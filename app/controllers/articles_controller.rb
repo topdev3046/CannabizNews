@@ -197,11 +197,16 @@ class ArticlesController < ApplicationController
         
         
         #we will now show some top products instead of related articles
-        @top_products = Product.featured.joins(:dispensary_source_products, :average_prices).group("products.id").
-                                    having("count(dispensary_source_products.id)>4").
-                                    #having("count(average_prices.id)>0").
-                                    includes(:vendors, :category, :average_prices).
-                                    order("RANDOM()").limit(3)
+        # @top_products = Product.featured.joins(:dispensary_source_products, :average_prices).group("products.id").
+        #                             having("count(dispensary_source_products.id)>4").
+        #                             #having("count(average_prices.id)>0").
+        #                             includes(:vendors, :category, :average_prices).
+        #                             order("RANDOM()").limit(3)
+                                    
+        @top_products = Product.featured.joins(:dispensary_source_products).group("products.id").
+                        having("count(dispensary_source_products.id)>4").
+                        includes(:vendors, :category, :average_prices).
+                        order("RANDOM()").limit(10)
         
         logger.info 'size of list ' +  @top_products.length.to_s
         logger.info @top_products.length
