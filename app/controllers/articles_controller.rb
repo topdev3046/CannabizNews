@@ -203,6 +203,10 @@ class ArticlesController < ApplicationController
                                     includes(:vendors, :category, :average_prices).
                                     order("RANDOM()").limit(3)
         
+        logger.info 'size of list ' +  @top_products.length.to_s
+        logger.info @top_products.length
+        
+        
         
         
         #SAME SOURCE ARTICLES
