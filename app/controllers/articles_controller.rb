@@ -203,10 +203,10 @@ class ArticlesController < ApplicationController
         #                             includes(:vendors, :category, :average_prices).
         #                             order("RANDOM()").limit(3)
                                     
-        @top_products = Product.featured.joins(:dispensary_source_products).
+        @top_products = Product.featured.joins(:dispensary_source_products).joins(:average_prices).
                         group("products.id").
                         having("count(dispensary_source_products.id)>4").
-                        includes(:vendors, :category, :average_prices).
+                        includes(:vendors, :category).
                         order("RANDOM()").limit(3)
         
         logger.info 'size of list ' +  @top_products.length.to_s
