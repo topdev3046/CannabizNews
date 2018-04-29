@@ -49,9 +49,10 @@
                             <% 
                                 i = 0
                                 loop do 
-                                    if value.dsp_prices.where(display_order: i).any?
+                                    dsps = value.dsp_prices.select { |dsp| dsp.display_order == i }
+                                    if dsps.size > 0
                             %>
-                                        <td style="text-align:center;">$<%=value.dsp_prices.where(display_order: i).first.price%></td>    
+                                        <td style="text-align:center;">$<%=dsps.first.price%></td>    
                                     <% else %>
                                         <td style="text-align:center;">--</td>
                                     <% end
