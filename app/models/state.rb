@@ -9,12 +9,16 @@ class State < ActiveRecord::Base
     
     has_many :dispensaries
     has_many :vendors
+    has_many :products
     
     #validations
     validates :name, presence: true, length: {minimum: 1, maximum: 50}
     validates :abbreviation, presence: true, length: {minimum: 1, maximum: 3}
     validates_uniqueness_of :name
     validates_uniqueness_of :abbreviation
+    
+    #scope
+    scope :product_state, -> { where(product_state: true) }
     
     #friendly url
     extend FriendlyId

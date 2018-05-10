@@ -9,12 +9,15 @@ if Rails.env.production?
 	Sidekiq::Cron::Job.create(name: 'Marijuana.com News', cron: '45 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MarijuanaWorker')
 	Sidekiq::Cron::Job.create(name: 'MjBizDaily News', cron: '50 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MjBizDailyWorker')
 	Sidekiq::Cron::Job.create(name: 'TheCannabist News', cron: '55 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'TheCannabistWorker')
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 1', cron: '0 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'WeedMapsWorker1')
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 2', cron: '8 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'WeedMapsWorker2')
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 3', cron: '16 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'WeedMapsWorker3')
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 4', cron: '24 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'WeedMapsWorker4')
-	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 1', cron: '32 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'LeaflyDispensaryWorker1')
-	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 2', cron: '40 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'LeaflyDispensaryWorker2')
-	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 3', cron: '48 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'LeaflyDispensaryWorker3')
-	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 4', cron: '56 1,3,5,7,9,11,13,15,17,19,21,23 * * *', class: 'LeaflyDispensaryWorker4')
+
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 1', cron: '0 3,7,11,15,19,23 * * *', class: 'WeedMapsWorker1')
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 2', cron: '15 3,7,11,15,19,23 * * *', class: 'WeedMapsWorker2')
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 3', cron: '30 3,7,11,15,19,23 * * *', class: 'WeedMapsWorker3')
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Dispensary 4', cron: '45 3,7,11,15,19,23 * * *', class: 'WeedMapsWorker4')
+	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 1', cron: '0 1,5,9,13,17,21 * * *', class: 'LeaflyDispensaryWorker1')
+	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 2', cron: '15 1,5,9,13,17,21 * * *', class: 'LeaflyDispensaryWorker2')
+	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 3', cron: '30 1,5,9,13,17,21 * * *', class: 'LeaflyDispensaryWorker3')
+	Sidekiq::Cron::Job.create(name: 'Leafly Dispensary 4', cron: '45 1,5,9,13,17,21 * * *', class: 'LeaflyDispensaryWorker4')
+
+	Sidekiq::Cron::Job.create(name: 'Headset Scraper', cron: '0 0 * * *', class: 'HeadsetWorker')
 end

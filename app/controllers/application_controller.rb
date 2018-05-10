@@ -65,7 +65,6 @@ class ApplicationController < ActionController::Base
     @sources = Source.where(:active => true).order("name ASC")
     @az_values = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M',
                         'N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-    #expires_in 10.days, :public => true
   end
   
   #redirect to homepage on error

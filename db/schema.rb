@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180306175519) do
+ActiveRecord::Schema.define(version: 20180510132227) do
 
   create_table "article_categories", force: :cascade do |t|
     t.integer  "article_id"
@@ -195,6 +195,11 @@ ActiveRecord::Schema.define(version: 20180306175519) do
     t.decimal  "med_thc"
     t.decimal  "max_thc"
     t.integer  "dsp_count"
+    t.integer  "state_id"
+    t.integer  "headset_alltime_count", default: 0
+    t.integer  "headset_monthly_count", default: 0
+    t.integer  "headset_weekly_count",  default: 0
+    t.integer  "headset_daily_count",   default: 0
   end
 
   add_index "products", ["slug"], name: "index_products_on_slug", unique: true
@@ -294,6 +299,8 @@ ActiveRecord::Schema.define(version: 20180306175519) do
     t.datetime "updated_at"
     t.string   "image"
     t.integer  "state_id"
+    t.float    "longitude"
+    t.float    "latitude"
     t.integer  "tier"
     t.string   "vendor_type"
     t.string   "address"
@@ -304,8 +311,6 @@ ActiveRecord::Schema.define(version: 20180306175519) do
     t.string   "month_inc"
     t.integer  "year_inc"
     t.integer  "month_inc_num"
-    t.float    "longitude"
-    t.float    "latitude"
   end
 
   add_index "vendors", ["slug"], name: "index_vendors_on_slug", unique: true

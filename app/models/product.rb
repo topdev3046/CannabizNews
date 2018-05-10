@@ -5,6 +5,7 @@ class Product < ActiveRecord::Base
     
     #lookups
     belongs_to :category
+    belongs_to :state
     
     has_many :vendor_products, -> { order(:units_sold => :desc) }
     has_many :vendors, through: :vendor_products
@@ -26,6 +27,16 @@ class Product < ActiveRecord::Base
     #validations
     validates :name, presence: true
     validates_uniqueness_of :name, :scope => :category_id #no duplicate products per category
+    
+    #increment the counters for headset whenever an existing product appears
+    def increment_counters
+        puts 'I AM UPDATING COUNTERS!!!'
+       self.headset_alltime_count += 1 
+       self.headset_monthly_count += 1
+       self.headset_weekly_count += 1
+       self.headset_daily_count += 1
+       self.save
+    end
     
     #import CSV file
     def self.import(file)
