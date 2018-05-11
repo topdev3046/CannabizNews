@@ -4,7 +4,7 @@ class HeadsetWorker
     def perform()
 		logger.info "Headset Worker is Running"
 		
-		@state_string = 'washington colorado nevada'
+		state_string = 'washington colorado nevada'
 		@state_names = state_string.split(/\W+/)
         
         @categories = Category.products
