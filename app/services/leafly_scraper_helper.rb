@@ -245,6 +245,7 @@ class LeaflyScraperHelper
 
 		#map of their quantities to our quantities
 		quantityToQuantity = {
+			'½ g' => 'Half Gram',
 			'1 g' => 'Gram',	
 			'2 g' => '2 Grams',	
 			'⅛ oz' => 'Eighth',	
