@@ -38,7 +38,6 @@ class StatesController < ApplicationController
     end 
     
     def show
-        
         #state articles
         @recents = @state.articles.active_source.
                         includes(:source, :categories, :states).
@@ -50,7 +49,6 @@ class StatesController < ApplicationController
             #get products available at dispensaries in state
             @products = Product.featured.includes(:dispensary_sources, :vendors, :category, :average_prices).
                                     where(:dispensary_sources => {state_id: @state.id}).
-                                    #order("dsp_count DESC").
                                     paginate(:page => params[:page], :per_page => 16)
             @search_string = @state.name
         else
@@ -60,7 +58,6 @@ class StatesController < ApplicationController
                         paginate(:page => params[:page], :per_page => 24)
         end
 
-        expires_in 10.minutes, :public => true
     end
     
     #refine the products on the state index
@@ -104,6 +101,7 @@ class StatesController < ApplicationController
    end    
     
     private 
+
         def set_state
             @state = State.friendly.find(params[:id])
         end

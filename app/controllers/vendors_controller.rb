@@ -31,8 +31,8 @@ class VendorsController < ApplicationController
     #--------ADMIN PAGE-------------------------
     
     def index
-        state_ids = State.product_state.pluck(:id)
-        @vendors = Vendor.where(state_id: state_ids).order("RANDOM()").paginate(page: params[:page], per_page: 16)
+        @vendors = Vendor.where(state_id: @site_visitor_state.id).
+                    order("RANDOM()").paginate(page: params[:page], per_page: 16)
     end
     
     def refine_index

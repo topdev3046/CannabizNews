@@ -56,28 +56,29 @@ class ApplicationController < ActionController::Base
     #end
   end
   
-  def populate_lists
-    require 'will_paginate/array'
-    @news_categories = Category.news.active.order("name ASC")
-    @product_categories = Category.products.active.order("name ASC")
-    @states = State.all.order("name ASC")
-    @product_states = @states.where(product_state: true)
-    @sources = Source.where(:active => true).order("name ASC")
-    @az_values = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M',
-                        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-  end
-  
-  #redirect to homepage on error
-  rescue_from ActionView::MissingTemplate, :with => :handle_error
-  rescue_from ActiveRecord::RecordNotFound, :with => :handle_error
-  rescue_from ActiveRecord::StatementInvalid, :with => :handle_error
-  rescue_from ActionController::RoutingError, :with => :handle_error
-
-  private
-  
-    def handle_error
-      if Rails.env.Production? 
-        redirect_to root_path
-      end
+    def populate_lists
+        require 'will_paginate/array'
+        
+        @news_categories = Category.news.active.order("name ASC")
+        @product_categories = Category.products.active.order("name ASC")
+        @all_states = State.all.order("name ASC")
+        @states_with_products = @all_states.where(product_state: true)
+        @active_sources = Source.where(:active => true).order("name ASC")
+        @az_values = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M',
+                            'N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     end
+  
+    #redirect to homepage on error
+    rescue_from ActionView::MissingTemplate, :with => :handle_error
+    rescue_from ActiveRecord::RecordNotFound, :with => :handle_error
+    rescue_from ActiveRecord::StatementInvalid, :with => :handle_error
+    rescue_from ActionController::RoutingError, :with => :handle_error
+    
+    private
+  
+        def handle_error
+            if Rails.env.Production? 
+                redirect_to root_path
+            end
+        end
 end

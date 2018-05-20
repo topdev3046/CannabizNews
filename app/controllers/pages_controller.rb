@@ -13,7 +13,7 @@ class PagesController < ApplicationController
         @nav_search = false
         
         #ARTICLES --  
-        @recent_articles = State.where(name: 'Washington').first.articles.active_source.
+        @recent_articles = @site_visitor_state.articles.active_source.
                             order("created_at DESC").
                             includes(:states, :source, :categories).limit(16)
 
@@ -110,7 +110,6 @@ class PagesController < ApplicationController
                redirect_to root_path
             else
                 DigestEmail.create(email: params[:email], active: true)
-                #flash.now[:message] = 'Thank you for signing up to the Weekly Roll Up!'
                 flash[:success] = 'Thank you for signing up to the Weekly Roll Up!'
                 redirect_to root_path
             end
