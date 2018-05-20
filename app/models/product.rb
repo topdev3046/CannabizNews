@@ -74,6 +74,7 @@ class Product < ActiveRecord::Base
        self.dispensary_source_products.destroy_all
        self.average_prices.destroy_all
        self.vendor_products.destroy_all
+       self.product_states.destroy_all
     end
     
 end
