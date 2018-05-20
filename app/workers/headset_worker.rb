@@ -154,7 +154,7 @@ class HeadsetWorker
 				:headset_daily_count => 1,
         	)
         	
-        	if category.name != 'Flower' && category.name != 'Pre-Roll'
+        	if category.name != 'Flower' && category.name != 'Pre-Rolls'
         		product.vendor_id = vendor.id	
         	end
         	unless product.save
@@ -173,7 +173,7 @@ class HeadsetWorker
 		end
 
 		#check vendor product (if flower or preroll)
-		if category.name == 'Flower' || category.name == 'Pre-Roll'
+		if category.name == 'Flower' || category.name == 'Pre-Rolls'
 			existing_vp = VendorProduct.where(vendor_id: vendor.id).where(product_id: product.id)
 	
 			if (existing_vp.size == 0)
