@@ -49,6 +49,12 @@ ActiveAdmin.register Product do
 			end
 		end
 		column :category_id
+		column "vendor" do |product|
+			if product.vendor.present?
+				product.vendor.name
+			end
+		end
+		column :vendor_id
 		column :sub_category
 		column :is_dom
 		column :cbd
@@ -102,6 +108,11 @@ ActiveAdmin.register Product do
 			end
 		end
 		column :sub_category
+		column "Vendor" do |product|
+			if product.vendor.present?
+				link_to product.vendor.name, admin_vendor_path(product.vendor)
+			end
+		end
 		column :updated_at
 		column :headset_alltime_count
 		column :headset_monthly_count

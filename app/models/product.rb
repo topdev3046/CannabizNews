@@ -9,8 +9,10 @@ class Product < ActiveRecord::Base
     has_many :product_states
     has_many :states, through: :product_states
     
+    #many to many for flowers and prerolls, one to many for other categories
     has_many :vendor_products, -> { order(:units_sold => :desc) }
     has_many :vendors, through: :vendor_products
+    belongs_to :vendor
     
     has_many :average_prices, -> { order(:display_order => :asc) }
     
@@ -71,6 +73,7 @@ class Product < ActiveRecord::Base
     def delete_relations
        self.dispensary_source_products.destroy_all
        self.average_prices.destroy_all
+       self.vendor_products.destroy_all
     end
     
 end
