@@ -1,8 +1,10 @@
 class User < ActiveRecord::Base
     
+    #validations
     validates :username, presence: true, uniqueness: { case_sensitive: false }, length: {minimum: 1, maximum: 25}
     has_secure_password
     
+    #relationships
     has_many :user_categories
     has_many :categories, through: :user_categories
 

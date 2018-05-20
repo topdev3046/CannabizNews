@@ -29,7 +29,8 @@ class AveragePrice < ActiveRecord::Base
     before_validation :set_display_order
     def set_display_order
         
-        displays = { 
+        displays = {
+            "Each" => 0,
             "Half Gram" => 0,
             "Half Grams" => 0,
             "Gram" => 1,
@@ -104,7 +105,7 @@ class AveragePrice < ActiveRecord::Base
         if self.average_price_unit.present? && displays.has_key?(self.average_price_unit)
            self.display_order = displays[self.average_price_unit]
         else 
-            # should i set a default value? - yes
+            #set default value
             self.display_order = 99
             puts "need to add the following value to displays map: " + self.average_price_unit
         end

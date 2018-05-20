@@ -1,13 +1,11 @@
 class Source < ActiveRecord::Base
 
+    #relationships
     has_many :articles
-    
     has_many :user_sources
     has_many :users, through: :user_sources
     
-    has_many :source_hashtags
-    has_many :hashtags, through: :source_hashtags
-    
+    #validations
     validates :name, presence: true, length: { minimum: 3, maximum: 25 }
     validates_uniqueness_of :name
     

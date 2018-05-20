@@ -4,7 +4,7 @@ class LeaflyDispensaryWorker1
 
 	def perform()
 		logger.info "Leafly Dispensary background job 1 is running"
-		LeaflyScraperHelper.new(ENV['LEAFLY_STATE'], 'A-F').scrapeLeafly
+		LeaflyScraperHelper.new('WA', 'A-F').scrapeLeafly
 	end    
 	
 end #end of class

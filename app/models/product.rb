@@ -1,19 +1,19 @@
 class Product < ActiveRecord::Base
     
-    #so I can just say Product.featured in query
-    scope :featured, -> { where(featured_product: true).where.not(image: nil) }
+    #scope
+    scope :featured, -> { where(featured_product: true) }
     
-    #lookups
+    #relationships
     belongs_to :category
-    belongs_to :state
+    
+    has_many :product_states
+    has_many :states, through: :product_states
     
     has_many :vendor_products, -> { order(:units_sold => :desc) }
     has_many :vendors, through: :vendor_products
     
-    #average prices has lookup to product
     has_many :average_prices, -> { order(:display_order => :asc) }
     
-    #many-to-many with
     has_many :dispensary_source_products
     has_many :dispensary_sources, through: :dispensary_source_products
     
@@ -30,7 +30,6 @@ class Product < ActiveRecord::Base
     
     #increment the counters for headset whenever an existing product appears
     def increment_counters
-        puts 'I AM UPDATING COUNTERS!!!'
        self.headset_alltime_count += 1 
        self.headset_monthly_count += 1
        self.headset_weekly_count += 1

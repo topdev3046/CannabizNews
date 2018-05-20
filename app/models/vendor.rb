@@ -3,7 +3,9 @@ class Vendor < ActiveRecord::Base
     #relationships
     has_many :vendor_products
     has_many :products, through: :vendor_products
-    belongs_to :state
+    
+    has_many :vendor_states
+    has_many :states, through: :vendor_states
     
     #validations
     validates :name, presence: true
@@ -52,6 +54,7 @@ class Vendor < ActiveRecord::Base
     before_destroy :delete_relations
     def delete_relations
        self.vendor_products.destroy_all
+       self.vendor_states.destroy_all
     end
     
 end
