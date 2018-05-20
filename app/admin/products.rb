@@ -43,6 +43,11 @@ ActiveAdmin.register Product do
 		column :description
 		column :featured_product
 		column :alternate_names
+		column "category" do |product|
+			if product.category.present?
+				product.category.name
+			end
+		end
 		column :category_id
 		column :sub_category
 		column :is_dom
