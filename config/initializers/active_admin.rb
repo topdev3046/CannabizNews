@@ -4,7 +4,32 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Cannabiz News"
+  config.site_title = "Cannabiz Network"
+  config.comments = false
+  config.footer = "Cannabiz Network"
+  config.localize_format = :short
+  config.site_title_link = "https://cannabiznetwork.com"
+  config.favicon = 'favicon.ico'
+  config.site_title_image = "header_footer/cbz-logo-color.png"
+  
+  #friendly ids
+  ActiveAdmin::ResourceController.class_eval do
+    def find_resource
+      finder = resource_class.is_a?(FriendlyId) ? :slug : :id
+      scoped_collection.find_by(finder => params[:id])
+    end
+  end
+
+  #settings button
+  config.namespace :admin do |admin|
+    admin.build_menu :utility_navigation do |menu|
+      menu.add  :label  => 'Settings', # text of your link
+        :url            => proc{ edit_admin_admin_user_path(current_admin_user) }, # route of your link
+        :html_options   => {:style => 'float:left;'}, # attributes added in the DOM of your link
+        :if             => proc{ 1 < 2 } # condition to display the link
+      admin.add_logout_button_to_menu menu, 100, :style => 'float:left;' # logout link
+    end
+  end
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.

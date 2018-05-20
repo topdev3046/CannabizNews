@@ -1,7 +1,26 @@
 Rails.application.routes.draw do
 
+  #active admin
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
+  match "/admin/admin_users/import_admin_users" => 'admin/admin_users#import_admin_users', via: [:get, :post]
+  match "/admin/articles/import_articles" => 'admin/articles#import_articles', via: [:get, :post]
+  match "/admin/average_prices/import_average_prices" => 'admin/average_prices#import_average_prices', via: [:get, :post]
+  match "/admin/categories/import_categories" => 'admin/categories#import_categories', via: [:get, :post]
+  match "/admin/dispensaries/import_dispensaries" => 'admin/dispensaries#import_dispensaries', via: [:get, :post]
+  
+  # match "/admin/dispensary_sources/:id/add_to_store" => 'admin/dispensary_sources#add_to_store', via: :post
+  match "/admin/dispensary_sources/:id/delete_from_store" => 'admin/dispensary_sources#delete_from_store', via: :post
+  match "/admin/dispensary_sources/:id/update_product_store" => 'admin/dispensary_sources#update_product_store', via: :put
+  # match "/admin/dispensary_source_products/add_to_store" => 'admin/dispensary_source_products#add_to_store', via: :post
+  match "/admin/dispensary_products/add_to_store" => 'admin/dispensary_products#add_to_store', via: [:post, :patch]
+  
+  #ecommerce
+  resources :carts
+  resources :product_items
+  get 'add_to_cart/:product_id/:dispensary_source_id', to: 'product_items#add_to_cart', :as => :add_to_cart
+  resources :orders
+  
   #SIDEKIQ Routes
   require 'sidekiq/web'
   require 'sidekiq/cron/web'
