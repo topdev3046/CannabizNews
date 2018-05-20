@@ -82,7 +82,7 @@ class LeaflyScraperHelper
 			"Flower" => returned_json_menu['Flower'], 
 			"Edibles" => returned_json_menu['Edible'],
 			"Concentrates" => returned_json_menu['Concentrate'],
-			"Pre-Roll" => returned_json_menu['PreRoll']
+			"Pre-Rolls" => returned_json_menu['PreRoll']
 		}
 
 		categoryToMenu.each do |category_name, returned_menu_section|
