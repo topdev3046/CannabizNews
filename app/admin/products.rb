@@ -18,7 +18,7 @@ ActiveAdmin.register Product do
 	scope :featured
 	
 	#save queries
-	includes :category
+	includes :category, :vendor, :vendors
 	
 	#filters
 	filter :name
@@ -111,6 +111,13 @@ ActiveAdmin.register Product do
 		column "Vendor" do |product|
 			if product.vendor.present?
 				link_to product.vendor.name, admin_vendor_path(product.vendor)
+			end
+		end
+		column "Vendors" do |product|
+			if product.vendors.any?
+				product.vendors.each do |vendor|
+					link_to vendor.name, admin_vendor_path(vendor)		
+				end
 			end
 		end
 		column :updated_at
