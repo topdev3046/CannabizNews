@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180520145704) do
+ActiveRecord::Schema.define(version: 20180528225912) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -229,6 +229,10 @@ ActiveRecord::Schema.define(version: 20180520145704) do
     t.integer  "state_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "headset_alltime_count", default: 0
+    t.integer  "headset_monthly_count", default: 0
+    t.integer  "headset_weekly_count",  default: 0
+    t.integer  "headset_daily_count",   default: 0
   end
 
   create_table "products", force: :cascade do |t|
