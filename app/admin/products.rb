@@ -28,13 +28,13 @@ ActiveAdmin.register Product do
     filter :sub_category
 	
 	#-----CSV ACTIONS ----------#
-    
-    #import csv
-	# action_item only: :index do
-	# 	if current_admin_user.admin?
-	# 		link_to 'Import Products', admin_products_import_products_path, class: 'import_csv'
-	# 	end
-	# end
+	
+	#import csv
+	action_item only: :index do
+		if current_admin_user.admin?
+			link_to 'Import Products', admin_products_import_products_path, class: 'import_csv'
+		end
+	end
 	
 	#export csv
 	csv do
@@ -108,16 +108,17 @@ ActiveAdmin.register Product do
 			end
 		end
 		column :sub_category
-		column "Vendor" do |product|
+		column "Vendor (1 to many)" do |product|
 			if product.vendor.present?
 				link_to product.vendor.name, admin_vendor_path(product.vendor)
 			end
 		end
-		column "Vendors" do |product|
-			if product.vendors.any?
-				product.vendors.each do |vendor|
-					link_to vendor.name, admin_vendor_path(vendor)		
-				end
+		column "Vendors (many to many)" do |product|
+			vendors = product.vendors
+			unless vendors.blank?
+				vendors.each.map do |vendor|
+					link_to(vendor.name, admin_vendor_path(vendor)) 
+				end.join(', ').html_safe
 			end
 		end
 		column :updated_at
