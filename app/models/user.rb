@@ -21,23 +21,6 @@ class User < ActiveRecord::Base
     extend FriendlyId
     friendly_id :username, use: :slugged
     
-    #import CSV file
-    def self.import(file)
-        CSV.foreach(file.path, headers: true) do |row|
-            User.create! row.to_hash
-        end
-    end    
-    
-    #export CSV file
-    def self.to_csv
-        CSV.generate do |csv|
-            csv << column_names
-            all.each do |user|
-                csv << user.attributes.values_at(*column_names)
-            end
-        end
-    end 
-    
     #password reset token
     def generate_password_reset_token!
         update_attribute(:password_reset_token, SecureRandom.urlsafe_base64(48))  

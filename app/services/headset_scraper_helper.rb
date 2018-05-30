@@ -3,7 +3,9 @@ class HeadsetScraperHelper
 	attr_reader :state_string
 	
 	def initialize(state_string)
+    	
     	@state_string = state_string
+        
 	end
 	
 	def scrapeHeadset()

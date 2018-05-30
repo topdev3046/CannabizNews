@@ -39,15 +39,19 @@
 	                            <div class="zm-post-meta" style="margin-bottom: 15px;">
 	                                <ul>
 	                                    <li class="s-meta">
-	                                    	Vendor: 
-                                    		<a style="color: #2ab081;" href="<%=vendor_path(product.vendors.first)%>">
-                            					<%= product.vendors.first.name %>
-                            				</a>
+	                                    	Vendor:
+	                                    	<% if product.vendors.any? %>
+	                                    		<a style="color: #2ab081;" href="<%=vendor_path(product.vendors.first)%>">
+	                            					<%= product.vendors.first.name %>
+	                            				</a>
+	                            			<% end %>
 	                                    </li>
 	                                    <li class="s-meta" style = "float: right;">
 	                                    	Average Price:
-                                    		<a style="color: #2ab081;" href="<%=average_price_path(product.average_prices.first)%>">
-                            					<%="$#{product.average_prices.first.average_price.round}/#{product.average_prices.first.average_price_unit}"%></a>
+	                                    	<% if product.average_prices.any? %>
+	                                    		<a style="color: #2ab081;" href="<%=average_price_path(product.average_prices.first)%>">
+	                            					<%="$#{product.average_prices.first.average_price.round}/#{product.average_prices.first.average_price_unit}"%></a>
+	                                		<% end %>
 	                                	</li>
 	                                </ul>
 	                            </div>

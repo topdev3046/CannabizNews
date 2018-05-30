@@ -22,28 +22,10 @@ class Dispensary < ActiveRecord::Base
     #photo aws storage
     mount_uploader :image, PhotoUploader
     
-    #import CSV file
-    def self.import_via_csv(file)
-        CSV.foreach(file.path, headers: true) do |row|
-            Dispensary.create! row.to_hash
-        end
-    end
-    
-    #export CSV file
-    def self.to_csv
-        CSV.generate do |csv|
-            csv << column_names
-            all.each do |dispensary|
-                csv << dispensary.attributes.values_at(*column_names)
-            end
-        end
-    end
-    
     #delete relations
     before_destroy :delete_relations
     def delete_relations
        self.dispensary_sources.destroy_all
     end
-    
     
 end #end dispensary class

@@ -27,34 +27,6 @@ class Article < ActiveRecord::Base
     #photo aws storage
     mount_uploader :image, PhotoUploader
     
-    #import CSV files
-    def self.import(file)
-        CSV.foreach(file.path, headers: true) do |row|
-            Article.create! row.to_hash
-        end
-    end
-    
-    #export CSV file
-    def self.to_csv
-        CSV.generate do |csv|
-            csv << column_names
-            all.each do |article|
-                csv << article.attributes.values_at(*column_names)
-            end
-        end
-    end
-    
-    #CALLBACKS
-    # after_save :update_image_url
-    # def update_image_url
-    #     puts self.image_url
-    #     puts self.image
-    #     puts self.remote_image_url
-    #     self.remote_image_url = self.remote_image_url != nil ? 
-    #                         self.remote_image_url.to_s.slice(0...(self.remote_image_url.to_s.index('?'))) : 
-    #                         nil
-    # end
-    
     #delete related article_categories and article_states on delete
     before_destroy :delete_relations
     def delete_relations
