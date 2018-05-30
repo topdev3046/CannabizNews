@@ -32,20 +32,7 @@ class DispensariesController < ApplicationController
         render 'index'
     end
     
-    #-----------------------------------
-    def new
-      @dispensary = Dispensary.new
-    end
-    def create
-      @dispensary = Dispensary.new(dispensary_params)
-      if @dispensary.save
-         flash[:success] = 'Dispensary was successfully created'
-         redirect_to dispensary_admin_path
-      else 
-         render 'new'
-      end
-    end 
-    #-------------------------------------
+    #---------
 
     def show
         
@@ -57,10 +44,7 @@ class DispensariesController < ApplicationController
                                 
         if @dispensary_source != nil
             
-            #dispensary_source_ids = @dispensary_source_products.pluck(:dispensary_source_id)
-            #@dispensary_sources = DispensarySource.where(id: dispensary_source_ids).order('last_menu_update DESC')
-            
-            @matching_products = Product.where(id: @dispensary_source.dispensary_source_products.pluck(:product_id)).
+            @matching_products = Product.featured.where(id: @dispensary_source.dispensary_source_products.pluck(:product_id)).
                                     includes(:vendors, :category)
             
             @category_to_products = Hash.new
