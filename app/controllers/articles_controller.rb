@@ -2,33 +2,6 @@ class ArticlesController < ApplicationController
     before_action :set_article, only: [:edit, :update, :destroy, :show, :tweet, :send_tweet]
     before_action :require_admin, except: [:index, :show]
     skip_before_action :verify_authenticity_token #for saving article via ajax
-
-    #--------ADMIN PAGE-------------------------
-    def admin
-        @articles = Article.order(sort_column + " " + sort_direction)
-                        .paginate(page: params[:page], per_page: 100)
-    
-        #for csv downloader
-        respond_to do |format|
-            format.html
-            format.csv {render text: @articles.to_csv }
-        end
-    end
-    
-    #method is used for csv file upload
-    def import
-        Article.import(params[:file])
-        flash[:success] = 'Articles were successfully imported'
-        redirect_to article_admin_path 
-    end
-    
-    def search
-        @q = "%#{params[:query]}%"
-        @articles = Article.where("title LIKE ? or abstract LIKE ?", @q, @q)
-                            .order(sort_column + " " + sort_direction)
-                            .paginate(page: params[:page], per_page: 24)
-        render 'admin'
-    end
     
     def tweet
         #not on admin page but admin functionality
@@ -183,19 +156,6 @@ class ArticlesController < ApplicationController
             redirect_to root_path
         end
         
-        #related articles
-        # if @article.states.present?
-        #     @related_articles = @article.states.sample.articles
-        # elsif @article.categories.present?
-        #     @related_articles = @article.categories.sample.articles
-        # else
-        #     @related_articles = Article.all
-        # end
-        
-        # @related_articles = @related_articles.active_source.includes(:source, :states, :categories).
-        #                         order("created_at DESC").limit(3).where.not(id: @article.id)
-        
-        
         #we will now show some top products instead of related articles
         @top_products = Product.featured.joins(:dispensary_source_products, :average_prices).
                         group("products.id").
@@ -263,12 +223,4 @@ class ArticlesController < ApplicationController
             params.require(:article).permit(:title, :abstract, :body, :date, :image, :remote_image_url, :web_url,
                                     :source_id, :include_in_digest, state_ids: [], category_ids: [])
         end
-      
-        def sort_column
-            params[:sort] || "date"
-        end
-        def sort_direction
-            params[:direction] || 'desc'
-        end
-          
 end

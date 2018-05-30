@@ -1,60 +1,69 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-  
-  #set lists before all actions
-  before_action :populate_lists
-  
-  helper_method :current_user, :logged_in?
-  
-  def current_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
-  end
-  
-  def logged_in?
-    !!current_user
-  end
-  
-  def require_user
-    if !logged_in?
-      flash[:danger] = "You must be logged in to perform that action"
-      redirect_to root_path
-    end
-  end 
-  
-  def site_visitor_state
-    @site_visitor_state = State.where(name: 'Washington').first 
+
+    protect_from_forgery with: :exception
     
-    #geocode user api
-    #if request.location && request.location.state
-    #    @site_visitor_state = State.where(name: request.location.state).first
-    #end
-  end
+    #these methods will be called before every action
+    before_action :populate_lists, :skip_for_admin?, :site_visitor_location
+    
+    helper_method :current_user, :logged_in?
   
-  def site_visitor_city
-    #geocode user api
-    @site_visitor_city = 'Seattle'
-    #if request.location && request.location.city
-    #    @site_visitor_city = request.location.city
-    #end
-  end
+    def skip_for_admin?
+        current_admin_user.blank?
+    end
+    
+    def current_user
+        @current_user ||= User.find(session[:user_id]) if session[:user_id]
+    end
+    
+    def logged_in?
+    !!current_user
+    end
   
-  def site_visitor_zip
-    #geocode user api
-    @site_visitor_zip = '98101'
-    #if request.location && request.location.zip_code
-    #    @site_visitor_zip = request.location.zip_code
-    #end
-  end
+    def require_user
+        if !logged_in?
+            flash[:danger] = "You must be logged in to perform that action"
+            redirect_to root_path
+        end
+    end
+    
+    def require_admin
+        if !logged_in? || (logged_in? and !current_user.admin?)
+            redirect_to root_path
+        end
+    end
   
-  def site_visitor_ip
-    #geocode user api
-    @site_visitor_ip = '75.172.101.74'
-    #if request.location && request.location.ip
-    #    @site_visitor_ip = request.location.ip
-    #end
-  end
+    def site_visitor_location
+        begin
+            if session[:state_id] != nil
+                @site_visitor_state = State.where(id: session[:state_id]).first
+            elsif request.location && request.location.state
+                @site_visitor_state = State.where(name: request.location.state).first
+            
+                if @site_visitor_state.product_state
+                    @site_visitor_city = request.location.city
+                    @site_visitor_zip = request.location.zip_code
+                    @site_visitor_ip = request.location.ip
+                    session[:state_id] = @site_visitor_state.id
+                    session[:product_state] = true
+                else
+                    default_visitor_location    
+                end
+            else
+                default_visitor_location
+            end
+        rescue => ex
+            default_visitor_location
+        end
+    end
+    
+    def default_visitor_location
+        @site_visitor_state = State.where(name: 'Washington').first
+        @site_visitor_city = 'Seattle'
+        @site_visitor_zip = '98101'
+        @site_visitor_ip = '75.172.101.74'
+        session[:state_id] = @site_visitor_state.id
+        session[:product_state] = false
+    end
   
     def populate_lists
         require 'will_paginate/array'

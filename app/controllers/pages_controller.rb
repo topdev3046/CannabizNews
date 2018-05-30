@@ -1,7 +1,5 @@
 class PagesController < ApplicationController
     
-    before_action :site_visitor_state, only: [:home, :search]
-    before_action :site_visitor_ip, only: [:home, :search]
     before_action :require_admin, only: [:admin]
     
     def home
@@ -30,7 +28,6 @@ class PagesController < ApplicationController
         #PRODUCTS
         if @site_visitor_state != nil && @site_visitor_state.product_state
             
-            
             if Rails.env.production? 
                 @top_products = Product.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
                                     includes(:vendors, :category, :average_prices).
@@ -39,15 +36,7 @@ class PagesController < ApplicationController
                 @top_products = Product.featured.includes(:vendors, :category, :average_prices).
                                     order("RANDOM()").limit(10)
             end
-            #not showing distance anymore
-            #includes(:dispensary_sources, :vendors, :category, :average_prices, :dispensary_sources => :dispensary).
-            #                            where(:dispensary_sources => {state_id: @site_visitor_state.id})
-        
-            #price range and distance
-            #result = ProductHelper.new(@top_products, @site_visitor_ip).findProductsPriceAndDistance
-            #@product_to_distance, @product_to_closest_disp = result[0], result[1]
         else 
-            #Project.joins(:vacancies).group("projects.id").having("count(vacancies.id)>0")
             @top_products = Product.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
                                     includes(:vendors, :category, :average_prices).
                                     order("RANDOM()").limit(10)
@@ -78,10 +67,6 @@ class PagesController < ApplicationController
             @product_results = @product_results | @product_results_two
             
             @product_results = @product_results.paginate(page: params[:page], per_page: 16)
-            
-                            
-            #result = ProductHelper.new(@product_results, @site_visitor_ip).findProductsPriceAndDistance
-            #    @product_to_distance, @product_to_closest_disp = result[0], result[1]
             
             #NEWS
             if Rails.env.production?
@@ -168,20 +153,6 @@ class PagesController < ApplicationController
         @states = State.all.order("name ASC")
         #need to update sitemap
     end
-    
-    # Exchange your oauth_token and oauth_token_secret for an AccessToken instance.
-    #def prepare_access_token(oauth_token, oauth_token_secret)
-
-    #    consumer = OAuth::Consumer.new("PeKIPXsMPl80fKm6SipbqrRVL", "EzcwBZ1lBd8RlnhbuDyxt3URqPyhrBpDq00Z6n4btsnaPF7VpO", 
-    #                                    { :site => "https://api.twitter.com", :scheme => :header })
-         
-        # now create the access token object from passed values
-    #    token_hash = { :oauth_token => oauth_token, :oauth_token_secret => oauth_token_secret }
-    #    access_token = OAuth::AccessToken.from_hash(consumer, token_hash )
-     
-    #    return access_token
-    #end
-    #helper_method :prepare_access_token
     
     private
         def require_admin

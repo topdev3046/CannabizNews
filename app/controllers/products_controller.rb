@@ -1,36 +1,8 @@
 class ProductsController < ApplicationController
-    before_action :site_visitor_state, only: [:show, :index]
+
     before_action :set_product, only: [:edit, :update, :destroy, :show]
-    before_action :site_visitor_ip, only: [:index, :refine_index]
     before_action :require_admin, only: [:admin, :edit, :update, :delete]
 
-    #--------ADMIN PAGE-------------------------
-    def admin
-        @requires_admin = true
-        @products = Product.order(sort_column + " " + sort_direction).paginate(page: params[:page], per_page: 50)
-        #for csv downloader
-        respond_to do |format|
-            format.html
-            format.csv {render text: Product.all.to_csv }
-        end
-    end
-    
-    #method is used for csv file upload
-    def import
-        Product.import(params[:file])
-        flash[:success] = 'Products were successfully imported'
-        redirect_to product_admin_path 
-    end
-    
-    def search
-        query = "%#{params[:query]}%"
-        @products = Product.where("name LIKE ?", query).order(sort_column + " " + 
-                                    sort_direction).paginate(page: params[:page], per_page: 50)
-                        
-        render 'admin'
-    end
-    #--------ADMIN PAGE-------------------------
-    
     def index
         
         if params[:format].present?
@@ -90,24 +62,9 @@ class ProductsController < ApplicationController
         render 'index' 
     end
     
-    #-------------------------------------------
-    def new
-      @product = Product.new
-    end
-    def create
-        @product = Product.new(product_params)
-        if @product.save
-            flash[:success] = 'Product was successfully created'
-            redirect_to product_admin_path
-        else 
-            render 'new'
-        end
-    end
-    
-    #-------------------------------------------
+    #------------------------------------
     
     def show
-        
         #only show featured product
         if @product.featured_product == false
             redirect_to root_path 
@@ -157,37 +114,6 @@ class ProductsController < ApplicationController
             end
         end
     end
-
-    #-------------------------------------------
-    
-    def edit
-        @requires_admin = true
-    end   
-    def update
-        if @product.update(product_params)
-            flash[:success] = 'Product was successfully updated'
-            redirect_to product_admin_path
-        else 
-            render 'edit'
-        end
-    end 
-    
-    #-------------------------------------------
-   
-    def destroy
-        @product.destroy
-        flash[:success] = 'Product was successfully deleted'
-        redirect_to product_admin_path
-    end
-   
-    def destroy_multiple
-        Product.destroy(params[:products])
-        flash[:success] = 'Products were successfully deleted'
-        redirect_to product_admin_path        
-    end
-    
-    #-------------------------------------------
-
   
     private
     
@@ -208,11 +134,4 @@ class ProductsController < ApplicationController
                                             :sub_category, :cbd, :cbn, :min_thc, :med_thc, :max_thc, :is_dom,
                                             :year, :month, :category_id, :description, dispensary_source_ids: [], vendor_ids: [])
         end  
-        
-        def sort_column
-            params[:sort] || "name"
-        end
-        def sort_direction
-            params[:direction] || 'desc'
-        end
 end

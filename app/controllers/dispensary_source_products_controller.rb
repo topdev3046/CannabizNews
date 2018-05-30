@@ -2,25 +2,6 @@ class DispensarySourceProductsController < ApplicationController
     
     before_action :set_dispensary_source_product, only: [:edit, :update, :destroy, :show]
     before_action :require_admin, except: [:show]
-
-    #--------ADMIN PAGE-------------------------
-    def admin
-        @dispensary_source_products = DispensarySourceProduct.order(sort_column + " " + sort_direction).paginate(page: params[:page], per_page: 50)
-    
-        respond_to do |format|
-            format.html
-            format.csv {render text: @dispensary_source_products.to_csv }
-        end
-    end
-    
-    #method is used for csv file upload
-    def import
-        DispensarySourceProduct.import(params[:file])
-        flash[:success] = 'Dispensary Source Products were successfully imported'
-        redirect_to dispensary_source_products_admin_path 
-    end
-    
-    #--------ADMIN PAGE-------------------------
     
     #-----------------------------------
     def new
@@ -42,7 +23,7 @@ class DispensarySourceProductsController < ApplicationController
     
     #-------------------------------------    
     def edit
-    end   
+    end       
     def update
         if @dispensary_source_product.update(dispensary_source_product_params)
             flash[:success] = 'Dispensary Source Product was successfully updated'
@@ -79,15 +60,6 @@ class DispensarySourceProductsController < ApplicationController
         end
         
         def dispensary_source_product_params
-            params.require(:dispensary_source_product).permit(:product_id, :dispensary_source_id, :image, :price, :price_gram,
-                                                :price_eighth, :price_quarter, :price_two_grams, :price_half_ounce,
-                                                :price_ounce, :price_half_gram)
+            params.require(:dispensary_source_product).permit(:product_id, :dispensary_source_id)
         end
-        
-        def sort_column
-            params[:sort] || "dispensary_source_id"
-        end
-        def sort_direction
-            params[:direction] || 'desc'
-        end 
 end
