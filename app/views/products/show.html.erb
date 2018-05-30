@@ -80,6 +80,8 @@
                                             
                                             <% if ['Flower'].include? @product.category.name %>
                                                 <%= render "price_table_flower" %>
+                                            <% else %>
+                                                <%= render "price_table_other" %>
                                             <% end %>
 
                                             <style>

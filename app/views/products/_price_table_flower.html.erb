@@ -30,16 +30,6 @@
                 <!--loop through dispensaries-->
                 <% @state_to_dispensary.each do |state_name, dispensaries| %>
                     
-                    <!--<tr class='state-name-row'>-->
-                    <!--    <td>state_name.upcase</td>-->
-                    <!--    <td>&nbsp;</td>-->
-                    <!--    <td>&nbsp;</td>-->
-                    <!--    <td>&nbsp;</td>-->
-                    <!--    <td>&nbsp;</td>-->
-                    <!--    <td>&nbsp;</td>-->
-                    <!--    <td>&nbsp;</td>-->
-                    <!--</tr>-->
-                    
                     <% dispensaries.each do |dispensary_key| %>
                         <tr>
                             <td class="dispensary-td"><%=link_to dispensary_key.name, dispensary_path(dispensary_key.dispensary)%></td>
