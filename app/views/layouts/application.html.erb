@@ -151,8 +151,16 @@
         <%= javascript_include_tag 'jquery.meanmenu' %>
         <%= javascript_include_tag 'jquery.meanmenu.min' %>
         <%= javascript_include_tag 'jquery.scrollUp' %>
+        <%= javascript_include_tag 'jquery.sticky' %>
         <%= javascript_include_tag 'main' %>
         <%= javascript_include_tag 'user_page' %>
+        
+        <script>
+            $(document).ready(function(){
+                $("#product-sidebar").sticky({topSpacing:10});
+            });   
+        </script>
+        
         
         <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
         <%= javascript_include_tag 'dispensary_product'%>
