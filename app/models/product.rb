@@ -68,6 +68,22 @@ class Product < ActiveRecord::Base
         end
     end
     
+    #stock image
+    def default_image
+        
+        if Rails.env.Production? && self.category.present?
+            if self.category.name = 'Flower'
+                return_image = 'substitutes/product-flower.png'
+            else
+                #need to get default images for other categories
+                return_image = 'home_top_product.jpg'
+            end
+        else
+            return_image = 'home_top_product.jpg'
+        end
+       return_image
+    end
+    
     #delete relations
     before_destroy :delete_relations
     def delete_relations

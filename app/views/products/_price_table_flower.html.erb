@@ -18,6 +18,7 @@
             <thead>
                 <tr>
                     <th>Dispensary</th>
+                    <th>Location</th>
                     <th>1 Gram</th>
                     <th>2 Grams</th>
                     <th>1/8 Ounce</th>
@@ -33,7 +34,9 @@
                     <% dispensaries.each do |dispensary_key| %>
                         <tr>
                             <td class="dispensary-td"><%=link_to dispensary_key.name, dispensary_path(dispensary_key.dispensary)%></td>
-                            
+                            <td>
+                                <%=dispensary_key.location%>
+                            </td>
                             <% value = @dispensary_to_product[dispensary_key.id] %>
                             
                             <% 

@@ -21,7 +21,7 @@
                                         <% if @product.image.present? %> 
                                             <img itemprop="image" alt= "<%=@product.name%>" src="<%= @product.image_url(:product_show_smaller)%>" style = "border: 1px solid black;">
                                         <% else %>
-                                            <img itemprop="image" alt= "<%=@product.name%>" src="<%= asset_path 'substitutes/product-substitute.png' %>" style = "border: 1px solid black;">
+                                            <img itemprop="image" alt= "<%=@product.name%>" src="<%= asset_path @product.default_image %>" style = "border: 1px solid black;">
                                         <% end %>
                                     </div>
                                 </div>
@@ -75,38 +75,6 @@
                                     <div class ="row">
                                         <%= render "average_price_table" %>
                                     </div>
-                                    <div class="row">
-                                        <% if @product.category.present? %>
-                                            
-                                            <% if ['Flower'].include? @product.category.name %>
-                                                <%= render "price_table_flower" %>
-                                            <% else %>
-                                                <%= render "price_table_other" %>
-                                            <% end %>
-
-                                            <style>
-                                                div.dataTables_wrapper {
-                                                    width: 800px;
-                                                    margin: 0 auto;
-                                                }
-                                                table.dataTable thead .sorting{
-                                                    background-image: url(<%= asset_path('sort_both.png') %>)
-                                                }
-                                                table.dataTable thead .sorting_asc{
-                                                    background-image: url(<%= asset_path('sort_asc.png') %>)
-                                                }
-                                                table.dataTable thead .sorting_desc{
-                                                    background-image: url(<%= asset_path('sort_desc.png') %>)
-                                                }
-                                                table.dataTable thead .sorting_asc_disabled{
-                                                    background-image: url(<%= asset_path('sort_asc_disabled.png') %>)
-                                                }
-                                                table.dataTable thead .sorting_desc_disabled{
-                                                    background-image: url(<%= asset_path('sort_desc_disabled.png') %>)
-                                                }
-                                            </style>
-                                        <% end %>
-                                    </div>
                                 </div>
                             </article>
                         </div>
@@ -114,6 +82,40 @@
                     </div>
                 </div>
                 <!-- End left side -->
+                <div class ="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="row">
+                        <% if @product.category.present? %>
+                            
+                            <% if ['Flower'].include? @product.category.name %>
+                                <%= render "price_table_flower" %>
+                            <% else %>
+                                <%= render "price_table_other" %>
+                            <% end %>
+    
+                            <style>
+                                div.dataTables_wrapper {
+                                    width: 100%;
+                                    margin: 0 auto;
+                                }
+                                table.dataTable thead .sorting{
+                                    background-image: url(<%= asset_path('sort_both.png') %>)
+                                }
+                                table.dataTable thead .sorting_asc{
+                                    background-image: url(<%= asset_path('sort_asc.png') %>)
+                                }
+                                table.dataTable thead .sorting_desc{
+                                    background-image: url(<%= asset_path('sort_desc.png') %>)
+                                }
+                                table.dataTable thead .sorting_asc_disabled{
+                                    background-image: url(<%= asset_path('sort_asc_disabled.png') %>)
+                                }
+                                table.dataTable thead .sorting_desc_disabled{
+                                    background-image: url(<%= asset_path('sort_desc_disabled.png') %>)
+                                }
+                            </style>
+                        <% end %>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
