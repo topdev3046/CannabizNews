@@ -36,21 +36,26 @@ class ProductHelper
 # 	end
 	
 	def buildProductDisplay()
-		
-        #similar products - include is_dom and sub_category as well
-        if @product.is_dom.present?
-            @similar_products = Product.featured.where.not(id: @product.id).
-                        where(is_dom: @product.is_dom).order("Random()").limit(4)
 
-        elsif @product.sub_category.present? 
-            @similar_products = Product.featured.where.not(id: @product.id).
-                        where(sub_category: @product.sub_category).
-                        order("Random()").limit(4)
-        
-        elsif @product.category.present?
-            @similar_products = @product.category.products.
-                    featured.where.not(id: @product.id).order("Random()").limit(4)
-        end
+	    #similar products - include is_dom and sub_category as well
+	    if @product.category.present?
+	        
+	        @similar_products = @product.category.products.featured.where.not(id: @product.id)
+	        
+	        if @product.is_dom.present?
+	        
+	            @similar_products = @similar_products.where(is_dom: @product.is_dom).order("Random()").limit(4)
+	            
+	        elsif @product.sub_category.present?
+	        
+	            @similar_products = @similar_products.where(sub_category: @product.sub_category).order("Random()").limit(4)
+	        else
+	            @similar_products = @similar_products.order("Random()").limit(4)    
+	        end
+	        
+	    else
+            @similar_products = Product.featured.order("Random()").limit(4)  
+	    end
         
         @dispensary_source_products = DispensarySourceProduct.where(product: @product).joins(:dsp_prices)
         dispensary_source_ids = @dispensary_source_products.pluck(:dispensary_source_id)
