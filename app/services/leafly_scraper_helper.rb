@@ -15,13 +15,19 @@ class LeaflyScraperHelper
 		#GLOBAL VARIABLES
 		@source = Source.where(name: 'Leafly').first #source we are scraping
 		@state = State.where(abbreviation: @state_abbreviation).first #state we are scraping from the source
+		
+		puts 'i am here'
 
 		#query the dispensarysources from this source and this state that have a dispensary lookup
 		@dispensary_sources = DispensarySource.where(state_id: @state.id).where(source_id: @source.id).
 								includes(:dispensary, :products, :products => :vendors, :dispensary_source_products => :dsp_prices)
+								
+		puts 'i am also here'
 
 		#the actual dispensaries that we will really display
 		@real_dispensaries = Dispensary.where(state_id: @state.id)
+		
+		puts 'i am also here 3'
 
 		#MAKE CALL AND CREATE JSON
 		output = nil
