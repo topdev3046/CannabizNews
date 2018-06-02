@@ -19,6 +19,7 @@ class LeaflyScraperHelper
 		@state = State.where(abbreviation: @state_abbreviation).first #state we are scraping from the source
 		
 		puts 'i am here 2'
+		puts @state.name
 
 		#query the dispensarysources from this source and this state that have a dispensary lookup
 		@dispensary_sources = DispensarySource.where(state_id: @state.id).where(source_id: @source.id).
@@ -30,6 +31,7 @@ class LeaflyScraperHelper
 		@real_dispensaries = Dispensary.where(state_id: @state.id)
 		
 		puts 'i am also here 3'
+		puts @real_dispensaries.count
 
 		#MAKE CALL AND CREATE JSON
 		output = nil
@@ -43,6 +45,8 @@ class LeaflyScraperHelper
 
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state_abbreviation.downcase].each do |returned_dispensary_source|
+			
+			puts 'i am in the content loop'
 			
 			#check if the dispensary source already exists
 			existing_dispensary_sources = @dispensary_sources.select { |dispensary_source| dispensary_source.name.casecmp(returned_dispensary_source['name']) == 0 }
