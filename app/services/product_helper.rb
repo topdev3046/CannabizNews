@@ -5,39 +5,39 @@ class ProductHelper
 		@state = state
 	end
 	
-	def findProductsPriceAndDistance()
+# 	def findProductsPriceAndDistance()
 		
-		#hash returned
-		@product_to_distance = Hash.new
-		@product_to_closest_disp = Hash.new
+# 		#hash returned
+# 		@product_to_distance = Hash.new
+# 		@product_to_closest_disp = Hash.new
 		
-		@products.each do |product|
+# 		@products.each do |product|
 			
-			#distance
-			if @ip_address != nil
-				closest_distance = nil
-				closest_dispensary = nil
+# 			#distance
+# 			if @ip_address != nil
+# 				closest_distance = nil
+# 				closest_dispensary = nil
 				
-				product.dispensary_sources.each do |dispSource|
+# 				product.dispensary_sources.each do |dispSource|
 					
-					if closest_distance == nil || dispSource.distance_to(@ip_address) < closest_distance
-						closest_distance = dispSource.distance_to(@ip_address).round(2)	
-						closest_dispensary = dispSource.dispensary
-					end
-				end
+# 					if closest_distance == nil || dispSource.distance_to(@ip_address) < closest_distance
+# 						closest_distance = dispSource.distance_to(@ip_address).round(2)	
+# 						closest_dispensary = dispSource.dispensary
+# 					end
+# 				end
 				
-				@product_to_distance.store(product, closest_distance)
-				@product_to_closest_disp.store(product, closest_dispensary)
-			end
-		end
+# 				@product_to_distance.store(product, closest_distance)
+# 				@product_to_closest_disp.store(product, closest_dispensary)
+# 			end
+# 		end
 		
-		#return
-		[@product_to_distance, @product_to_closest_disp]
-	end
+# 		#return
+# 		[@product_to_distance, @product_to_closest_disp]
+# 	end
 	
 	def buildProductDisplay()
 		
-        #get similar products
+        #similar products - include is_dom and sub_category as well
         if @product.is_dom.present?
             @similar_products = Product.featured.where.not(id: @product.id).
                         where(is_dom: @product.is_dom).order("Random()").limit(4)
@@ -52,43 +52,37 @@ class ProductHelper
                     featured.where.not(id: @product.id).order("Random()").limit(4)
         end
         
-        #populate page maps - IF THEY HAVE A SELF ONE THEN AUTOMATICALLY USE THAT, IF NOT USE ANOTHER
-        dispensary_sources = @product.dispensary_sources.where(state_id: @state.id).
-                                includes(:dispensary, :state, :dispensary_source_products => :dsp_prices).
+        @dispensary_source_products = DispensarySourceProduct.where(product: @product).joins(:dsp_prices)
+        dispensary_source_ids = @dispensary_source_products.pluck(:dispensary_source_id)
+        @dispensary_sources = DispensarySource.where(id: dispensary_source_ids).where(state_id: @state.id).
                                 order('last_menu_update DESC').order("name ASC")
-                                
+        
         #need a map of dispensary to dispensary source product
         @dispensary_to_product = Hash.new
-        @table_headers = Hash.new #for product table
+        @state_to_dispensary = Hash.new
         
-        dispensary_sources.each do |dispSource|
+        @dispensary_sources.each do |dispSource|
             
-            #get the th from dsp_prices
-            dispSource.dispensary_source_products.each do |dsp|
-                if dsp.product_id == @product.id
-                    dsp.dsp_prices.each do |dsp_price|
-                        if dsp_price.display_order != nil
-                           @table_headers.store(dsp_price.display_order, dsp_price.unit)
-                        end
-                    end
-                end
+            #state dispensaries
+            if @state_to_dispensary.has_key?(dispSource.state.name)
+                @state_to_dispensary[dispSource.state.name].push(dispSource)
+            else
+                dispensaries = []
+                dispensaries.push(dispSource)
+                @state_to_dispensary.store(dispSource.state.name, dispensaries) 
             end
             
             #dispensary products
-            if !@dispensary_to_product.has_key?(dispSource)
-                
-                dsps = dispSource.dispensary_source_products.select { |dsp| dsp.product_id == @product.id}
-                
-                if dsps.size > 0
-                    @dispensary_to_product.store(dispSource, dsps[0])
+            if !@dispensary_to_product.has_key?(dispSource.id)
+               
+                if @dispensary_source_products.where(dispensary_source_id: dispSource.id).any?
+                    @dispensary_to_product.store(dispSource.id, 
+                        @dispensary_source_products.where(dispensary_source_id: dispSource.id).first)
                 end
             end
         end
         
-        @table_headers = Hash[@table_headers.sort_by {|k,v| k.to_i }]
-        
-        #return
-        [@similar_products, @dispensary_to_product, @table_headers]
+        [@similar_products, @dispensary_to_product, @state_to_dispensary]
 		
 	end
 	
