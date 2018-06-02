@@ -1,4 +1,4 @@
-<select name="State" class="selectDropdown state-dropdown" data-live-search="true" disabled = "disabled" onChange="setSelectedState(this.value)">
+<select name="State" class="selectDropdown state-dropdown" data-live-search="true" onChange="setSelectedState(this.value)">
     <option value = "">State</option>
     <% @states_with_products.each do |state| %>
         <% if @site_visitor_state != nil && @site_visitor_state.name == state.name && @searched_state == nil %>
