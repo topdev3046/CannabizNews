@@ -42,6 +42,9 @@ class LeaflyScraperHelper
 		end
 
 		contents = JSON.parse(output.read)
+		
+		puts 'contents: '
+		puts contents
 
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state_abbreviation.downcase].each do |returned_dispensary_source|
