@@ -36,24 +36,49 @@ class DispensariesController < ApplicationController
 
     def show
         
+        require 'uri' #google map / facebook
+        
+        @dispensary_source = @dispensary.dispensary_sources.order('last_menu_update DESC').first
+        @dispensary_source_products = @dispensary_source.dispensary_source_products.includes(:dsp_prices, :product)
+        
+        @category_to_products = Hash.new
+        
+        @dispensary_source_products.each do |dsp|
+            
+            if dsp.product.present? && dsp.product.category.present?
+                if @category_to_products.has_key?(dsp.product.category.name)
+                    @category_to_products[dsp.product.category.name].push(dsp)
+                else
+                    @category_to_products.store(dsp.product.category.name, [dsp])
+                end
+            end
+            
+        end
+        
+        # @category_to_products.store('Flower', @dispensary_source.dispensary_source_products)
+        
+        # products = dispensary_source.products.featured
+        
+        
+        
         #need to update dispensary page to show more than flower
         
-        @dispensary_source = DispensarySource.where(dispensary_id: @dispensary.id).
-                        includes(dispensary_source_products: [:product, :dsp_prices]).
-                        order('last_menu_update DESC').first
+        # @dispensary_source = DispensarySource.where(dispensary_id: @dispensary.id).
+        #                 includes(dispensary_source_products: [:product, :dsp_prices]).
+        #                 order('last_menu_update DESC').first
                                 
-        if @dispensary_source != nil
+        # if @dispensary_source != nil
             
-            @matching_products = Product.featured.where(id: @dispensary_source.dispensary_source_products.pluck(:product_id)).
-                                    includes(:vendors, :category)
+        #     @matching_products = Product.featured.where(id: @dispensary_source.dispensary_source_products.pluck(:product_id)).
+        #                             includes(:vendors, :category)
             
-            @category_to_products = Hash.new
-            @category_to_products.store('Flower', @dispensary_source.dispensary_source_products)
+        #     @category_to_products = Hash.new
+        #     @category_to_products.store('Flower', @dispensary_source.dispensary_source_products)
             
-            require 'uri' #google map / facebook
-        else 
-            redirect_to root_path
-        end
+            
+        # else 
+        #     redirect_to root_path
+        # end
         
     end
     

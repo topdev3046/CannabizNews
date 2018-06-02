@@ -10,7 +10,7 @@ ActiveAdmin.register DspPrice do
 	index do
 		selectable_column
 		column "Product" do |dsp|
-			if dsp.dispensary_source_product.present?
+			if dsp.dispensary_source_product.present? && dsp.dispensary_source_product.product.present?
 				link_to dsp.dispensary_source_product.product.name, admin_product_path(dsp.dispensary_source_product.product)
 			end
 		end

@@ -24,8 +24,6 @@ class DspPrice < ActiveRecord::Base
     :"10 Pack, 165mg CBD, 35mg THC", :"15 pack, 75mg THC, 45mg CBD", :"5ml, 75mg"]
     
     enum unit: UNIT_PRICES_OPTIONS
-           
-        
 
     def set_display_order
         displays = { 

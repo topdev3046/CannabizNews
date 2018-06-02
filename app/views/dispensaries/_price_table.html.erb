@@ -1,0 +1,51 @@
+<div class="col-md-12 mt-20">
+    <div class="title">Products</div>
+    <!-- table -->
+    <div class="table-responsive">
+        <table id="product-price-table" class="display" style="width: 100% !important;">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Average Prices</th>
+                    <th>Dispensary Prices</th>
+                </tr>
+            </thead>
+            
+            <% @dispensary_source_products.each do |dsp| %>
+                <tr>
+                    <td>
+                        <% if dsp.product.present? %>
+                            <p><%= dsp.product.name %></p>
+                            <% if dsp.product.image.present? && Rails.env.production? %>
+                        	    <img src="<%=dsp.product.image_url(:product_show)%>" onerror="this.src='<%= asset_path dsp.product.default_image %>'" alt="<%=dsp.product.name%>">
+                        	<% else %>
+                        	    <%= image_tag(dsp.product.default_image) %>
+                        	<% end %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if dsp.product.present? && dsp.product.category.present? %>
+                            <%= dsp.product.category.name %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if dsp.product.present? %> 
+                            <% dsp.product.average_prices.each do |avg_price| %>
+                                <p><%= "#{avg_price.average_price_unit}: $#{avg_price.average_price}" %></p>
+                            <% end %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% dsp.dsp_prices.each do |dsp_price| %>
+                            <p><%= "#{dsp_price.unit}: $#{dsp_price.price}" %></p>
+                        <% end %>
+                    </td>
+                </tr>
+            
+            <% end %>
+    
+            
+        </table>
+    </div>
+</div>
