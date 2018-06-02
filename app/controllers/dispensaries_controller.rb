@@ -45,7 +45,7 @@ class DispensariesController < ApplicationController
         
         @dispensary_source_products.each do |dsp|
             
-            if dsp.product.present? && dsp.product.category.present?
+            if dsp.product.present? && dsp.product.featured_product && dsp.product.category.present?
                 if @category_to_products.has_key?(dsp.product.category.name)
                     @category_to_products[dsp.product.category.name].push(dsp)
                 else
@@ -54,31 +54,6 @@ class DispensariesController < ApplicationController
             end
             
         end
-        
-        # @category_to_products.store('Flower', @dispensary_source.dispensary_source_products)
-        
-        # products = dispensary_source.products.featured
-        
-        
-        
-        #need to update dispensary page to show more than flower
-        
-        # @dispensary_source = DispensarySource.where(dispensary_id: @dispensary.id).
-        #                 includes(dispensary_source_products: [:product, :dsp_prices]).
-        #                 order('last_menu_update DESC').first
-                                
-        # if @dispensary_source != nil
-            
-        #     @matching_products = Product.featured.where(id: @dispensary_source.dispensary_source_products.pluck(:product_id)).
-        #                             includes(:vendors, :category)
-            
-        #     @category_to_products = Hash.new
-        #     @category_to_products.store('Flower', @dispensary_source.dispensary_source_products)
-            
-            
-        # else 
-        #     redirect_to root_path
-        # end
         
     end
     
