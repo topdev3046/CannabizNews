@@ -11,12 +11,14 @@ class LeaflyScraperHelper
 		
 		require "json"
 		require 'open-uri'
+		
+		puts 'i am here'
 
 		#GLOBAL VARIABLES
 		@source = Source.where(name: 'Leafly').first #source we are scraping
 		@state = State.where(abbreviation: @state_abbreviation).first #state we are scraping from the source
 		
-		puts 'i am here'
+		puts 'i am here 2'
 
 		#query the dispensarysources from this source and this state that have a dispensary lookup
 		@dispensary_sources = DispensarySource.where(state_id: @state.id).where(source_id: @source.id).
