@@ -18,8 +18,8 @@
                             <article class="zm-post-lay-single">
                                 <div class="zm-post-dis">
                                     <div class="col-md-4 mb-40 product-show-image"  style="padding-left: 0px !important;">
-                                        <% if Rails.env.Production? && @product.image.present? %> 
-                                            <img itemprop="image" alt= "<%=@product.name%>" src="<%= @product.image_url(:product_show_smaller)%>" onerror="this.src='<%= asset_path @product.default_image %>'" style = "border: 1px solid black;">
+                                        <% if Rails.env.production? && @product.image.present? %> 
+                                            <img itemprop="image" alt= "<%=@product.name%>" src="<%= @product.image_url(:product_show)%>" onerror="this.src='<%= asset_path @product.default_image %>'" style = "border: 1px solid black;">
                                         <% else %>
                                             <img itemprop="image" alt= "<%=@product.name%>" src="<%= asset_path @product.default_image %>" style = "border: 1px solid black;">
                                         <% end %>
