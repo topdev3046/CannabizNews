@@ -39,7 +39,8 @@ class DispensariesController < ApplicationController
         require 'uri' #google map / facebook
         
         @dispensary_source = @dispensary.dispensary_sources.order('last_menu_update DESC').first
-        @dispensary_source_products = @dispensary_source.dispensary_source_products.includes(:dsp_prices, :product)
+        @dispensary_source_products = @dispensary_source.dispensary_source_products.
+                    includes(:dsp_prices, product: [:category, :vendors, :vendor])
         
         @category_to_products = Hash.new
         
