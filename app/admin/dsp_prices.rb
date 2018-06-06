@@ -5,10 +5,15 @@ ActiveAdmin.register DspPrice do
 	permit_params :dispensary_source_product_id, :price, :unit, :display_order
 	
 	#save queries
-	includes :dispensary_source_product => :product
+	includes :dispensary_source_product => [:product, :dispensary_source]
 	
 	index do
 		selectable_column
+		column "Dispensary Source" do |dsp|
+			if dsp.dispensary_source_product.present? && dsp.dispensary_source_product.dispensary_source.present?
+				link_to dsp.dispensary_source_product.dispensary_source.name, admin_dispensary_source_path(dsp.dispensary_source_product.dispensary_source)
+			end
+		end
 		column "Product" do |dsp|
 			if dsp.dispensary_source_product.present? && dsp.dispensary_source_product.product.present?
 				link_to dsp.dispensary_source_product.product.name, admin_product_path(dsp.dispensary_source_product.product)
@@ -28,12 +33,17 @@ ActiveAdmin.register DspPrice do
 	end
 
 	form do |f|
-		f.input :dispensary_source_product_id, :label => 'Dispensary Source Product', :as => :select, 
-				:collection => DispensarySourceProduct.all.map{|u| ["#{u.id}", u.id]}
-		f.input :price
-		f.input :unit
-		f.input :display_order
-    	f.actions
-    end
+		panel " " do	
+			f.input :dispensary_source_product_id, :label => 'Dispensary Source Product', :as => :select, 
+					:collection => DispensarySourceProduct.all.map{|u| ["#{u.id}", u.id]}
+		end
+		panel " " do	 		
+			f.input :price
+		end 	
+		panel " " do	
+			f.input :unit
+		end 
+	    	f.actions
+	    end
 
 end

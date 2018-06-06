@@ -79,6 +79,7 @@ class ApplicationController < ActionController::Base
   
     #redirect to homepage on error
     rescue_from ActionView::MissingTemplate, :with => :handle_error
+    rescue_from ActionView::Template::Error, :with => :handle_error
     rescue_from ActiveRecord::RecordNotFound, :with => :handle_error
     rescue_from ActiveRecord::StatementInvalid, :with => :handle_error
     rescue_from ActionController::RoutingError, :with => :handle_error
@@ -86,7 +87,7 @@ class ApplicationController < ActionController::Base
     private
   
         def handle_error
-            if Rails.env.Production? 
+            if Rails.env.production?
                 redirect_to root_path
             end
         end
