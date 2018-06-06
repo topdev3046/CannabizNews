@@ -75,10 +75,19 @@ class Product < ActiveRecord::Base
         
         if Rails.env.production? && self.category.present?
             if self.category.name == 'Flower'
-                return_image = 'substitutes/product-flower.png'
+                return_image = 'substitutes/default_flower.jpg'
+            
+            elsif self.category.name == 'Concentrates'
+                return_image = 'substitutes/default_concentrate.jpg'
+            
+            elsif self.category.name == 'Edibles'
+                return_image = 'substitutes/default_edible.jpg'
+                
+            elsif self.category.name == 'Pre-Rolls'
+                return_image = 'substitutes/default_preroll.jpg'
+            
             else
-                #need to get default images for other categories
-                return_image = 'substitutes/product-flower.png'
+                return_image = 'substitutes/default_flower.jpg'    
             end
         else
             return_image = 'home_top_product.jpg'
