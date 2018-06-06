@@ -3,7 +3,7 @@ class WeedMapsWorker2
 
 	def perform()
 		require "json"
-		logger.info "Weedmaps Job is running"
-		WeedmapsScraperHelper.new(ENV['WEEDMAPS_STATE'], 'G-L').scrapeWeedmaps
+		logger.info "Weedmaps 2 Job is running"
+		WeedmapsScraperHelper.new('Washington', 'G-L').scrapeWeedmaps
 	end
 end
