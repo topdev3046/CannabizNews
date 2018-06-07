@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180606134608) do
+ActiveRecord::Schema.define(version: 20180607195345) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -216,8 +216,8 @@ ActiveRecord::Schema.define(version: 20180606134608) do
     t.decimal  "price"
     t.string   "unit"
     t.integer  "display_order"
-    t.datetime "created_at",                   default: '2018-05-20 14:58:07'
-    t.datetime "updated_at",                   default: '2018-05-20 14:58:07'
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "hashtags", force: :cascade do |t|
