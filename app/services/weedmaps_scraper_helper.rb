@@ -18,7 +18,7 @@ class WeedmapsScraperHelper
 				
 		#query the dispensarysources from this source and this state that have a dispensary lookup
 		@dispensary_sources = DispensarySource.where(state_id: @state.id).where(source_id: @source.id).
-								includes(:dispensary, :products, :products => :vendors, :dispensary_source_products => :dsp_prices)
+								includes(:dispensary, products => [:vendors, :vendor, :category], :dispensary_source_products => :dsp_prices)
 		
 		#the actual dispensaries that we will really display
 		@real_dispensaries = Dispensary.where(state_id: @state.id)
