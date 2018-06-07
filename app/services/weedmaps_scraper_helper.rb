@@ -138,7 +138,7 @@ class WeedmapsScraperHelper
 				@category_products = Category.where(name: 'Topical').first.products
 			end
 
-			if @category_products.any?
+			if @category_products != nil
 				#loop through the different menu sections (separated by title - category)
 				returned_menu_section['items'].each do |returned_dispensary_source_product|
 				
