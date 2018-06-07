@@ -9,7 +9,7 @@ ActiveAdmin.register DispensarySourceProduct, as: "Dispensary Products" do
 	scope :for_featured
 	
   #save queries
-  includes :dispensary_source, :product
+  includes :dispensary_source, :product => :category
   
   index do
     selectable_column
@@ -22,6 +22,11 @@ ActiveAdmin.register DispensarySourceProduct, as: "Dispensary Products" do
     column "Product" do |dsp|
       if dsp.product.present?
         link_to dsp.product.name , admin_product_path(dsp.product)
+      end
+    end
+    column "Product Category" do |dsp|
+      if dsp.product.present? && dsp.product.category.present? 
+        link_to dsp.product.category.name , admin_category_path(dsp.product.category)
       end
     end
     column :created_at
