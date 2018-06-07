@@ -56,6 +56,12 @@ class ProductHelper
 	    else
             @similar_products = Product.featured.order("Random()").limit(4)  
 	    end
+	    
+	    dispensary_sources = @product.dispensary_sources.where(state_id: @state.id).
+                        includes(:dispensary, :state, :dispensary_source_products => :dsp_prices).
+                        order('last_menu_update DESC').order("name ASC")
+	    
+	    
         
         @dispensary_source_products = DispensarySourceProduct.where(product: @product).joins(:dsp_prices)
         dispensary_source_ids = @dispensary_source_products.pluck(:dispensary_source_id)
@@ -64,30 +70,28 @@ class ProductHelper
         
         #need a map of dispensary to dispensary source product
         @dispensary_to_product = Hash.new
+        header_options =  @product.dispensary_source_products.map{|dispensary_source| dispensary_source.dsp_prices.map(&:unit)}.flatten.uniq unless  @product.dispensary_source_products.blank?
+        @table_header_options = DspPrice::DISPLAYS.sort_by {|key, value| value}.to_h.select{|k, v| k if header_options.include?(k)}.keys
+        
+        
+        #need a map of dispensary to dispensary source product
+        @dispensary_to_product = Hash.new
         @state_to_dispensary = Hash.new
         
-        @dispensary_sources.each do |dispSource|
-            
-            #state dispensaries
-            if @state_to_dispensary.has_key?(dispSource.state.name)
-                @state_to_dispensary[dispSource.state.name].push(dispSource)
-            else
-                dispensaries = []
-                dispensaries.push(dispSource)
-                @state_to_dispensary.store(dispSource.state.name, dispensaries) 
-            end
+        dispensary_sources.each do |dispSource|
             
             #dispensary products
-            if !@dispensary_to_product.has_key?(dispSource.id)
-               
-                if @dispensary_source_products.where(dispensary_source_id: dispSource.id).any?
-                    @dispensary_to_product.store(dispSource.id, 
-                        @dispensary_source_products.where(dispensary_source_id: dispSource.id).first)
+            if !@dispensary_to_product.has_key?(dispSource)
+                
+                dsps = dispSource.dispensary_source_products.select { |dsp| dsp.product_id == @product.id}
+                
+                if dsps.size > 0
+                    @dispensary_to_product.store(dispSource, dsps[0])
                 end
             end
         end
         
-        [@similar_products, @dispensary_to_product, @state_to_dispensary]
+        [@similar_products, @dispensary_to_product, @table_header_options]
 		
 	end
 	

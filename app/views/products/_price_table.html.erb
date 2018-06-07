@@ -1,0 +1,56 @@
+<div class="col-md-12 mt-20">
+    
+    <!-- state dropdown -->
+    <div style="overflow: visible; float: right;">
+        <%= form_tag change_state_product_path do %>
+            <div style ="display: inline-block; width: 160px;">
+                <%= render 'shared/dropdown_states' %>    
+            </div>
+            <div style ="display: inline-block;">
+                 <button type="submit" class="button" style="margin-bottom: 0px; margin: 10px 0px;">Change State</button>   
+            </div>
+        <% end %>
+    </div>
+    
+    <div class="title">Pricing</div>
+    <!-- table -->
+    <table id="product-price-table" class="display" style="width: 100% !important;">
+        <thead>
+            <tr>
+                <th>Dispensary</th>
+                <th>Location</th>
+                <% if @table_header_options.present? %>
+                    <% @table_header_options.each do |unit| %>
+                        <th><%= unit %></th>
+                    <% end %>
+                <% end %>
+            </tr>
+        </thead>
+            
+        <!--loop through dispensaries-->
+        <% @dispensary_to_product.each do |dispensary_source, product| %>
+            <tr>
+                <td class="dispensary-td">
+                    <%=link_to dispensary_source.name, dispensary_path(dispensary_source.dispensary)%>
+                </td>
+                <td>
+                    <%=dispensary_source.location%>
+                </td>
+
+                <% @table_header_options.each do |unit| %>
+                    <% index_count = 0 %>
+                    <% product.dsp_prices.each do |dps| %>
+                        <% if unit.to_s == dps.unit.to_s && index_count == 0 %>
+                            <% index_count += 1 %>
+                            <td>$<%=dps.price.to_f %></td>
+                        <% end %>
+                    <% end %>
+                    <% unless index_count == 1 %>
+                        <td>--</td>
+                    <% end %>
+                <% end %>
+            </tr>
+        <% end %>
+            
+    </table>
+</div>
