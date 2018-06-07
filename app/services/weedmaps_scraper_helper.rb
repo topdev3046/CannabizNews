@@ -294,11 +294,10 @@ class WeedmapsScraperHelper
 
 				if @quantity_to_quantity.has_key?(price_key) && returned_dispensary_source_product['prices'][price_key].present? && returned_dispensary_source_product['prices'][price_key] > 0
 					DspPrice.create(
-						:dispensary_source_product_id => dsp.id,
 						:unit => @quantity_to_quantity[price_key],
 						:price => returned_dispensary_source_product['prices'][price_key]
 					)
-				else 
+				elsif !@quantity_to_quantity.has_key?(price_key)
 					UnitMissing.email('Weed Maps', price_key, returned_dispensary_source_product['prices'][price_key]).deliver_now
 				end
 			end
@@ -335,7 +334,7 @@ class WeedmapsScraperHelper
 						)
 						updated_menu = true
 					end
-				else
+				elsif !@quantity_to_quantity.has_key?(price_key)
 					UnitMissing.email('Weed Maps', price_key, returned_dispensary_source_product['prices'][price_key]).deliver_now
 				end
 			end
