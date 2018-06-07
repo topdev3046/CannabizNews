@@ -62,6 +62,7 @@ class ProductHelper
                         order('last_menu_update DESC').order("name ASC")
         
         #table headers
+        # header_options = nil
         header_options =  @product.dispensary_source_products.map{|dispensary_source| dispensary_source.dsp_prices.map(&:unit)}.flatten.uniq unless  @product.dispensary_source_products.blank?
         if header_options != nil
             @table_header_options = DspPrice::DISPLAYS.sort_by {|key, value| value}.to_h.select{|k, v| k if header_options.include?(k)}.keys

@@ -4,7 +4,10 @@ ActiveAdmin.register DispensarySourceProduct, as: "Dispensary Products" do
   
   permit_params :dispensary_source_id, :product_id, dsp_prices_attributes: [:id, :price, :unit, :_destroy]
    
-  
+  #scopes
+	scope :all, default: true
+	scope :for_featured
+	
   #save queries
   includes :dispensary_source, :product
   
