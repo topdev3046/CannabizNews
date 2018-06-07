@@ -72,7 +72,7 @@
                                                     <% end %>
                                                 <% end %>
                                             <% elsif @product.vendor.present? %>
-                                                <%= link_to vendor.name, vendor_path(vendor), :class => 'vendor_path'%>
+                                                <%= link_to @product.vendor.name, vendor_path(@product.vendor), :class => 'vendor_path'%>
                                             <% end %>    
                                         </p>
                                     </div>
