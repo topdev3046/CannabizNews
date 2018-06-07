@@ -61,15 +61,8 @@ class ProductHelper
                         includes(:dispensary, :state, :dispensary_source_products => :dsp_prices).
                         order('last_menu_update DESC').order("name ASC")
 	    
-	    
         
-        @dispensary_source_products = DispensarySourceProduct.where(product: @product).joins(:dsp_prices)
-        dispensary_source_ids = @dispensary_source_products.pluck(:dispensary_source_id)
-        @dispensary_sources = DispensarySource.where(id: dispensary_source_ids).where(state_id: @state.id).
-                                order('last_menu_update DESC').order("name ASC")
-        
-        #need a map of dispensary to dispensary source product
-        @dispensary_to_product = Hash.new
+        #table headers
         header_options =  @product.dispensary_source_products.map{|dispensary_source| dispensary_source.dsp_prices.map(&:unit)}.flatten.uniq unless  @product.dispensary_source_products.blank?
         @table_header_options = DspPrice::DISPLAYS.sort_by {|key, value| value}.to_h.select{|k, v| k if header_options.include?(k)}.keys
         
