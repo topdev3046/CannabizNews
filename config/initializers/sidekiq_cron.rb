@@ -39,10 +39,10 @@ if Rails.env.production?
 	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp CO 7', cron: '30 9 * * *', class: 'WeedMapsWorker7')
 	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp CO 8', cron: '45 9 * * *', class: 'WeedMapsWorker8')
 	
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp CO 9', cron: '0 11 * * *', class: 'WeedMapsWorker9')
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp CO 10', cron: '15 11 * * *', class: 'WeedMapsWorker10')
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp CO 11', cron: '30 11 * * *', class: 'WeedMapsWorker11')
-	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp CO 12', cron: '45 11 * * *', class: 'WeedMapsWorker12')
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp NV 9', cron: '0 11 * * *', class: 'WeedMapsWorker9')
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp NV 10', cron: '15 11 * * *', class: 'WeedMapsWorker10')
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp NV 11', cron: '30 11 * * *', class: 'WeedMapsWorker11')
+	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp NV 12', cron: '45 11 * * *', class: 'WeedMapsWorker12')
 
 	Sidekiq::Cron::Job.create(name: 'Headset Scraper', cron: '0 0 * * *', class: 'HeadsetWorker')
 end
