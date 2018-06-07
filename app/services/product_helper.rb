@@ -39,7 +39,7 @@ class ProductHelper
 
 	    #similar products - include is_dom and sub_category as well
 	    if @product.category.present?
-	        
+
 	        @similar_products = @product.category.products.featured.where.not(id: @product.id)
 	        
 	        if @product.is_dom.present?
@@ -60,17 +60,17 @@ class ProductHelper
 	    dispensary_sources = @product.dispensary_sources.where(state_id: @state.id).
                         includes(:dispensary, :state, :dispensary_source_products => :dsp_prices).
                         order('last_menu_update DESC').order("name ASC")
-	    
         
         #table headers
         header_options =  @product.dispensary_source_products.map{|dispensary_source| dispensary_source.dsp_prices.map(&:unit)}.flatten.uniq unless  @product.dispensary_source_products.blank?
-        @table_header_options = DspPrice::DISPLAYS.sort_by {|key, value| value}.to_h.select{|k, v| k if header_options.include?(k)}.keys
-        
+        if header_options != nil
+            @table_header_options = DspPrice::DISPLAYS.sort_by {|key, value| value}.to_h.select{|k, v| k if header_options.include?(k)}.keys
+        else 
+            @table_header_options = nil
+        end
         
         #need a map of dispensary to dispensary source product
         @dispensary_to_product = Hash.new
-        @state_to_dispensary = Hash.new
-        
         dispensary_sources.each do |dispSource|
             
             #dispensary products

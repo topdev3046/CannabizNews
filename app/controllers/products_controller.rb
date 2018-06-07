@@ -67,6 +67,7 @@ class ProductsController < ApplicationController
     def show
         #only show featured product
         if @product.featured_product == false
+            puts 'here?'
             redirect_to root_path 
         end
         
@@ -76,7 +77,9 @@ class ProductsController < ApplicationController
             @similar_products, @dispensary_to_product, @table_header_options = 
                     result[0], result[1], result[2]
                     
-        rescue
+        rescue => ex
+            #I should send email with error message here
+            puts ex
             redirect_to root_path
         end
     end
