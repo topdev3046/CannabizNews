@@ -102,6 +102,7 @@ class DspPrice < ActiveRecord::Base
             self.display_order = displays[self.unit]
         else 
             puts "need to add the following value to displays map: " + self.unit.to_s
+            UnitMissing.email('Dsp Price', self.unit.to_s, nil).deliver_now
         end
     end
 end

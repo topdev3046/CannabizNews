@@ -285,6 +285,8 @@ class LeaflyScraperHelper
 						:unit => quantityToQuantity[quantity_price_pair['quantity']],
 						:price => quantity_price_pair['price']
 					)
+				else
+					UnitMissing.email('Leafly', quantity_price_pair['quantity'], quantity_price_pair['price']).deliver_now
 				end
 			end
 		end
@@ -334,7 +336,8 @@ class LeaflyScraperHelper
 						)
 						updated_menu = true
 					end
-
+				else
+					UnitMissing.email('Leafly', quantity_price_pair['quantity'], quantity_price_pair['price']).deliver_now	
 				end
 			end
 			

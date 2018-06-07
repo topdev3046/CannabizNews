@@ -298,6 +298,8 @@ class WeedmapsScraperHelper
 						:unit => @quantity_to_quantity[price_key],
 						:price => returned_dispensary_source_product['prices'][price_key]
 					)
+				else 
+					UnitMissing.email('Weed Maps', price_key, returned_dispensary_source_product['prices'][price_key]).deliver_now
 				end
 			end
 		end
@@ -333,6 +335,8 @@ class WeedmapsScraperHelper
 						)
 						updated_menu = true
 					end
+				else
+					UnitMissing.email('Weed Maps', price_key, returned_dispensary_source_product['prices'][price_key]).deliver_now
 				end
 			end
 
