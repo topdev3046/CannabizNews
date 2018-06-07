@@ -194,13 +194,13 @@ class WeedmapsScraperHelper
 										end
 									elsif product.vendor.present?
 										combined = []
-										combined.push("#{product.name} - #{vendor.name}")
-										combined.push("#{vendor.name} - #{product.name}")
-										combined.push("#{product.name} by #{vendor.name}")
-										combined.push("#{product.name} : #{vendor.name}")
-										combined.push("#{vendor.name} : #{product.name}")
-										combined.push("#{product.name} (#{vendor.name})")
-										combined.push("#{product.name} by #{vendor.name} of " + @state.name)
+										combined.push("#{product.name} - #{product.vendor.name}")
+										combined.push("#{product.vendor.name} - #{product.name}")
+										combined.push("#{product.name} by #{product.vendor.name}")
+										combined.push("#{product.name} : #{product.vendor.name}")
+										combined.push("#{product.vendor.name} : #{product.name}")
+										combined.push("#{product.name} (#{product.vendor.name})")
+										combined.push("#{product.name} by #{product.vendor.name} of " + @state.name)
 
 										product_vendor_matches = combined.select { |product_vendor| 
 													product_vendor.casecmp(returned_dispensary_source_product['name']) == 0 }
@@ -276,13 +276,13 @@ class WeedmapsScraperHelper
 										end
 									elsif product.vendor.present?
 										combined = []
-										combined.push("#{product.name} - #{vendor.name}")
-										combined.push("#{vendor.name} - #{product.name}")
-										combined.push("#{product.name} by #{vendor.name}")
-										combined.push("#{product.name} : #{vendor.name}")
-										combined.push("#{vendor.name} : #{product.name}")
-										combined.push("#{product.name} (#{vendor.name})")
-										combined.push("#{product.name} by #{vendor.name} of " + @state.name)
+										combined.push("#{product.name} - #{product.vendor.name}")
+										combined.push("#{product.vendor.name} - #{product.name}")
+										combined.push("#{product.name} by #{product.vendor.name}")
+										combined.push("#{product.name} : #{product.vendor.name}")
+										combined.push("#{product.vendor.name} : #{product.name}")
+										combined.push("#{product.name} (#{product.vendor.name})")
+										combined.push("#{product.name} by #{product.vendor.name} of " + @state.name)
 
 										product_vendor_matches = combined.select { |product_vendor| 
 													product_vendor.casecmp(returned_dispensary_source_product['name']) == 0 }
