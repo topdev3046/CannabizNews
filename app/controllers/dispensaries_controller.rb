@@ -12,9 +12,6 @@ class DispensariesController < ApplicationController
             @dispensaries = Dispensary.order("name ASC").paginate(page: params[:page], per_page: 16)
         end
         
-        #az-list
-        
-        
     end
     
     def refine_index
@@ -58,31 +55,6 @@ class DispensariesController < ApplicationController
         
     end
     
-    #-------------------------------------    
-    def edit
-    end   
-    def update
-        if @dispensary.update(dispensary_params)
-            flash[:success] = 'Dispensary was successfully updated'
-            redirect_to dispensary_admin_path
-        else 
-            render 'edit'
-        end
-    end
-    #-------------------------------------
-   
-    def destroy
-        @dispensary.destroy
-        flash[:success] = 'Dispensary was successfully deleted'
-        redirect_to dispensary_admin_path
-    end  
-    
-    def destroy_multiple
-      Dispensary.destroy(params[:dispensaries])
-      flash[:success] = 'Dispensaries were successfully deleted'
-      redirect_to dispensary_admin_path        
-    end 
-    
     #-------------------------------------
     private 
         
@@ -93,9 +65,22 @@ class DispensariesController < ApplicationController
             end
         end
         def set_dispensary
-            @dispensary = Dispensary.friendly.find(params[:id])
+            if marshal_load($redis.get("dispensary_#{params[:id]}")).blank?
+                @dispensary = Dispensary.friendly.find(params[:id])
+                set_into_redis
+            else
+                get_from_redis
+            end
+            if @dispensary.blank?
+                redirect_to root_path 
+            end
         end
-        def dispensary_params
-            params.require(:dispensary).permit(:name, :image, :location, :city, :state_id, :has_hypur, :has_payqwick)
+        
+        def set_into_redis
+            $redis.set("dispensary_#{params[:id]}", marshal_dump(@dispensary))
+        end
+
+        def get_from_redis
+            @dispensary = marshal_load($redis.get("dispensary_#{params[:id]}")) 
         end
 end

@@ -18,7 +18,7 @@ ActiveAdmin.register Product do
 	scope :featured
 	
 	#save queries
-	includes :category, :vendor, :vendors
+    includes :category, :vendor, :vendors, :dispensary_source_products, :dispensary_sources
 	
 	#filters
 	filter :name
@@ -121,6 +121,14 @@ ActiveAdmin.register Product do
 				end.join(', ').html_safe
 			end
 		end
+        column "DispensaryProduct" do |product|
+            dsps = product.dispensary_source_products
+            unless dsps.blank?
+                dsps.each.map do |dsp|
+                    link_to(dsp.dispensary_source.name, admin_dispensary_product_path(dsp)) 
+                end.join(', ').html_safe
+            end
+        end
 		column :updated_at
 		column :headset_alltime_count
 		column :headset_monthly_count

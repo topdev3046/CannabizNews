@@ -30,7 +30,7 @@
 	                <article class="zm-post-lay-a sidebar">
 	                    <div class="zm-post-thumb">
 	                        <a href="<%= product_path(product) %>">
-	                            <img src="<%= product.image_url(:profile_size)%>" onerror="this.src='<%= asset_path 'substitutes/product-substitute.png' %>'" alt="">
+	                            <img src="<%= product.image_url(:profile_size)%>" onerror="this.src='<%= asset_path product.default_image %>'" alt="<%=product.name%>">
 	                        </a>
 	                    </div>
 	                    <div class="zm-post-dis">

@@ -1,0 +1,2 @@
+class ErrorFound < ApplicationMailer
+end

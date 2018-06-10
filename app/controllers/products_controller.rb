@@ -1,14 +1,10 @@
-class ProductsController < ApplicationController
-
+class ProductsController < ApplicationController  
     before_action :set_product, only: [:edit, :update, :destroy, :show, :change_state]
     before_action :require_admin, only: [:admin, :edit, :update, :delete]
-
     def index
         
         if params[:format].present?
-            
-            @searched_category = @product_categories.find_by(name: params[:format])
-            
+           @searched_category = @product_categories.find_by(name: params[:format])
             if !@searched_category.present?
                 if params[:format] == 'Hybrid-Indica'
                     @searched_is_dom = 'Indica'
@@ -67,21 +63,17 @@ class ProductsController < ApplicationController
     def show
         #only show featured product
         if @product.featured_product == false
-            puts 'here?'
             redirect_to root_path 
         end
-        
-        begin 
-            result = ProductHelper.new(@product, @site_visitor_state).buildProductDisplay
-            
+        begin
+          result = ProductHelper.new(@product, @site_visitor_state).buildProductDisplay
             @similar_products, @dispensary_to_product, @table_header_options = 
-                    result[0], result[1], result[2]
-                    
+                    result[0], result[1], result[2]    
         rescue => ex
-            #I should send email with error message here
+            puts 'here is the error: '
             puts ex
-            redirect_to root_path
-        end
+            redirect_to root_path              
+        end           
     end
     
     def change_state
@@ -119,13 +111,22 @@ class ProductsController < ApplicationController
         end
         
         def set_product
-          @product = Product.friendly.find(params[:id])
+            if marshal_load($redis.get("product_#{params[:id]}")).blank?
+                @product = Product.friendly.find(params[:id])
+                set_into_redis
+            else
+                get_from_redis
+            end
+            if @product.blank?
+                redirect_to root_path 
+            end
         end
         
-        def product_params
-          params.require(:product).permit(:name, :product_type, :image, :remote_image_url, 
-                                            :ancillary, :featured_product, :alternate_names,
-                                            :sub_category, :cbd, :cbn, :min_thc, :med_thc, :max_thc, :is_dom,
-                                            :year, :month, :category_id, :description, dispensary_source_ids: [], vendor_ids: [])
-        end  
+        def set_into_redis
+            $redis.set("product_#{params[:id]}", marshal_dump(@product))
+        end
+
+        def get_from_redis
+            @product = marshal_load($redis.get("product_#{params[:id]}")) 
+        end
 end
