@@ -55,3 +55,26 @@ $panelHeaderBck: #2f2f2f;
   background: #fff;
   padding: 15px;
 }
+.panel_contents li{
+  list-style: none;
+  margin-bottom: 10px;
+}
+.panel_contents li label{
+  margin-right: 10px;
+}
+.panel_contents li select{
+  padding: 5px;
+}
+.has_many_remove{
+  background: red !important;
+}
+.has_many_fields ol li input {
+  width: 196px !important;
+}
+
+.inline-errors{
+  color: #e82814;
+}
+#dispensary_source_product_product_id{
+  margin-left: 52px;
+}
