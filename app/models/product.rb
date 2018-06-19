@@ -70,9 +70,6 @@ class Product < ActiveRecord::Base
     
     #stock image
     def default_image
-        
-        # return_image = 'substitutes/product-flower.png'
-        
         if Rails.env.production? && self.category.present?
             if self.category.name == 'Flower'
                 return_image = 'substitutes/default_flower.jpg'
@@ -104,4 +101,11 @@ class Product < ActiveRecord::Base
        self.product_states.destroy_all
     end
     
+    #set redis key after save
+    after_save :set_redis_key
+    def set_redis_key
+        if self.slug.present?
+            $redis.set("product_#{self.slug}", Marshal.dump(self))   
+        end
+    end
 end
