@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180607195345) do
+ActiveRecord::Schema.define(version: 20180619194517) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -118,11 +118,6 @@ ActiveRecord::Schema.define(version: 20180607195345) do
 
   add_index "categories", ["slug"], name: "index_categories_on_slug", unique: true
 
-  create_table "digest_emails", force: :cascade do |t|
-    t.string  "email"
-    t.boolean "active"
-  end
-
   create_table "dispensaries", force: :cascade do |t|
     t.string   "name"
     t.string   "image"
@@ -142,28 +137,6 @@ ActiveRecord::Schema.define(version: 20180607195345) do
   create_table "dispensary_source_products", force: :cascade do |t|
     t.integer  "dispensary_source_id"
     t.integer  "product_id"
-    t.string   "image"
-    t.decimal  "price"
-    t.decimal  "price_gram"
-    t.decimal  "price_eighth"
-    t.decimal  "price_quarter"
-    t.decimal  "price_half_gram"
-    t.decimal  "price_two_grams"
-    t.decimal  "price_half_ounce"
-    t.decimal  "price_ounce"
-    t.decimal  "price_80mg"
-    t.decimal  "price_160mg"
-    t.decimal  "price_180mg"
-    t.decimal  "price_100mg"
-    t.decimal  "price_40mg"
-    t.decimal  "price_25mg"
-    t.decimal  "price_150mg"
-    t.decimal  "price_10mg"
-    t.decimal  "price_50mg"
-    t.decimal  "price_240mg"
-    t.decimal  "price_1mg"
-    t.decimal  "price_2_5mg"
-    t.decimal  "one"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -175,7 +148,6 @@ ActiveRecord::Schema.define(version: 20180607195345) do
     t.string   "name"
     t.string   "slug"
     t.string   "image"
-    t.string   "location"
     t.string   "city"
     t.float    "latitude"
     t.float    "longitude"
@@ -220,10 +192,6 @@ ActiveRecord::Schema.define(version: 20180607195345) do
     t.datetime "updated_at"
   end
 
-  create_table "hashtags", force: :cascade do |t|
-    t.string "name"
-  end
-
   create_table "product_states", force: :cascade do |t|
     t.integer  "product_id"
     t.integer  "state_id"
@@ -238,12 +206,10 @@ ActiveRecord::Schema.define(version: 20180607195345) do
   create_table "products", force: :cascade do |t|
     t.string   "name"
     t.string   "image"
-    t.boolean  "ancillary"
     t.string   "product_type"
     t.string   "slug"
     t.string   "description"
     t.boolean  "featured_product"
-    t.string   "short_description"
     t.integer  "category_id"
     t.decimal  "year"
     t.decimal  "month"
@@ -267,11 +233,6 @@ ActiveRecord::Schema.define(version: 20180607195345) do
   end
 
   add_index "products", ["slug"], name: "index_products_on_slug", unique: true
-
-  create_table "source_hashtags", force: :cascade do |t|
-    t.integer "source_id"
-    t.integer "hashtag_id"
-  end
 
   create_table "sources", force: :cascade do |t|
     t.string   "name"
