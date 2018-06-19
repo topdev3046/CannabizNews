@@ -11,37 +11,38 @@ ActiveAdmin.register DispensarySource do
           
     
     filter :name
-    filter :state_id
+    filter :"state_id" , :as => :select, :collection => State.all.map{|u| [u.name , u.id]}
+    filter :"dispensary_id" , :as => :select, :collection => Dispensary.all.map{|u| [u.name , u.id]}
+    filter :"admin_user_id" , :as => :select, :collection => AdminUser.all.map{|u| [u.email , u.id]}
     
     #save queries
     includes :dispensary, :source, :state, :admin_user
-  
     
     index do
         selectable_column
         id_column
         column :name
     
-        column "Image" do |dispensary|
+        column "Image", :sortable=>:"dispensary_sources.image" do |dispensary|
           truncate(dispensary.image_url, omision: "...", length: 50) if dispensary.image
         end
         
         if current_admin_user.admin?
             
-            column "Dispensary" do |ds|
+            column "Dispensary", :sortable=>:"dispensaries.name" do |ds|
                 if ds.dispensary.present?
                     link_to ds.dispensary.name, admin_dispensary_path(ds.dispensary_id)
                 end
             end
-            column "Source" do |ds|
+            column "Source", :sortable=>:"sources.name" do |ds|
                 if ds.source.present?
                     link_to ds.source.name, admin_source_path(ds.source_id)
                 end
             end
-            column "Admin User" do |ds|
+            column "Admin User", :sortable=>:"admin_user.name" do |ds|
                 link_to ds.admin_user.email, admin_admin_user_path(ds.admin_user_id) if ds.admin_user
             end
-            column "State" do |ds|
+            column "State", :sortable=>:"state.name" do |ds|
                 if ds.state.present?
                     link_to ds.state.name, admin_state_path(ds.state_id)
                 end
@@ -49,8 +50,6 @@ ActiveAdmin.register DispensarySource do
         end
 
         column :location
-
-    
         column :updated_at
         #should make a new column thats like - awaiting approval - everytime they change it I set it
         actions

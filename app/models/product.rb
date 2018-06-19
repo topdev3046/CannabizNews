@@ -78,7 +78,7 @@ class Product < ActiveRecord::Base
                 return_image = 'substitutes/default_flower.jpg'
             
             elsif self.category.name == 'Concentrates'
-                return_image = 'substitutes/default_concentrate.jpg'
+                return_image = 'substitutes/default_concentrate.jpeg'
             
             elsif self.category.name == 'Edibles'
                 return_image = 'substitutes/default_edible.jpg'
