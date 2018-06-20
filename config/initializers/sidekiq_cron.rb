@@ -1,16 +1,16 @@
 if Rails.env.production?
 	
 	# NEWS
-	Sidekiq::Cron::Job.create(name: 'Leafly News', cron: '10 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'LeaflyWorker')
-	Sidekiq::Cron::Job.create(name: 'CannaLawBlog News', cron: '15 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'CannaLawBlogWorker')
-	Sidekiq::Cron::Job.create(name: 'CannabisCulture News', cron: '20 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'CannabisCultureWorker')
-	# Sidekiq::Cron::Job.create(name: 'DopeMagazine News', cron: '25 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'DopeMagazineWorker')
-	# Sidekiq::Cron::Job.create(name: 'FourTwentyTimes News', cron: '30 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'FourTwentyTimesWorker')
-	Sidekiq::Cron::Job.create(name: 'HighTimes News', cron: '35 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'HighTimesWorker')
-	Sidekiq::Cron::Job.create(name: 'MarijuanaStocks News', cron: '40 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MarijuanaStocksWorker')
-	Sidekiq::Cron::Job.create(name: 'Marijuana.com News', cron: '45 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MarijuanaWorker')
-	Sidekiq::Cron::Job.create(name: 'MjBizDaily News', cron: '50 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MjBizDailyWorker')
-	Sidekiq::Cron::Job.create(name: 'TheCannabist News', cron: '55 0,2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'TheCannabistWorker')
+	Sidekiq::Cron::Job.create(name: 'News Leafly', cron: '10 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'LeaflyWorker')
+	Sidekiq::Cron::Job.create(name: 'News CannaLawBlog', cron: '15 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'CannaLawBlogWorker')
+	Sidekiq::Cron::Job.create(name: 'News CannabisCulture', cron: '20 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'CannabisCultureWorker')
+	# Sidekiq::Cron::Job.create(name: 'DopeMagazine News', cron: '25 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'DopeMagazineWorker')
+	# Sidekiq::Cron::Job.create(name: 'FourTwentyTimes News', cron: '30 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'FourTwentyTimesWorker')
+	Sidekiq::Cron::Job.create(name: 'News HighTimes', cron: '35 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'HighTimesWorker')
+	Sidekiq::Cron::Job.create(name: 'News MarijuanaStocks', cron: '40 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MarijuanaStocksWorker')
+	Sidekiq::Cron::Job.create(name: 'News Marijuana.com', cron: '45 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MarijuanaWorker')
+	Sidekiq::Cron::Job.create(name: 'News MjBizDaily', cron: '50 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'MjBizDailyWorker')
+	Sidekiq::Cron::Job.create(name: 'News TheCannabist', cron: '55 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'TheCannabistWorker')
 	
 	# LEAFLY
 	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA 1', cron: '0 1 * * *', class: 'LeaflyDispensaryWorker1')
@@ -44,5 +44,14 @@ if Rails.env.production?
 	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp NV 11', cron: '30 11 * * *', class: 'WeedMapsWorker11')
 	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp NV 12', cron: '45 11 * * *', class: 'WeedMapsWorker12')
 
+	# HEADSET
 	Sidekiq::Cron::Job.create(name: 'Headset Scraper', cron: '0 0 * * *', class: 'HeadsetWorker')
+
+	# REDIS RESET KEYS
+	Sidekiq::Cron::Job.create(name: 'Redis Category Worker', cron: '10 0 * * *', class: 'RedisCategoryWorker')
+	Sidekiq::Cron::Job.create(name: 'Redis Dispensary Worker', cron: '20 0 * * *', class: 'RedisDispensaryWorker')
+	Sidekiq::Cron::Job.create(name: 'Redis Source Worker', cron: '30 0 * * *', class: 'RedisSourceWorker')
+	Sidekiq::Cron::Job.create(name: 'Redis State Worker', cron: '40 0 * * *', class: 'RedisStateWorker')
+	Sidekiq::Cron::Job.create(name: 'Redis Vendor Worker', cron: '50 0 * * *', class: 'RedisVendorWorker')
+
 end
