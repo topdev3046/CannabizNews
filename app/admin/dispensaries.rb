@@ -40,16 +40,8 @@ ActiveAdmin.register Dispensary do
 	collection_action :import_dispensaries do
 		if request.method == "POST"
 			if params[:dispensary][:file_name].present?
-				file_data = params[:dispensary][:file_name]
-				if file_data.respond_to?(:read)
-					dispensaries = file_data.read
-					Dispensary.import_from_csv(dispensaries)
-					flash[:notice] = "Dispensaries imported successfully."
-				elsif file_data.respond_to?(:path)
-					dispensaries = File.read(file_data.path)
-					Dispensary.import_from_csv(dispensaries)
-					flash[:notice] = "Dispensaries imported successfully."
-				end
+				Dispensary.import_from_csv(params[:dispensary][:file_name])
+				flash[:notice] = "Dispensaries imported successfully."
 			end
 			redirect_to admin_dispensaries_path
 		end

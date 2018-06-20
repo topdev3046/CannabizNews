@@ -40,7 +40,7 @@ class Product < ActiveRecord::Base
     end
     
     #import CSV file
-    def self.import(file)
+    def self.import_from_csv(file)
         CSV.foreach(file.path, headers: true, skip_blanks: true) do |row|
             
             #change to update record if id matches
@@ -50,10 +50,10 @@ class Product < ActiveRecord::Base
             if product.present? 
                 product.first.update_attributes(product_hash)
             else
-                #Product.create! product_hash
+                Product.create! product_hash
             end
         end
-    end    
+    end   
     
     #export CSV file
     def self.to_csv
@@ -101,11 +101,15 @@ class Product < ActiveRecord::Base
        self.product_states.destroy_all
     end
     
-    #set redis key after save
-    after_save :set_redis_key
-    def set_redis_key
-        if self.slug.present?
-            $redis.set("product_#{self.slug}", Marshal.dump(self))   
+    after_validation :set_redis_key
+	def set_redis_key
+	    begin
+    	    if self.slug.present?
+                $redis.set("product_#{self.slug}", Marshal.dump(self))   
+            end
+        rescue => ex
+            puts ex
+            #should send error email here
         end
-    end
+	end
 end

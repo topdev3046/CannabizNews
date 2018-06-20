@@ -71,16 +71,8 @@ ActiveAdmin.register Product do
 	collection_action :import_products do
 		if request.method == "POST"
 			if params[:product][:file_name].present?
-				file_data = params[:product][:file_name]
-				if file_data.respond_to?(:read)
-					products = file_data.read
-					Product.import_from_csv(products)
-					flash[:notice] = "Products imported successfully."
-				elsif file_data.respond_to?(:path)
-					products = File.read(file_data.path)
-					Product.import_from_csv(products)
-					flash[:notice] = "Products imported successfully."
-				end
+				Product.import_from_csv(params[:product][:file_name])
+				flash[:notice] = "Products imported successfully."
 			end
 			redirect_to admin_products_path
 		end

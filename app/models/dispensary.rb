@@ -22,6 +22,22 @@ class Dispensary < ActiveRecord::Base
     #photo aws storage
     mount_uploader :image, PhotoUploader
     
+    #import CSV file
+    def self.import_from_csv(file)
+        CSV.foreach(file.path, headers: true, skip_blanks: true) do |row|
+            
+            #change to update record if id matches
+            dispensary_hash = row.to_hash
+            dispensary = self.where(id: dispensary_hash["id"])
+            
+            if dispensary.present? 
+                dispensary.first.update_attributes(dispensary_hash)
+            else
+                Dispensary.create! dispensary_hash
+            end
+        end
+    end
+    
     #delete relations
     before_destroy :delete_relations
     def delete_relations
