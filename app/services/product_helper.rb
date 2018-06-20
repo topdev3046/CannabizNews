@@ -46,14 +46,6 @@ class ProductHelper
 	end
 	
 	def buildProductDisplay()
-	    
-	    
-	    #populate page maps - IF THEY HAVE A SELF ONE THEN AUTOMATICALLY USE THAT, IF NOT USE ANOTHER
-        # dispensary_sources = @product.dispensary_sources.where(state_id: @state.id).
-        #                         includes(:dispensary, :state, :dispensary_source_products => :dsp_prices).
-        #                         order('last_menu_update DESC').order("name ASC")
-                                
-	    #gotta put average price in here as well
 	   
 	    @dispensary_source_products = @product.dispensary_source_products.includes(:product, :dsp_prices, :dispensary_source => [:dispensary, :state]).
                 where("dispensary_sources.state_id =?", @state.id).
@@ -61,28 +53,10 @@ class ProductHelper
                 references(:dispensary_sources)
 	    
 	    if @average_price.present?
-	        
-	       # puts 'steve is here 60'
-	        
-	       # #@dsp_prices = DspPrice.where()
-	        
-	       # @dispensary_source_products = @product.dispensary_source_products.includes(:product, :dsp_prices, :dispensary_source => [:dispensary, :state]).
-        #         where("dispensary_sources.state_id =?", @state.id).
-        #         # where('dsp_prices.unit like ?', @average_price.average_price_unit).
-        #         # where('dsp_prices.price <= ?', @average_price.average_price).
-        #         order('dispensary_sources.last_menu_update DESC').order("dispensary_sources.name ASC").
-        #         references(:dispensary_sources)#.joins(:dsp_prices)
-                
-        #     puts 'steve is here 69' 
-        #     puts @dispensary_source_products.count
                 
             @table_header_options = [@average_price.average_price_unit]
 	        
 	    else 
-	       # @dispensary_source_products = @product.dispensary_source_products.includes(:product, :dsp_prices, :dispensary_source => [:dispensary, :state]).
-        #         where("dispensary_sources.state_id =?", @state.id).
-        #         order('dispensary_sources.last_menu_update DESC').order("dispensary_sources.name ASC").
-        #         references(:dispensary_sources)
             
             @header_options =  @dispensary_source_products.
                 map{|dispensary_source_product| dispensary_source_product.dsp_prices.map(&:unit)}.flatten.uniq
@@ -111,21 +85,7 @@ class ProductHelper
             end
                 
         end
-        
-        
-        # dispensary_sources.each do |dispSource|
-            
-        #     #dispensary products
-        #     if !@dispensary_to_product.has_key?(dispSource)
-                
-        #         dsps = dispSource.dispensary_source_products.select { |dsp| dsp.product_id == @product.id}
-                
-        #         if dsps.size > 0
-        #             @dispensary_to_product.store(dispSource, dsps[0])
-        #         end
-        #     end
-        # end
-        
+
         #return
         [@dispensary_to_product, @table_header_options]
 	end
