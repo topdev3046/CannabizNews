@@ -4,6 +4,13 @@ class ProductsController < ApplicationController
     
     def index
         
+        #state dropdown
+        if params[:state].present?
+            if state = State.find_by(name: params[:state])
+                @site_visitor_state = state
+            end
+        end
+        
         if params[:format].present?
            @searched_category = @product_categories.find_by(name: params[:format])
             if !@searched_category.present?
@@ -26,6 +33,7 @@ class ProductsController < ApplicationController
                     includes(:vendors, :category, :average_prices)    
         end
         
+        @search_string = ''
         if @searched_category.present?
             
             @products = @products.where(category_id: @searched_category.id)
@@ -43,16 +51,16 @@ class ProductsController < ApplicationController
         end
         
         #search string
-        if @search_string.present? && @site_visitor_state.product_state
+        if @site_visitor_state.product_state
             @search_string = "#{@search_string} in #{@site_visitor_state.name}"  
         
-        elsif @search_string.present? && !@site_visitor_state.product_state
+        elsif !@site_visitor_state.product_state
             
             state_string = ''
             @states_with_products.each do |state|
                 state_string = state_string + state.name + ', ' 
             end
-            state_string.chomp(', ')
+            state_string = state_string.chomp(', ')
             @search_string = "#{@search_string} in #{state_string}"
         end
 

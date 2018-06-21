@@ -10,6 +10,13 @@ class PagesController < ApplicationController
         #dont display nav search
         @nav_search = false
         
+        #state dropdown
+        if params[:state].present?
+            if state = State.find_by(name: params[:state])
+                @site_visitor_state = state
+            end
+        end
+        
         #ARTICLES --  
         @recent_articles = @site_visitor_state.articles.active_source.
                             order("created_at DESC").

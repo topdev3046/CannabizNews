@@ -96,9 +96,15 @@
                                                 <li><a href="<%= articles_path %>">News</a></li>
                                             <% end %>
                                             
-                                            <li><a href="<%= products_path %>">Products</a></li>
-                                            <li><a href="<%= contact_us_path %>">Contact Us</a></li>
-                                            <li class="ipad-remove"><a href="<%= feedback_path %>">Leave Feedback</a></li>
+                                            <% if @site_visitor_state.product_state %>
+                                                <li><a href="<%= products_path(state: @site_visitor_state.name) %>">Products</a></li>
+                                            <% else %>
+                                                <li><a href="<%= products_path %>">Products</a></li>
+                                            <% end %>
+                                            <li>
+                                                <%= render 'shared/dropdown_states_header' %>
+                                            </li>
+                                            <li class="ipad-remove"><a href="<%= contact_us_path %>">Contact Us</a></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -146,9 +152,17 @@
                             <% end %>
                         </li>
                         <li><a href="<%= articles_path %>">News</a></li>
-                        <li><a href="<%= products_path %>">Products</a></li>
+                        
+                        <% if @site_visitor_state.product_state %>
+                            <li><a href="<%= products_path(state: @site_visitor_state.name) %>">Products</a></li>
+                        <% else %>
+                            <li><a href="<%= products_path %>">Products</a></li>
+                        <% end %>
+                        
+                        <li>
+                            <%= render 'shared/dropdown_states_header_mobile' %>    
+                        </li>
                         <li><a href="<%= contact_us_path %>">Contact Us</a></li>
-                        <li><a href="<%= feedback_path %>">Leave Feedback</a></li>
                                             
                     </ul>
                 </nav>

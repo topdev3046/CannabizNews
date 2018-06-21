@@ -1,0 +1,25 @@
+<div class="home-state-dropdown">
+    <select name="State" class="selectDropdown" data-live-search="true" onChange="window.location.href=this.value">
+    	<option value = "<%= root_path %>">Change State</option>
+    	<% @all_states.each do |state| %>
+    	    <% if @site_visitor_state.present? && @site_visitor_state.name == state.name %>
+    	        <option value = "<%=root_path(state: state.name)%>" selected="selected"><%=state.name%></option>
+    	    <% else %>
+    	        <option value = "<%=root_path(state: state.name)%>"><%=state.name%></option>
+    	    <% end %>
+    	<% end %>
+    </select>
+</div>
+
+<style>
+    .home-state-dropdown {
+        color: #2ab081;
+        line-height: 60px;
+        padding: 0 20px;
+    } 
+    @media (min-width: 992px) and (max-width: 1169px) {
+        .home-state-dropdown {
+            padding: 0 12px;
+        } 
+    }
+</style>
