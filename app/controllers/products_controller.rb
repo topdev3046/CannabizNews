@@ -11,19 +11,6 @@ class ProductsController < ApplicationController
             end
         end
         
-        if params[:format].present?
-           @searched_category = @product_categories.find_by(name: params[:format])
-            if !@searched_category.present?
-                if params[:format] == 'Hybrid-Indica'
-                    @searched_is_dom = 'Indica'
-                elsif params[:format] == 'Hybrid-Sativa'
-                    @searched_is_dom = 'Sativa'
-                else
-                    @searched_sub_category = params[:format] 
-                end
-            end
-        end
-        
         if @site_visitor_state.present? && @site_visitor_state.product_state
             @products = @site_visitor_state.products.featured.order('RANDOM()').
                     includes(:vendors, :category, :average_prices)
@@ -33,21 +20,29 @@ class ProductsController < ApplicationController
                     includes(:vendors, :category, :average_prices)    
         end
         
+        #category parameters
         @search_string = ''
-        if @searched_category.present?
-            
-            @products = @products.where(category_id: @searched_category.id)
-            @search_string = @searched_category.name
-        
-        elsif @searched_sub_category.present? 
-        
-            @products = @products.where(sub_category: @searched_sub_category).where(is_dom: nil)
+        if params[:cat].present?
+            if @searched_category = @product_categories.find_by(name: params[:cat])
+                @products = @products.where(category_id: @searched_category.id)
+                @search_string = @searched_category.name    
+            end
+        elsif params[:sub_cat].present? && ['Sativa', 'Indica', 'Hybrid'].include?(params[:sub_cat])
+            @searched_sub_category = params[:sub_cat]
+            @products = @products.where(sub_category: @searched_sub_category)
             @search_string = @searched_sub_category
+        elsif params[:is_dom].present?
         
-        elsif @searched_is_dom.present?    
-        
-            @products = @products.where(is_dom: @searched_is_dom)
-            @search_string = "Hybrid-#{@searched_is_dom}"
+            if params[:is_dom] == 'Hybrid-Indica'
+                @searched_is_dom = 'Indica'
+            elsif params[:is_dom] == 'Hybrid-Sativa'
+                @searched_is_dom = 'Sativa'
+            end
+            
+            if @searched_is_dom.present?
+                @products = @products.where(is_dom: @searched_is_dom)
+                @search_string = "Hybrid-#{@searched_is_dom}"
+            end
         end
         
         #search string
