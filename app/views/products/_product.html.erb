@@ -1,7 +1,11 @@
 <!-- individual dispensary on the index -->
 <div class="col-md-3 productspacer ind-product">
 	<!-- product image -->
-	<a href="<%= product_path(product) %>">
+	<% if @site_visitor_state.product_state %>
+        <a href="<%= product_path(product, state_id: @site_visitor_state.id) %>">
+    <% else %>
+        <a href="<%= product_path(product) %>">
+    <% end %>
     	<% if product.image.present? && Rails.env.production? %>
     	    <img src="<%=product.image_url(:product_show)%>" onerror="this.src='<%= asset_path product.default_image %>'" alt="<%=product.name%>">
     	<% else %>
@@ -16,7 +20,11 @@
                 <div class="zm-post-header">
                     
                     <h5 class="h5height product-index-ind">
-                        <%=link_to product.name, product_path(product)%>
+                        <% if @site_visitor_state.product_state %>
+            	            <%=link_to product.name, product_path(product, state_id: @site_visitor_state.id)%>
+            	        <% else %>
+            	            <%=link_to product.name, product_path(product)%>
+            	        <% end %>
                     </h5>
                     <div class="zm-category hidden-991">
                         <% if product.category.present? %>

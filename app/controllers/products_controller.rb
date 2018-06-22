@@ -106,6 +106,7 @@ class ProductsController < ApplicationController
         if params[:state_id].present?
             if @searched_state = State.find_by(id: params[:state_id])
                 state_used = @searched_state
+                @site_visitor_state = state_used
             else 
                 state_used = @site_visitor_state
             end

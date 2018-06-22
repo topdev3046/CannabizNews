@@ -1,5 +1,5 @@
 <div class="home-state-dropdown">
-    <select name="State" class="selectDropdown" data-live-search="true" onChange="window.location.href=this.value">
+    <select name="State" class="selectDropdown" style="padding-left: 5px;" data-live-search="true" onChange="window.location.href=this.value">
     	<option value = "<%= root_path %>">Change State</option>
     	<% @all_states.each do |state| %>
     	    <% if @site_visitor_state.present? && @site_visitor_state.name == state.name %>
