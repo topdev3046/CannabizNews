@@ -86,9 +86,6 @@ class ProductsController < ApplicationController
             redirect_to root_path 
         end
         
-        puts 'here are the params'
-        puts params
-        
         state_used = nil
         avg_price = nil
         
@@ -107,6 +104,12 @@ class ProductsController < ApplicationController
             end
         else 
             state_used = @site_visitor_state
+        end
+        
+        #default state to washington
+        if !state_used.product_state
+           state_used = State.find_by(name: 'Washington')
+           @searched_state = state_used
         end
         
         begin
