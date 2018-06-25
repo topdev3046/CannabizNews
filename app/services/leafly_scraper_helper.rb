@@ -14,6 +14,8 @@ class LeaflyScraperHelper
 		#GLOBAL VARIABLES
 		@source = Source.where(name: 'Leafly').first #source we are scraping
 		@state = State.where(abbreviation: @state_abbreviation).first #state we are scraping from the source
+		
+		puts 'steve is here 18'
 
 		#query the dispensarysources from this source and this state that have a dispensary lookup
 		@dispensary_sources = DispensarySource.where(state_id: @state.id).where(source_id: @source.id).
@@ -21,6 +23,8 @@ class LeaflyScraperHelper
 
 		#the actual dispensaries that we will really display
 		@real_dispensaries = Dispensary.where(state_id: @state.id)
+		
+		puts 'steve is here 27'
 		
 		#map of their quantities to our quantities
 		@quantityToQuantity = {
@@ -69,10 +73,16 @@ class LeaflyScraperHelper
 			'Pack of 10' => '10 Pack',
 			'Pack of 16' => '16 Pack',
 		}
+		
+		'puts steve is here 77'
 
 		#MAKE CALL AND CREATE JSON
         output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation])
 		contents = JSON.parse(output.read)
+		
+		puts 'steve is here 83'
+		puts contents
+
 
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state_abbreviation.downcase].each do |returned_dispensary_source|
