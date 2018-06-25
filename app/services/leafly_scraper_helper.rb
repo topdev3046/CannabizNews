@@ -60,10 +60,10 @@ class LeaflyScraperHelper
 			'80MG' => '80mg',
 			'85 mg' => '85mg',
 			'90 mg' => '90mg',
-			"100 mg" => "100mg",
+			'100 mg' => '100mg',
 			'100MG' => '100mg',
-			"125 mg" => "125mg",
-			"130 mg" => "130mg",
+			'125 mg' => '125mg',
+			'130 mg' => '130mg',
 			'500 mg' => '500mg',
 			'500mg' => '500mg',
 			'250MG' => '250mg',
@@ -74,7 +74,7 @@ class LeaflyScraperHelper
 			'Pack of 16' => '16 Pack',
 		}
 		
-		'puts steve is here 77'
+		puts 'steve is here 77'
 
 		#MAKE CALL AND CREATE JSON
         output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation])
@@ -82,7 +82,6 @@ class LeaflyScraperHelper
 		
 		puts 'steve is here 83'
 		puts contents
-
 
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state_abbreviation.downcase].each do |returned_dispensary_source|
