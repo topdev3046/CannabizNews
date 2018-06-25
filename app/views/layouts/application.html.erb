@@ -112,6 +112,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <%= javascript_include_tag 'application' %>
         <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
         <%= stylesheet_link_tag 'style', media: 'all', 'data-turbolinks-track' => true %>
         <%= csrf_meta_tags %>
@@ -142,12 +143,11 @@
             <% end %>
         </div>
         
-        <%= javascript_include_tag 'application' %>
         <%= javascript_include_tag 'article_help'%>
         <%= javascript_include_tag 'sticky' %>
         <%= javascript_include_tag 'endless_scroll' %>
         
-        <%= javascript_include_tag 'jquery-1.12.1.min' %>
+        <%#= javascript_include_tag 'jquery-1.12.1.min' %>
         <%= javascript_include_tag 'jquery.meanmenu' %>
         <%= javascript_include_tag 'jquery.meanmenu.min' %>
         <%= javascript_include_tag 'jquery.scrollUp' %>

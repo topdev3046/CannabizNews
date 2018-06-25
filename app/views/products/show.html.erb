@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <!-- Start left side -->
-                <div itemscope itemtype="http://schema.org/Product" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 columns">
+                <div itemscope itemtype="http://schema.org/Product" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 columns margin-991-100">
                     <div class="row mb-40">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="section-title">
@@ -33,7 +33,7 @@
                                     </span>
                                     <h5 class="h5height">
                                         <% if @product.category.present? %>
-                                             <a style ="color: #2ab081;" href="<%=products_path(@product.category.name)%>">
+                                             <a style ="color: #2ab081;" href="<%=products_path(cat: @product.category.name)%>">
                                                 <%= @product.category.name %></a>
                                         <% end %>
                                        
@@ -41,10 +41,10 @@
                                              - 
                                             <% if @product.is_dom.present? %>
                                                 <a style="color: #2ab081;" 
-                                                    href="<%=products_path("Hybrid-#{@product.is_dom}")%>">Hybrid-<%=@product.is_dom%></a> 
+                                                    href="<%=products_path(is_dom: "Hybrid-#{@product.is_dom}")%>">Hybrid-<%=@product.is_dom%></a> 
                                             <% else %>
                                                 <a style="color: #2ab081;" 
-                                                    href="<%=products_path(@product.sub_category)%>"><%=@product.sub_category%></a>
+                                                    href="<%=products_path(sub_cat: @product.sub_category)%>"><%=@product.sub_category%></a>
                                             <% end %>
                                         <% end %>
                                         <!--thc cbd cbn-->

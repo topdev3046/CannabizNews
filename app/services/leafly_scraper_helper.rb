@@ -1,55 +1,33 @@
 class LeaflyScraperHelper
 
-	attr_reader :state_abbreviation, :city_range
+	attr_reader :state_abbreviation
 	
-	def initialize(state_abbreviation, city_range)
+	def initialize(state_abbreviation)
 		@state_abbreviation = state_abbreviation
-		@city_range = city_range
 	end   
 	
 	def scrapeLeafly()
 		
 		require "json"
 		require 'open-uri'
-		
-		puts 'i am here'
 
 		#GLOBAL VARIABLES
 		@source = Source.where(name: 'Leafly').first #source we are scraping
 		@state = State.where(abbreviation: @state_abbreviation).first #state we are scraping from the source
-		
-		puts 'i am here 2'
-		puts @state.name
 
 		#query the dispensarysources from this source and this state that have a dispensary lookup
 		@dispensary_sources = DispensarySource.where(state_id: @state.id).where(source_id: @source.id).
 								includes(:dispensary, :products, :products => :vendors, :dispensary_source_products => :dsp_prices)
-								
-		puts 'i am also here'
 
 		#the actual dispensaries that we will really display
 		@real_dispensaries = Dispensary.where(state_id: @state.id)
-		
-		puts 'i am also here 3'
-		puts @real_dispensaries.count
 
 		#MAKE CALL AND CREATE JSON
-		output = nil
-		if @city_range.present?
-            output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation, '--city='+ @city_range])
-		else
-            output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation])
-		end
-
+        output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation])
 		contents = JSON.parse(output.read)
-		
-		puts 'contents: '
-		puts contents
 
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state_abbreviation.downcase].each do |returned_dispensary_source|
-			
-			puts 'i am in the content loop'
 			
 			#check if the dispensary source already exists
 			existing_dispensary_sources = @dispensary_sources.select { |dispensary_source| dispensary_source.name.casecmp(returned_dispensary_source['name']) == 0 }

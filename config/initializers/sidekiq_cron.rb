@@ -13,20 +13,20 @@ if Rails.env.production?
 	Sidekiq::Cron::Job.create(name: 'News TheCannabist', cron: '55 2,4,6,8,10,12,14,16,18,20,22 * * *', class: 'TheCannabistWorker')
 	
 	# LEAFLY
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA 1', cron: '0 1 * * *', class: 'LeaflyDispensaryWorker1')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA 2', cron: '15 1 * * *', class: 'LeaflyDispensaryWorker2')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA 3', cron: '30 1 * * *', class: 'LeaflyDispensaryWorker3')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA 4', cron: '45 1 * * *', class: 'LeaflyDispensaryWorker4')
+	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA', cron: '0 1 * * *', class: 'LeaflyDispensaryWorker1')
+	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO', cron: '15 3 * * *', class: 'LeaflyDispensaryWorker2')
+	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV', cron: '30 5 * * *', class: 'LeaflyDispensaryWorker3')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp WA 4', cron: '45 1 * * *', class: 'LeaflyDispensaryWorker4')
 	
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 5', cron: '0 3 * * *', class: 'LeaflyDispensaryWorker5')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 6', cron: '15 3 * * *', class: 'LeaflyDispensaryWorker6')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 7', cron: '30 3 * * *', class: 'LeaflyDispensaryWorker7')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 8', cron: '45 3 * * *', class: 'LeaflyDispensaryWorker8')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 5', cron: '0 3 * * *', class: 'LeaflyDispensaryWorker5')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 6', cron: '15 3 * * *', class: 'LeaflyDispensaryWorker6')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 7', cron: '30 3 * * *', class: 'LeaflyDispensaryWorker7')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 8', cron: '45 3 * * *', class: 'LeaflyDispensaryWorker8')
 	
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 9', cron: '0 5 * * *', class: 'LeaflyDispensaryWorker9')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 10', cron: '15 5 * * *', class: 'LeaflyDispensaryWorker10')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 11', cron: '30 5 * * *', class: 'LeaflyDispensaryWorker11')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 12', cron: '45 5 * * *', class: 'LeaflyDispensaryWorker12')	
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 9', cron: '0 5 * * *', class: 'LeaflyDispensaryWorker9')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 10', cron: '15 5 * * *', class: 'LeaflyDispensaryWorker10')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 11', cron: '30 5 * * *', class: 'LeaflyDispensaryWorker11')
+	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 12', cron: '45 5 * * *', class: 'LeaflyDispensaryWorker12')	
 
 	# WEED MAPS
 	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp WA 1', cron: '0 7 * * *', class: 'WeedMapsWorker1')

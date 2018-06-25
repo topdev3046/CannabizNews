@@ -65,7 +65,7 @@ class ProductsController < ApplicationController
     
     def refine_index
         
-        result = ProductFinder.new(params).build
+        result = ProductFinder.new(params, @states_with_products).build
         
         #parse returns
         @products, @search_string, @searched_name, @az_letter, 
@@ -154,6 +154,12 @@ class ProductsController < ApplicationController
             state_used = @site_visitor_state
         end
         
+        #default washington
+        if !state_used.product_state
+            @searched_state = State.find_by(name: 'Washington')
+            state_used = @searched_state
+        end
+        
         begin
             result = ProductHelper.new(@product, @searched_state, @average_price).buildSimilarProducts
             @similar_products = result[0]
@@ -173,7 +179,16 @@ class ProductsController < ApplicationController
         end
         
     end
-  
+
+    def autocomplete_search
+        query_term = params[:term]
+        @products = Product.featured.where("lower(name) like (?)","%#{query_term.to_s.downcase}%")
+        respond_to do |format|  
+          format.html {redirect_to root_path }
+          format.json { render :json => @products.to_json }
+        end
+    end
+
     private
     
         def require_admin

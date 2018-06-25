@@ -3,8 +3,8 @@ class LeaflyDispensaryWorker1
   sidekiq_options :queue => :dispensary, :retry => false
 
 	def perform()
-		logger.info "Leafly Dispensary background job 1 is running"
-		LeaflyScraperHelper.new('WA', 'A-F').scrapeLeafly
+		logger.info "Leafly Dispensary background WA Job"
+		LeaflyScraperHelper.new('WA').scrapeLeafly
 	end    
 	
 end #end of class

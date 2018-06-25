@@ -47,31 +47,7 @@
             </div>
         </div>
     </div>
-    <div class="header-middle-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-lg-4 col-xs-12 header-mdh">
-                    <div class="global-table">
-                        <div class="global-row">
-                            <div class="global-cell">
-                                <div class="logo">
-                                    <!--if state use the state logo-->
-                                    <% if @state != nil && @state.logo.present? %>
-                                        <%= link_to image_tag(asset_path(@state.logo), alt: "#{@state.name} Cannabiz Logo"), root_path %>
-                                    <% elsif @site_visitor_state != nil && @site_visitor_state.logo.present? %>
-                                        <%= link_to image_tag(asset_path(@site_visitor_state.logo), alt: "#{@site_visitor_state.name} Cannabiz Logo"), root_path %>
-                                    <% else %>
-                                	    <%= link_to image_tag("header_footer/cbz-logo-color.svg", alt: "Cannabiz Network Logo"), root_path %>
-                                    <% end %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+
     <div class="header-bottom-area bg-theme hidden-sm hidden-xs">
         <div class="container">
             <div class="row">
@@ -114,7 +90,7 @@
                                     <div class="search-form">
                                         
                                         <form class="navbar-form" role="search" method="get" action = '/search'>
-                                            <input type="search" name="query" placeholder="Search by Product, Not by Dispensary" autocomplete='on'>
+                                            <input type="search" name="query" placeholder="Search by Product, Not by Dispensary" autocomplete='on' id ="search">
                                             <button type="submit">Search</button>
                                         </form>
 
@@ -173,7 +149,7 @@
 </header>
 
 <!--mobile sticky header-->
-<div id = "mobile-sticky-logo">
+<div id = "mobile-sticky-logo" class="fix-logo">
     <!--desktop logo-->
     <% if @state.present? && @state.logo.present? %>
         <%= link_to image_tag(asset_path(@state.logo)), root_path %>
@@ -184,7 +160,7 @@
     <% end %>
 </div>
 
-<div id = "mobile-sticky-header">
+<div id = "mobile-sticky-header" class="fix-search">
     <div class="col-xs-12">
         <div class="archive-inner">
             <div class="archive-filter">
@@ -201,3 +177,28 @@
         </div>
     </div>                        
 </div>
+ <script type="text/javascript">
+    $(function() {
+      $('#search').autocomplete({
+          minLength: 3,
+          source: '<%= autocomplete_search_path(:json) %>',
+          focus: function(event, ui) {
+            $('#search').val(ui.item.name);
+            return false;
+          },
+          select: function(event, ui) {
+            $('#search').val(ui.item.name);
+            url = window.location.origin
+            window.location.href = url + "/products/" + ui.item.slug
+            return false;
+          },
+          create: function () {
+           $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+              return $('<li>')
+                .append( "<p>" + item.name + "</p>" )
+                .appendTo(ul);
+            };
+          }
+      })
+    });
+</script>
