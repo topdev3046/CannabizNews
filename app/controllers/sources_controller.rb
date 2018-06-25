@@ -19,7 +19,7 @@ class SourcesController < ApplicationController
                         order("num_views DESC").page(params[:page]).per_page(24)
                 $redis.set("#{@source.name.downcase}_mostview_articles", Marshal.dump(@mostviews))           
             else
-                @mostviews = Marshal.load($redis.get("#{@category.name.downcase}_mostview_articles"))
+                @mostviews = Marshal.load($redis.get("#{@source.name.downcase}_mostview_articles"))
             end
         
         else
