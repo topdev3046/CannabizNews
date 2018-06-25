@@ -82,10 +82,11 @@ class LeaflyScraperHelper
 		contents = JSON.parse(output.read)
 		
 		puts 'steve is here 83'
-		puts contents
 
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state_abbreviation.downcase].each do |returned_dispensary_source|
+			
+			puts 'in the content loop'
 			
 			#check if the dispensary source already exists
 			existing_dispensary_sources = @dispensary_sources.select { |dispensary_source| dispensary_source.name.casecmp(returned_dispensary_source['name']) == 0 }
