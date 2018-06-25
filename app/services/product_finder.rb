@@ -2,8 +2,9 @@ class ProductFinder
 	
 	attr_reader :params
 	
-	def initialize(params)
+	def initialize(params, states_with_products)
 		@params = params
+		@states_with_products = states_with_products
 		@search_string = ''
 	end
 	
@@ -71,6 +72,14 @@ class ProductFinder
         #add state value at the end
         if add_state_to_string
             add_to_search(params[:state_search], ' in ')
+        else
+            #in the product states
+            state_string = ''
+            @states_with_products.each do |state|
+                state_string = state_string + state.name + ', ' 
+            end
+            state_string = state_string.chomp(', ')
+            add_to_search(state_string, ' in ')
         end
         
         #return values
