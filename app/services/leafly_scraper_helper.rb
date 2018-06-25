@@ -44,6 +44,7 @@ class LeaflyScraperHelper
 			'½ oz' => 'Half Ounce',
 			'1 oz' => 'Ounce',
 			'1 OZ' => 'Ounce',
+			'(1)' => 'Each',
 			'each' => 'Each',
 			'PREROLL' => 'Each',
 			'pre-roll' => 'Each',
