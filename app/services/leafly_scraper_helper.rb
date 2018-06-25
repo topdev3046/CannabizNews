@@ -21,6 +21,54 @@ class LeaflyScraperHelper
 
 		#the actual dispensaries that we will really display
 		@real_dispensaries = Dispensary.where(state_id: @state.id)
+		
+		#map of their quantities to our quantities
+		@quantityToQuantity = {
+			'½ g' => 'Half Gram',
+			'.5g' => 'Half Gram',
+			'.5G' => 'Half Gram',
+			'.6G' => '.6g',
+			'1 g' => 'Gram',
+			'1g' => 'Gram',
+			'1 G' => 'Gram',
+			'2 g' => '2 Grams',
+			'4 G' => '4 Grams',
+			'⅛ oz' => 'Eighth',
+			'3.5 G' => 'Eighth',
+			'3.5 g' => 'Eighth',
+			'¼ oz' => 'Quarter Ounce',
+			'½ oz' => 'Half Ounce',
+			'1 oz' => 'Ounce',
+			'1 OZ' => 'Ounce',
+			'each' => 'Each',
+			'PREROLL' => 'Each',
+			'pre-roll' => 'Each',
+			'preroll' => 'Each',
+			'Pre-Roll' => 'Each',
+			'10 mg' => '10mg',
+			'20 mg' => '20mg',
+			'30 mg' => '30mg',
+			'32 mg' => '32mg',
+			'50 mg' => '50mg',
+			'60 mg' => '60mg',
+			'75 mg' => '75mg',
+			'80 mg' => '80mg',
+			'80MG' => '80mg',
+			'85 mg' => '85mg',
+			'90 mg' => '90mg',
+			"100 mg" => "100mg",
+			'100MG' => '100mg',
+			"125 mg" => "125mg",
+			"130 mg" => "130mg",
+			'500 mg' => '500mg',
+			'500mg' => '500mg',
+			'250MG' => '250mg',
+			'5 sticks 15 mg' => '5 Pack',
+			'PRE ROLL PACK' => 'Pack',
+			'3 PACK' => '3 Pack',
+			'Pack of 10' => '10 Pack',
+			'Pack of 16' => '16 Pack',
+		}
 
 		#MAKE CALL AND CREATE JSON
         output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation])
@@ -235,19 +283,6 @@ class LeaflyScraperHelper
 			)
 		end
 
-
-		#map of their quantities to our quantities
-		quantityToQuantity = {
-			'½ g' => 'Half Gram',
-			'1 g' => 'Gram',	
-			'2 g' => '2 Grams',	
-			'⅛ oz' => 'Eighth',	
-			'¼ oz' => 'Quarter Ounce',
-			'½ oz' => 'Half Ounce',
-			'1 oz' => 'Ounce',
-			'each' => 'Each'
-		}
-
 		#create dispensary source product
 		if returned_dispensary_source_product['prices'] != nil
 			
@@ -257,10 +292,10 @@ class LeaflyScraperHelper
 			returned_dispensary_source_product['prices'].each do |quantity_price_pair|
 
 				#only create if the quantity matches - if not we should email to create a new quantity
-				if quantityToQuantity.has_key?(quantity_price_pair['quantity'])
+				if @quantityToQuantity.has_key?(quantity_price_pair['quantity'])
 					DspPrice.create(
 						:dispensary_source_product_id => dsp.id,
-						:unit => quantityToQuantity[quantity_price_pair['quantity']],
+						:unit => @quantityToQuantity[quantity_price_pair['quantity']],
 						:price => quantity_price_pair['price']
 					)
 				else
@@ -278,30 +313,18 @@ class LeaflyScraperHelper
 			#see if we need to update the last_menu_update for the dispensary source
 			updated_menu = false
 
-			#need more for other categories
-			quantityToQuantity = {
-				'½ g' => 'Half Gram',
-				'1 g' => 'Gram',	
-				'2 g' => '2 Grams',	
-				'⅛ oz' => 'Eighth',	
-				'¼ oz' => 'Quarter Ounce',
-				'½ oz' => 'Half Ounce',
-				'1 oz' => 'Ounce',
-				'each' => 'Each'
-			}
-
 			returned_dispensary_source_product['prices'].each do |quantity_price_pair|
 
 				#use the same map like above - only update if we have a match
-				if quantityToQuantity.has_key?(quantity_price_pair['quantity'])
+				if @quantityToQuantity.has_key?(quantity_price_pair['quantity'])
 					#see if we have any dsp prices with this quantity
 
-					if existing_dispensary_source_product.dsp_prices.where(unit: quantityToQuantity[quantity_price_pair['quantity']]).any?
+					if existing_dispensary_source_product.dsp_prices.where(unit: @quantityToQuantity[quantity_price_pair['quantity']]).any?
 						#compare the price - if its different we update
-						if existing_dispensary_source_product.dsp_prices.where(unit: quantityToQuantity[quantity_price_pair['quantity']]).first.price != quantity_price_pair['price']
+						if existing_dispensary_source_product.dsp_prices.where(unit: @quantityToQuantity[quantity_price_pair['quantity']]).first.price != quantity_price_pair['price']
 							
 							existing_dispensary_source_product.dsp_prices.
-								where(unit: quantityToQuantity[quantity_price_pair['quantity']]).first.update_attribute :price, quantity_price_pair['price']
+								where(unit: @quantityToQuantity[quantity_price_pair['quantity']]).first.update_attribute :price, quantity_price_pair['price']
 							
 							updated_menu = true
 						end
@@ -309,7 +332,7 @@ class LeaflyScraperHelper
 						#create new dsp price
 						DspPrice.create(
 							:dispensary_source_product_id => existing_dispensary_source_product.id,
-							:unit => quantityToQuantity[quantity_price_pair['quantity']],
+							:unit => @quantityToQuantity[quantity_price_pair['quantity']],
 							:price => quantity_price_pair['price']
 						)
 						updated_menu = true

@@ -37,8 +37,13 @@ class Article < ActiveRecord::Base
     #set redis key after save
     after_save :set_redis_key
     def set_redis_key
-        if self.slug.present?
-            $redis.set("article_#{self.slug}", Marshal.dump(self))   
+        begin
+            if self.slug.present?
+                $redis.set("article_#{self.slug}", Marshal.dump(self))   
+            end
+        rescue => ex
+            puts ex
+            #should send error email here
         end
     end
     
