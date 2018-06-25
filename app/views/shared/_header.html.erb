@@ -111,7 +111,7 @@
                     <div class="mobile-search-btn"><%=image_tag("icons/search.png")%></div>
                     <div class="mobile-search-form">
                         <form class="navbar-form" role="search" method="get" action = '/search'>
-                            <input type="text" name="query" placeholder="Search by Product, not by Dispensary" autocomplete='on'>
+                            <input type="text" name="query" placeholder="Search by Product, not by Dispensary" autocomplete='on' id="search_mobile">
                             <button type="submit"><%=image_tag("icons/search.png")%></button>
                         </form>
                     </div>
@@ -201,4 +201,31 @@
           }
       })
     });
+    $(function() {
+      $('#search_mobile').autocomplete({
+          minLength: 3,
+          source: '<%= autocomplete_search_path(:json) %>',
+          focus: function(event, ui) {
+            $('#search').val(ui.item.name);
+            return false;
+          },
+          select: function(event, ui) {
+            $('#search_mobile').val(ui.item.name);
+            url = window.location.origin
+            window.location.href = url + "/products/" + ui.item.slug
+            return false;
+          },
+          create: function () {
+           $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+              return $('<li>')
+                .append( "<p>" + item.name + "</p>" )
+                .appendTo(ul);
+            };
+          }
+      })
+    });
 </script>
+
+<style>
+    .ui-menu {top: 104px !important;}
+</style>

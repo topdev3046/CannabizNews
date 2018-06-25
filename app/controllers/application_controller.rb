@@ -34,11 +34,8 @@ class ApplicationController < ActionController::Base
   
     def site_visitor_location
         begin
-            if session[:state_id].present?
-                @site_visitor_state = State.where(id: session[:state_id]).first
-            elsif request.location && request.location.state.present?
+            if request.location && request.location.state.present?
                 @site_visitor_state = State.where(name: request.location.state).first
-                session[:state_id] = @site_visitor_state.id
             else
                 default_visitor_location
             end
