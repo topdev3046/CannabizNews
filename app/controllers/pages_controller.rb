@@ -3,10 +3,6 @@ class PagesController < ApplicationController
     before_action :require_admin, only: [:admin]
     
     def home
-        
-        #test scraper
-        #DispWeedmaps.perform_later('Washington', 'A-B')
-        
         #dont display nav search
         @nav_search = false
         
@@ -25,7 +21,8 @@ class PagesController < ApplicationController
         #trending news - we should have num_views created this past week - not of all time - will do when moving live
         if Rails.env.production?
             @trending_articles = Article.active_source.
-                        where("created_at >= ?", 1.week.ago.utc).order("num_views DESC").limit(10)
+                        where("created_at >= ?", 1.week.ago.utc).order("num_views DESC").
+                        includes(:states, :source, :categories).limit(10)
         else
             @trending_articles = Article.active_source.order("num_views DESC").
                                     includes(:states, :source, :categories).
