@@ -81,14 +81,4 @@ class ApplicationController < ActionController::Base
                 redirect_to root_path
             end
         end
-        
-        def marshal_dump(object)
-            data = Marshal.dump(object)
-            data
-        end
-        
-        def marshal_load(data)
-            object = Marshal.load(data) rescue nil
-            object
-        end
 end

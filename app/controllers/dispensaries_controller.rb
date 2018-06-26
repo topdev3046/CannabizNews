@@ -32,36 +32,23 @@ class DispensariesController < ApplicationController
     def show
         
         require 'uri' #google map / facebook
+        @dispensary_source = @dispensary.dispensary_sources.order('last_menu_update DESC').first
         
-        if marshal_load($redis.get("#{@dispensary.name.downcase}_dispensary_source")).blank?
-            @dispensary_source = @dispensary.dispensary_sources.order('last_menu_update DESC').first
-            $redis.set("#{@dispensary.name.downcase}_dispensary_source", Marshal.dump(@dispensary_source))
-        else
-            @dispensary_source = Marshal.load($redis.get("#{@dispensary.name.downcase}_dispensary_source"))    
-        end
-        
-        if marshal_load($redis.get("#{@dispensary.name.downcase}_category_to_products")).blank?
-            
-            @dispensary_source_products = @dispensary_source.dispensary_source_products.
+        @dispensary_source_products = @dispensary_source.dispensary_source_products.
                         includes(:dsp_prices, product: [:category, :vendors, :vendor])
             
-            @category_to_products = Hash.new
+        @category_to_products = Hash.new
+        
+        @dispensary_source_products.each do |dsp|
             
-            @dispensary_source_products.each do |dsp|
-                
-                if dsp.product.present? && dsp.product.featured_product && dsp.product.category.present?
-                    if @category_to_products.has_key?(dsp.product.category.name)
-                        @category_to_products[dsp.product.category.name].push(dsp)
-                    else
-                        @category_to_products.store(dsp.product.category.name, [dsp])
-                    end
+            if dsp.product.present? && dsp.product.featured_product && dsp.product.category.present?
+                if @category_to_products.has_key?(dsp.product.category.name)
+                    @category_to_products[dsp.product.category.name].push(dsp)
+                else
+                    @category_to_products.store(dsp.product.category.name, [dsp])
                 end
             end
-            $redis.set("#{@dispensary.name.downcase}_category_to_products", Marshal.dump(@category_to_products))           
-        else
-            @category_to_products = Marshal.load($redis.get("#{@dispensary.name.downcase}_category_to_products"))
         end
-        
     end
     
     #-------------------------------------
@@ -74,22 +61,6 @@ class DispensariesController < ApplicationController
             end
         end
         def set_dispensary
-            if marshal_load($redis.get("dispensary_#{params[:id]}")).blank?
-                @dispensary = Dispensary.friendly.find(params[:id])
-                set_into_redis
-            else
-                get_from_redis
-            end
-            if @dispensary.blank?
-                redirect_to root_path 
-            end
-        end
-        
-        def set_into_redis
-            $redis.set("dispensary_#{params[:id]}", marshal_dump(@dispensary))
-        end
-
-        def get_from_redis
-            @dispensary = marshal_load($redis.get("dispensary_#{params[:id]}")) 
+            @dispensary = Dispensary.friendly.find(params[:id])
         end
 end

@@ -199,22 +199,6 @@ class ProductsController < ApplicationController
         end
         
         def set_product
-            if marshal_load($redis.get("product_#{params[:id]}")).blank?
-                @product = Product.friendly.find(params[:id])
-                set_into_redis
-            else
-                get_from_redis
-            end
-            if @product.blank?
-                redirect_to root_path 
-            end
-        end
-        
-        def set_into_redis
-            $redis.set("product_#{params[:id]}", marshal_dump(@product))
-        end
-
-        def get_from_redis
-            @product = marshal_load($redis.get("product_#{params[:id]}")) 
+            @product = Product.friendly.find(params[:id])
         end
 end
