@@ -9,23 +9,11 @@ class CategoriesController < ApplicationController
             redirect_to root_path 
         end
         
-        if marshal_load($redis.get("#{@category.name.downcase}_recent_articles")).blank?
-            @recents = @category.articles.active_source.
-                        includes(:source, :categories, :states).order("created_at DESC")
-            $redis.set("#{@category.name.downcase}_recent_articles", Marshal.dump(@recents))           
-        else
-            @recents = Marshal.load($redis.get("#{@category.name.downcase}_recent_articles"))
-        end
-        @recents = @recents.paginate(:page => params[:page], :per_page => 24)
-        
-        if marshal_load($redis.get("#{@category.name.downcase}_mostview_articles")).blank?
-            @mostviews = @category.articles.active_source.
-                        includes(:source, :categories, :states).order("num_views DESC")
-            $redis.set("#{@category.name.downcase}_mostview_articles", Marshal.dump(@mostviews))           
-        else
-            @mostviews = Marshal.load($redis.get("#{@category.name.downcase}_mostview_articles"))
-        end
-        @mostviews = @mostviews.paginate(:page => params[:page], :per_page => 24)
+        @recents = @category.articles.active_source.includes(:source, :categories, :states).
+                            order("created_at DESC").paginate(:page => params[:page], :per_page => 24)
+                            
+        @mostviews = @category.articles.active_source.includes(:source, :categories, :states).
+                                order("num_views DESC").paginate(:page => params[:page], :per_page => 24)
     end
   
     private

@@ -5,13 +5,8 @@ class DispensariesController < ApplicationController
     def index
         
         if @site_visitor_state.product_state?
-            if marshal_load($redis.get("#{@site_visitor_state.name.downcase}_dispensaries")).blank?
-                @dispensaries = Dispensary.where(state_id: @site_visitor_state.id).order("RANDOM()")
-                $redis.set("#{@site_visitor_state.name.downcase}_dispensaries", Marshal.dump(@dispensaries))
-            else
-                @dispensaries = Marshal.load($redis.get("#{@site_visitor_state.name.downcase}_dispensaries"))    
-            end
-            @dispensaries = @dispensaries.paginate(page: params[:page], per_page: 16)
+            @dispensaries = Dispensary.where(state_id: @site_visitor_state.id).order("RANDOM()").
+                                paginate(page: params[:page], per_page: 16)
         else
             @dispensaries = Dispensary.order("RANDOM()").paginate(page: params[:page], per_page: 16)
         end

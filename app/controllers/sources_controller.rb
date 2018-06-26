@@ -6,22 +6,11 @@ class SourcesController < ApplicationController
     def show
         if @source.active
             
-            if marshal_load($redis.get("#{@source.name.downcase}_recent_articles")).blank?
-                @recents = @source.articles.includes(:source, :categories, :states).
-                        order("created_at DESC").page(params[:page]).per_page(24)
-                $redis.set("#{@source.name.downcase}_recent_articles", Marshal.dump(@recents))           
-            else
-                @recents = Marshal.load($redis.get("#{@source.name.downcase}_recent_articles"))
-            end
-            
-            if marshal_load($redis.get("#{@source.name.downcase}_mostview_articles")).blank?
-                @mostviews = @source.articles.includes(:source, :categories, :states).
-                        order("num_views DESC").page(params[:page]).per_page(24)
-                $redis.set("#{@source.name.downcase}_mostview_articles", Marshal.dump(@mostviews))           
-            else
-                @mostviews = Marshal.load($redis.get("#{@source.name.downcase}_mostview_articles"))
-            end
-        
+            @recents = @source.articles.active_source.includes(:source, :categories, :states).
+                            order("created_at DESC").paginate(:page => params[:page], :per_page => 24)
+                            
+            @mostviews = @source.articles.active_source.includes(:source, :categories, :states).
+                                order("num_views DESC").paginate(:page => params[:page], :per_page => 24)
         else
             redirect_to root_path
         end
