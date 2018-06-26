@@ -363,6 +363,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     naught (1.1.0)
+    newrelic_rpm (5.2.0.345)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     oauth (0.5.1)
@@ -571,6 +572,7 @@ DEPENDENCIES
   jquery-ui-rails (~> 6.0, >= 6.0.1)
   left_join (~> 0.2.1)
   mini_magick (~> 4.5, >= 4.5.1)
+  newrelic_rpm
   nokogiri
   oauth (~> 0.5.1)
   owlcarousel-rails!

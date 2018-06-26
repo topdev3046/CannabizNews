@@ -20,6 +20,7 @@ gem 'canonical-rails', '~> 0.2.1' #automatically add canonical meta tag to each 
 gem 'owlcarousel-rails', github: 'acrogenesis/owlcarousel-rails', branch: 'master'
 gem 'left_join', '~> 0.2.1' #do left_join queries
 gem 'hairtrigger', '~> 0.2.20' #allow for trigger use
+gem 'newrelic_rpm'
 
 
 #ACTIVE ADMIN
