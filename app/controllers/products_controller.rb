@@ -13,11 +13,11 @@ class ProductsController < ApplicationController
         
         if @site_visitor_state.present? && @site_visitor_state.product_state
             @products = @site_visitor_state.products.featured.order('RANDOM()').
-                    includes(:vendors, :category, :average_prices)
+                    includes(:vendors, :category, :average_prices).paginate(:page => params[:page], :per_page => 16)
         else 
             @products = Product.featured.left_join(:dispensary_source_products).group(:id).
                     order('COUNT(dispensary_source_products.id) DESC').
-                    includes(:vendors, :category, :average_prices)    
+                    includes(:vendors, :category, :average_prices).paginate(:page => params[:page], :per_page => 16)  
         end
         
         #category parameters
