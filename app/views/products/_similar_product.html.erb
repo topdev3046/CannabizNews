@@ -1,9 +1,5 @@
 <div class="col-md-3 productspacer similar_product">
-    <% if @site_visitor_state.product_state %>
-        <a href="<%= product_path(product, state_id: @site_visitor_state.id) %>">
-    <% else %>
-        <a href="<%= product_path(product) %>">
-    <% end %>
+    <a href="<%= product_path(product) %>">
         <% if Rails.env.production? && product.image_url != nil %>
             <img src="<%= product.image_url(:product_show)%>" onerror="this.src='<%= asset_path product.default_image %>'" alt="<%=product.name%>">
         <% else %>
@@ -16,23 +12,14 @@
             <div class="zm-post-dis">
                 <div class="zm-post-header">
                           
-                    <h5 class="h5height" style="max-height: 27px; overflow: hidden;">
-                    	<% if @site_visitor_state.product_state %>
-            	            <%=link_to product.name, product_path(product, state_id: @site_visitor_state.id)%>
-            	        <% else %>
-            	            <%=link_to product.name, product_path(product)%>
-            	        <% end %>
+                    <h5 class="h5height">
+                    	<%= link_to product.name, product_path(product) %>
                     </h5>
                     
                     <div class="zm-category hidden-991">
                         <% if product.category.present? %>
-                            <% if @site_visitor_state.product_state %>
-                                <a class="bg-cat-3 cat-btn" href="<%=products_path(cat: product.category.name, state: @site_visitor_state.name)%>">
-                            <% else %>        
-                                <a class="bg-cat-3 cat-btn" href="<%=products_path(cat: product.category.name)%>">
-                            <% end %>
-                                    <%= product.category.name %>    
-                                </a>
+                            <a class="bg-cat-3 cat-btn" href="<%=products_path(product.category.name)%>">
+                                <%= product.category.name %></a>
                         <% end %>
                         
                         <!--sub category-->
@@ -43,35 +30,19 @@
                                 
                                 <% if product.is_dom == 'Indica' %>
                                 
-                                    <% if @site_visitor_state.product_state %>
-                                        <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path(is_dom: 'Hybrid-Indica', state: @site_visitor_state.name)%>">Hybrid-Indica</a>
-                                    <% else %>        
-                                        <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path(is_dom: 'Hybrid-Indica')%>">Hybrid-Indica</a>
-                                    <% end %>
-                                    
+                                    <a class="bg-cat-3 cat-btn" 
+                                        href="<%=products_path('Hybrid-Indica')%>">Hybrid-Indica</a>
                                 
                                 <% else %>
-
-                                    <% if @site_visitor_state.product_state %>
-                                        <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path(is_dom: 'Hybrid-Sativa', state: @site_visitor_state.name)%>">Hybrid-Sativa</a>
-                                    <% else %>        
-                                        <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path(is_dom: 'Hybrid-Sativa')%>">Hybrid-Sativa</a>
-                                    <% end %>
+                                
+                                    <a class="bg-cat-3 cat-btn" 
+                                        href="<%=products_path('Hybrid-Sativa')%>">Hybrid-Sativa</a>
                                 
                                 <% end %>
                                 
                             <% else %>
-                                <% if @site_visitor_state.product_state %>
-                                    <a class="bg-cat-3 cat-btn" 
-                                    href="<%=products_path(sub_cat: product.sub_category, state: @site_visitor_state.name)%>"><%= product.sub_category %></a>
-                                <% else %>        
-                                    <a class="bg-cat-3 cat-btn" 
-                                    href="<%=products_path(sub_cat: product.sub_category)%>"><%= product.sub_category %></a>
-                                <% end %>   
+                                <a class="bg-cat-3 cat-btn" 
+                                    href="<%=products_path(product.sub_category)%>"><%= product.sub_category %></a>   
                             <% end %>
                             
                         <% end %>
@@ -79,7 +50,7 @@
                     </div>
                 </div>
                 <div class="product-info">
-                    <p style="max-height: 53px; overflow: hidden;">Produced By:
+                    <p style="max-height: 36px; overflow: hidden">Produced By:
                         <% if product.vendors.any? %>
                             <% product.vendors.each_with_index do |vendor, index| %>
                                 <% if index + 1 == product.vendors.size %>
@@ -90,25 +61,17 @@
                             <% end %>
                         <% elsif product.vendor.present? %>
                             <%= link_to product.vendor.name, vendor_path(product.vendor), :class => 'vendor_path'%>
-                        <% end %> 
+                        <% end %>
                     </p>
                 </div>
                 <div class="product-info">
                     <p>Average Prices:
                         <% product.average_prices.each_with_index do |average_price, index| %>
                             <% if index + 1 == product.average_prices.size %>
-                                <% if @site_visitor_state.product_state %>
-                                    <a href="<%=product_path(product, average_price_id: average_price.id, state_id: @site_visitor_state.id)%>" style="color: #2ab081;">
-                                <% else %>
-                                    <a href="<%=product_path(product, average_price_id: average_price.id)%>" style="color: #2ab081;">
-                                <% end %>
+                                <a href="<%=average_price_path(average_price)%>" style="color: #2ab081;">
                                     <%="$#{average_price.average_price.round}/#{average_price.average_price_unit}"%></a>
                             <% else %>
-                                <% if @site_visitor_state.product_state %>
-                                    <a href="<%=product_path(product, average_price_id: average_price.id, state_id: @site_visitor_state.id)%>" style="color: #2ab081;">
-                                <% else %>
-                                    <a href="<%=product_path(product, average_price_id: average_price.id)%>" style="color: #2ab081;">
-                                <% end %>
+                                <a href="<%=average_price_path(average_price)%>" style="color: #2ab081;">
                                     <%="$#{average_price.average_price.round}/#{average_price.average_price_unit}"%></a>,&nbsp;
                             <% end %>
                         <% end %>

@@ -4,59 +4,40 @@ class ProductsController < ApplicationController
     
     def index
         
-        #state dropdown
-        if params[:state].present?
-            if state = State.find_by(name: params[:state])
-                @site_visitor_state = state
+        if params[:format].present?
+            
+            @searched_category = @product_categories.find_by(name: params[:format])
+            
+            if !@searched_category.present?
+                if params[:format] == 'Hybrid-Indica'
+                    @searched_is_dom = 'Indica'
+                elsif params[:format] == 'Hybrid-Sativa'
+                    @searched_is_dom = 'Sativa'
+                else
+                    @searched_sub_category = params[:format] 
+                end
             end
         end
         
-        if @site_visitor_state.present? && @site_visitor_state.product_state
-            @products = @site_visitor_state.products.featured.order('RANDOM()').
-                    includes(:vendors, :category, :average_prices).paginate(:page => params[:page], :per_page => 16)
-        else 
-            @products = Product.featured.left_join(:dispensary_source_products).group(:id).
+        @products = Product.featured.left_join(:dispensary_source_products).group(:id).
                     order('COUNT(dispensary_source_products.id) DESC').
-                    includes(:vendors, :category, :average_prices).paginate(:page => params[:page], :per_page => 16)  
-        end
-        
-        #category parameters
-        @search_string = ''
-        if params[:cat].present?
-            if @searched_category = @product_categories.find_by(name: params[:cat])
-                @products = @products.where(category_id: @searched_category.id)
-                @search_string = @searched_category.name    
-            end
-        elsif params[:sub_cat].present? && ['Sativa', 'Indica', 'Hybrid'].include?(params[:sub_cat])
-            @searched_sub_category = params[:sub_cat]
-            @products = @products.where(sub_category: @searched_sub_category)
-            @search_string = @searched_sub_category
-        elsif params[:is_dom].present?
-        
-            if params[:is_dom] == 'Hybrid-Indica'
-                @searched_is_dom = 'Indica'
-            elsif params[:is_dom] == 'Hybrid-Sativa'
-                @searched_is_dom = 'Sativa'
-            end
+                    includes(:vendors, :category, :average_prices)
+
+        if @searched_category.present?
             
-            if @searched_is_dom.present?
-                @products = @products.where(is_dom: @searched_is_dom)
-                @search_string = "Hybrid-#{@searched_is_dom}"
-            end
-        end
+            @products = @products.where(category_id: @searched_category.id)
+            @search_string = "#{@searched_category.name}"
         
-        #search string
-        if @site_visitor_state.product_state
-            @search_string = "#{@search_string} in #{@site_visitor_state.name}"  
+        elsif @searched_sub_category.present? 
         
-        elsif !@site_visitor_state.product_state
-            
-            state_string = ''
-            @states_with_products.each do |state|
-                state_string = state_string + state.name + ', ' 
-            end
-            state_string = state_string.chomp(', ')
-            @search_string = "#{@search_string} in #{state_string}"
+            @products = @products.where(sub_category: @searched_sub_category).where(is_dom: nil)
+            @search_string = "#{@searched_sub_category}"
+        
+        elsif @searched_is_dom.present?    
+        
+            @products = @products.where(is_dom: @searched_is_dom)
+            @search_string = "Hybrid-#{@searched_is_dom}"
+
         end
 
         @products = @products.paginate(page: params[:page], per_page: 16)
