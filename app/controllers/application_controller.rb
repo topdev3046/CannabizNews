@@ -57,48 +57,11 @@ class ApplicationController < ActionController::Base
     def populate_lists
         require 'will_paginate/array'
         
-        begin
-            if $redis.get('news_categories').blank?
-                @news_categories = Category.news.active.order("name ASC")
-                $redis.set("news_categories", Marshal.dump(@news_categories))
-            else 
-                @news_categories = Marshal.load($redis.get("news_categories"))
-            end
-            
-            if $redis.get('product_categories').blank?
-                @product_categories = Category.products.active.order("name ASC")
-                $redis.set("product_categories", Marshal.dump(@product_categories))
-            else 
-                @product_categories = Marshal.load($redis.get("product_categories"))
-            end
-            
-            if $redis.get('all_states').blank?
-                @all_states = State.all.order("name ASC")
-                $redis.set("all_states", Marshal.dump(@all_states))
-            else 
-                @all_states = Marshal.load($redis.get("all_states"))
-            end
-            
-            if $redis.get('states_with_products').blank?
-                @states_with_products = @all_states.where(product_state: true)
-                $redis.set("states_with_products", Marshal.dump(@states_with_products))
-            else 
-                @states_with_products = Marshal.load($redis.get("states_with_products"))
-            end
-            
-            if $redis.get('active_sources').blank?
-                @active_sources = Source.where(:active => true).order("name ASC")
-                $redis.set("active_sources", Marshal.dump(@active_sources))
-            else 
-                @active_sources = Marshal.load($redis.get("active_sources"))
-            end
-        rescue
-            @news_categories = Category.news.active.order("name ASC")
-            @product_categories = Category.products.active.order("name ASC")
-            @all_states = State.all.order("name ASC")
-            @states_with_products = @all_states.where(product_state: true)
-            @active_sources = Source.where(:active => true).order("name ASC")
-        end
+        @news_categories = Category.news.active.order("name ASC")
+        @product_categories = Category.products.active.order("name ASC")
+        @all_states = State.all.order("name ASC")
+        @states_with_products = @all_states.where(product_state: true)
+        @active_sources = Source.where(:active => true).order("name ASC")
 
         @az_values = ['#', 'A','B','C','D','E','F','G','H','I','J','K','L','M',
                             'N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
