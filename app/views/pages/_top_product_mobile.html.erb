@@ -88,7 +88,42 @@
                     <p><%=product.description.truncate(175) if product.description%></p>
                 </div>
 
-                <%= render partial: 'shared/average_price_vendor', locals: {product: product} %>
+                <div class="product-info">
+                    <p style="max-height: 53px; overflow: hidden;">Produced By:
+                        <% if product.vendors.any? %>
+                            <% product.vendors.each_with_index do |vendor, index| %>
+                                <% if index + 1 == product.vendors.size %>
+                                    <%= link_to vendor.name, vendor_path(vendor), :class => 'vendor_path'%>
+                                <% else %>
+                                    <%= link_to vendor.name, vendor_path(vendor), :class => 'vendor_path'%>,&nbsp;
+                                <% end %>
+                            <% end %>
+                        <% elsif product.vendor.present? %>
+                            <%= link_to product.vendor.name, vendor_path(product.vendor), :class => 'vendor_path'%>
+                        <% end %> 
+                    </p>
+                </div>
+                <div class="product-info">
+                    <p>Average Prices:
+                        <% product.average_prices.each_with_index do |average_price, index| %>
+                            <% if index + 1 == product.average_prices.size %>
+                                <% if @site_visitor_state.product_state %>
+                                    <a href="<%=product_path(product, average_price_id: average_price.id, state_id: @site_visitor_state.id)%>" style="color: #2ab081;">
+                                <% else %>
+                                    <a href="<%=product_path(product, average_price_id: average_price.id)%>" style="color: #2ab081;">
+                                <% end %>
+                                    <%="$#{average_price.average_price.round}/#{average_price.average_price_unit}"%></a>
+                            <% else %>
+                                <% if @site_visitor_state.product_state %>
+                                    <a href="<%=product_path(product, average_price_id: average_price.id, state_id: @site_visitor_state.id)%>" style="color: #2ab081;">
+                                <% else %>
+                                    <a href="<%=product_path(product, average_price_id: average_price.id)%>" style="color: #2ab081;">
+                                <% end %>
+                                    <%="$#{average_price.average_price.round}/#{average_price.average_price_unit}"%></a>,&nbsp;
+                            <% end %>
+                        <% end %>
+                    </p>
+                </div>
                 
             </div>
         </div>
