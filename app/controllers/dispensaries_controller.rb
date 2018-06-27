@@ -61,6 +61,22 @@ class DispensariesController < ApplicationController
             end
         end
         def set_dispensary
-            @dispensary = Dispensary.friendly.find(params[:id])
+            if marshal_load($redis.get("dispensary_#{params[:id]}")).blank?
+                @dispensary = Dispensary.friendly.find(params[:id])
+                set_into_redis
+            else
+                get_from_redis
+            end
+            if @dispensary.blank?
+                redirect_to root_path 
+            end
+        end
+        
+        def set_into_redis
+            $redis.set("dispensary_#{params[:id]}", marshal_dump(@dispensary))
+        end
+
+        def get_from_redis
+            @dispensary = marshal_load($redis.get("dispensary_#{params[:id]}")) 
         end
 end
