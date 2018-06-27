@@ -3,6 +3,13 @@ class ProductsController < ApplicationController
     
     def index
         
+        #state dropdown
+        if params[:state].present?
+            if state = State.find_by(name: params[:state])
+                @site_visitor_state = state
+            end
+        end
+        
         if params[:format].present?
             
             @searched_category = @product_categories.find_by(name: params[:format])
