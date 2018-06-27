@@ -48,10 +48,10 @@ if Rails.env.production?
 	Sidekiq::Cron::Job.create(name: 'Headset Scraper', cron: '0 0 * * *', class: 'HeadsetWorker')
 
 	# REDIS RESET KEYS
-	Sidekiq::Cron::Job.create(name: 'Redis Category Worker', cron: '10 0 * * *', class: 'RedisCategoryWorker')
-	Sidekiq::Cron::Job.create(name: 'Redis Dispensary Worker', cron: '20 0 * * *', class: 'RedisDispensaryWorker')
-	Sidekiq::Cron::Job.create(name: 'Redis Source Worker', cron: '30 0 * * *', class: 'RedisSourceWorker')
-	Sidekiq::Cron::Job.create(name: 'Redis State Worker', cron: '40 0 * * *', class: 'RedisStateWorker')
-	Sidekiq::Cron::Job.create(name: 'Redis Vendor Worker', cron: '50 0 * * *', class: 'RedisVendorWorker')
+	# Sidekiq::Cron::Job.create(name: 'Redis Category Worker', cron: '10 0 * * *', class: 'RedisCategoryWorker')
+	# Sidekiq::Cron::Job.create(name: 'Redis Dispensary Worker', cron: '20 0 * * *', class: 'RedisDispensaryWorker')
+	# Sidekiq::Cron::Job.create(name: 'Redis Source Worker', cron: '30 0 * * *', class: 'RedisSourceWorker')
+	# Sidekiq::Cron::Job.create(name: 'Redis State Worker', cron: '40 0 * * *', class: 'RedisStateWorker')
+	# Sidekiq::Cron::Job.create(name: 'Redis Vendor Worker', cron: '50 0 * * *', class: 'RedisVendorWorker')
 
 end

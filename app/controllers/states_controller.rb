@@ -14,6 +14,22 @@ class StatesController < ApplicationController
     private 
         
         def set_state
-            @state = State.friendly.find(params[:id])
+            if marshal_load($redis.get("state_#{params[:id]}")).blank?
+                @state = State.friendly.find(params[:id])
+                set_into_redis
+            else
+                get_from_redis
+            end     
+            if @state.blank?
+                redirect_to root_path 
+            end
+        end
+
+        def set_into_redis
+            $redis.set("state_#{params[:id]}", marshal_dump(@state))
+        end
+
+        def get_from_redis
+            @state = marshal_load($redis.get("state_#{params[:id]}")) 
         end
 end

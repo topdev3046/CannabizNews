@@ -25,6 +25,22 @@ class CategoriesController < ApplicationController
         end
         
         def set_category
-            @category = Category.friendly.find(params[:id])
+            if marshal_load($redis.get("category_#{params[:id]}")).blank?
+                @category = Category.friendly.find(params[:id])
+                set_into_redis
+            else
+                get_from_redis
+            end     
+            if @category.blank?
+                redirect_to root_path 
+            end
+        end
+
+        def set_into_redis
+            $redis.set("category_#{params[:id]}", marshal_dump(@category))
+        end
+
+        def get_from_redis
+            @category = marshal_load($redis.get("category_#{params[:id]}")) 
         end
 end

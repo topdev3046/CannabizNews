@@ -110,6 +110,22 @@ class ArticlesController < ApplicationController
         end
         
         def set_article
-            @article = Article.friendly.find(params[:id])
+            if marshal_load($redis.get("article_#{params[:id]}")).blank?
+                @article = Article.friendly.find(params[:id])
+                set_into_redis
+            else
+                get_from_redis
+            end     
+            if @article.blank?
+                redirect_to root_path 
+            end
+        end
+
+        def set_into_redis
+            $redis.set("article_#{params[:id]}", marshal_dump(@article))
+        end
+
+        def get_from_redis
+            @article = marshal_load($redis.get("article_#{params[:id]}")) 
         end
 end
