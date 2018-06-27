@@ -9,7 +9,7 @@ class NewsScraperHelper
 	
 	def addArticles
         categories = Category.active.news
-        random_category = @categories.where(:name => 'Random').first
+        random_category = categories.where(:name => 'Random').first
         states = State.all
         source = Source.find_by name: @source_name
         
