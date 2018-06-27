@@ -1,6 +1,5 @@
 class ProductsController < ApplicationController  
     before_action :set_product, only: [:edit, :update, :destroy, :show, :change_state]
-    before_action :require_admin, only: [:admin, :edit, :update, :delete]
     
     def index
         
@@ -19,9 +18,14 @@ class ProductsController < ApplicationController
             end
         end
         
-        @products = Product.featured.left_join(:dispensary_source_products).group(:id).
-                    order('COUNT(dispensary_source_products.id) DESC').
+        if @site_visitor_state.product_state
+            @products = @site_visitor_state.products.featured.order('RANDOM()').
                     includes(:vendors, :category, :average_prices)
+        else 
+            @products = Product.featured.left_join(:dispensary_source_products).group(:id).
+                    order('COUNT(dispensary_source_products.id) DESC').
+                    includes(:vendors, :category, :average_prices)    
+        end
 
         if @searched_category.present?
             
@@ -39,6 +43,20 @@ class ProductsController < ApplicationController
             @search_string = "Hybrid-#{@searched_is_dom}"
 
         end
+        
+        #search string
+        if @site_visitor_state.product_state
+            @search_string = "#{@search_string} in #{@site_visitor_state.name}"  
+        
+        elsif !@site_visitor_state.product_state
+            
+            state_string = ''
+            @states_with_products.each do |state|
+                state_string = state_string + state.name + ', '
+            end
+            state_string = state_string.chomp(', ')
+            @search_string = "#{@search_string} in #{state_string}"
+        end
 
         @products = @products.paginate(page: params[:page], per_page: 16)
 
@@ -46,16 +64,21 @@ class ProductsController < ApplicationController
     
     def refine_index
         
-        result = ProductFinder.new(params, @states_with_products).build
-        
-        #parse returns
-        @products, @search_string, @searched_name, @az_letter, 
-            @searched_category, @searched_location, @searched_state = 
-                result[0], result[1], result[2], result[3], result[4], result[5], result[6]
-        
-        @products = @products.paginate(page: params[:page], per_page: 16)
-        
-        render 'index' 
+        begin 
+            result = ProductFinder.new(params, @states_with_products).build
+            
+            #parse returns
+            @products, @search_string, @searched_name, @az_letter, 
+                @searched_category, @searched_location, @searched_state = 
+                    result[0], result[1], result[2], result[3], result[4], result[5], result[6]
+            
+            @products = @products.paginate(page: params[:page], per_page: 16)
+            
+            render 'index' 
+        rescue => ex
+            ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+            redirect_to root_path
+        end
     end
     
     #------------------------------------
@@ -63,100 +86,91 @@ class ProductsController < ApplicationController
     def show
         
         #only show featured product
-        if @product.featured_product == false
-            redirect_to root_path 
-        end
+        if @product.featured_product
         
-        state_used = nil
-        avg_price = nil
-        
-        if params[:average_price_id].present?
-            if @average_price = AveragePrice.find_by(id: params[:average_price_id])
-                avg_price = @average_price
+            avg_price = nil
+            if params[:average_price_id].present?
+                if @average_price = AveragePrice.find_by(id: params[:average_price_id])
+                    avg_price = @average_price
+                end
             end
-        end
-        
-        if params[:state_id].present?
-            if @searched_state = State.find_by(id: params[:state_id])
-                state_used = @searched_state
-                @site_visitor_state = state_used
+            
+            state_used = nil
+            if params[:state_id].present?
+                if @searched_state = State.find_by(id: params[:state_id])
+                    state_used = @searched_state
+                    @site_visitor_state = state_used
+                else 
+                    state_used = @site_visitor_state
+                end
             else 
                 state_used = @site_visitor_state
             end
-        else 
-            state_used = @site_visitor_state
+        
+            #default state to washington
+            if !state_used.product_state
+               state_used = State.find_by(name: 'Washington')
+               @searched_state = state_used
+            end
+        
+            begin
+                result = ProductHelper.new(@product, state_used, avg_price).buildSimilarProducts
+                @similar_products = result[0]
+            
+                result = ProductHelper.new(@product, state_used, avg_price).buildProductDisplay
+                @dispensary_to_product, @table_header_options = result[0], result[1]    
+            rescue => ex
+                ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+                redirect_to root_path
+            end 
+        else
+            redirect_to root_path
         end
-        
-        #default state to washington
-        if !state_used.product_state
-           state_used = State.find_by(name: 'Washington')
-           @searched_state = state_used
-        end
-        
-        begin
-            result = ProductHelper.new(@product, state_used, avg_price).buildSimilarProducts
-            @similar_products = result[0]
-        
-            result = ProductHelper.new(@product, state_used, avg_price).buildProductDisplay
-            @dispensary_to_product, @table_header_options = result[0], result[1]    
-        rescue => ex
-            puts 'here is the error: '
-            puts ex.backtrace
-            # redirect_to root_path              
-        end 
     end
     
     def change_state
         
-        puts 'here are the params'
-        puts params 
-        
-        state_used = nil
-        avg_price = nil
-        
         #only show featured product
-        if @product.featured_product == false
-            redirect_to root_path 
-        end
+        if @product.featured_product
         
-        if params[:average_price_id].present?
-            if @average_price = AveragePrice.find_by(id: params[:average_price_id])
-                avg_price = @average_price
+            avg_price = nil
+            if params[:average_price_id].present?
+                if @average_price = AveragePrice.find_by(id: params[:average_price_id])
+                    avg_price = @average_price
+                end
             end
-        end
-        
-        if params[:State].present?
-            if @searched_state = State.find_by(name: params[:State])
-                state_used = @searched_state
+            
+            state_used = nil
+            if params[:State].present?
+                if @searched_state = State.find_by(name: params[:State])
+                    state_used = @searched_state
+                else 
+                    state_used = @site_visitor_state
+                end
             else 
                 state_used = @site_visitor_state
             end
-        else 
-            state_used = @site_visitor_state
-        end
-        
-        #default washington
-        if !state_used.product_state
-            @searched_state = State.find_by(name: 'Washington')
-            state_used = @searched_state
-        end
-        
-        begin
-            result = ProductHelper.new(@product, @searched_state, @average_price).buildSimilarProducts
-            @similar_products = result[0]
             
-            puts 'i am here 186'
-        
-            result = ProductHelper.new(@product, @searched_state, @average_price).buildProductDisplay
-            @dispensary_to_product, @table_header_options = result[0], result[1] 
+            #default washington
+            if !state_used.product_state
+                @searched_state = State.find_by(name: 'Washington')
+                state_used = @searched_state
+            end
             
-            puts 'i am here 191'
+            begin
+                result = ProductHelper.new(@product, @searched_state, @average_price).buildSimilarProducts
+                @similar_products = result[0]
             
-            render 'show'
-        rescue => ex
-            puts 'here is the error: '
-            puts ex
-            redirect_to root_path              
+                result = ProductHelper.new(@product, @searched_state, @average_price).buildProductDisplay
+                @dispensary_to_product, @table_header_options = result[0], result[1] 
+                
+                render 'show'
+            rescue => ex
+                ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+                redirect_to root_path              
+            end
+        else
+            redirect_to root_path
         end
         
     end
@@ -171,14 +185,7 @@ class ProductsController < ApplicationController
     end
 
     private
-    
-        def require_admin
-            if !logged_in? || (logged_in? and !current_user.admin?)
-                #flash[:danger] = 'Only administrators can visit that page'
-                redirect_to root_path
-            end
-        end
-        
+
         def set_product
             if marshal_load($redis.get("product_#{params[:id]}")).blank?
                 @product = Product.friendly.find(params[:id])
