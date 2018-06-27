@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
     
     def index
         
-        #state dropdown
+        #hold state throughout
         if params[:state].present?
             if state = State.find_by(name: params[:state])
                 @site_visitor_state = state
@@ -99,6 +99,13 @@ class ProductsController < ApplicationController
             if params[:average_price_id].present?
                 if @average_price = AveragePrice.find_by(id: params[:average_price_id])
                     avg_price = @average_price
+                end
+            end
+            
+            #hold state throughout
+            if params[:state].present?
+                if state = State.find_by(name: params[:state])
+                    @site_visitor_state = state
                 end
             end
             
