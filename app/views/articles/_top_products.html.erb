@@ -1,7 +1,13 @@
 <div class="row mb-40">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="section-title">
-             <h2 class="h6 header-color inline-block uppercase">Top Products in WA</h2> 
+			<h2 class="h6 header-color inline-block uppercase">
+				<% if @site_visitor_state.product_state %>
+            		Top Products in <%= @site_visitor_state.abbreviation%>
+            	<% else %>
+            		Top Products
+            	<% end %>
+			</h2> 
         </div>
     </div>
 </div>

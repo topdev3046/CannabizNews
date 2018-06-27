@@ -2,18 +2,18 @@ class Article < ActiveRecord::Base
     
     # only showing articles for active sources
     scope :active_source, -> { 
-        source_ids = Source.where(:active => true).pluck(:id)
+        source_ids = Source.active.pluck(:id)
         where("source_id IN (?)", source_ids)
     }
     
     #relationships
+    belongs_to :source
+    
     has_many :article_categories
     has_many :categories, through: :article_categories
 
     has_many :article_states
     has_many :states, through: :article_states
-
-    belongs_to :source
     
     #validations
     validates :title, presence: true, length: {minimum: 3, maximum: 300}

@@ -51,8 +51,8 @@ class Dispensary < ActiveRecord::Base
             if self.slug.present?
                 $redis.set("dispensary_#{self.slug}", Marshal.dump(self))   
             end
-        rescue => ex    
-            puts ex
+        rescue => ex
+            ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
         end
     end
     
