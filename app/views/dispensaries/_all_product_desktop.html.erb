@@ -16,7 +16,8 @@
                     
                     <div class="zm-category mobile-homepage mobile-category">
                         <% if dispProduct.product.category.present? %>
-                            <a class="bg-cat-3 cat-btn" href="<%=products_path(dispProduct.product.category.name)%>"><%= dispProduct.product.category.name %></a>
+                            <a class="bg-cat-3 cat-btn" href="<%=products_path(dispProduct.product.category.name, state: @site_visitor_state.name)%>">
+                                <%= dispProduct.product.category.name %></a>
                         <% end %>
                         
                         <!--sub category-->
@@ -26,29 +27,29 @@
                                 <% if dispProduct.product.is_dom == 'Indica' %>
                                 
                                     <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path('Hybrid-Indica')%>">Hybrid-Indica</a>
+                                        href="<%=products_path('Hybrid-Indica', state: @site_visitor_state.name)%>">Hybrid-Indica</a>
                                 
                                 <% else %>
                                 
                                     <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path('Hybrid-Sativa')%>">Hybrid-Indica</a>
+                                        href="<%=products_path('Hybrid-Sativa', state: @site_visitor_state.name)%>">Hybrid-Sativa</a>
                                 
                                 <% end %>
                                 
                             <% else %>
                                 <a class="bg-cat-3 cat-btn" 
-                                    href="<%=products_path(dispProduct.product.sub_category)%>"><%= dispProduct.product.sub_category %></a>   
+                                    href="<%=products_path(dispProduct.product.sub_category, state: @site_visitor_state.name)%>"><%= dispProduct.product.sub_category %></a>   
                             <% end %>
                             
                         <% end %>
                     </div>
                     
                     <h5 class="h5height product-index-ind">
-                        <%=link_to dispProduct.product.name, product_path(dispProduct.product)%>
+                        <%=link_to dispProduct.product.name, product_path(dispProduct.product, state: @site_visitor_state.name)%>
                     </h5>
                     <div class="zm-category hidden-991">
                         <% if dispProduct.product.category.present? %>
-                            <a class="bg-cat-3 cat-btn" href="<%=products_path(dispProduct.product.category.name)%>">
+                            <a class="bg-cat-3 cat-btn" href="<%=products_path(dispProduct.product.category.name, state: @site_visitor_state.name)%>">
                                 <%= dispProduct.product.category.name %></a>
                         <% end %>
                         
@@ -61,18 +62,18 @@
                                 <% if dispProduct.product.is_dom == 'Indica' %>
                                 
                                     <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path('Hybrid-Indica')%>">Hybrid-Indica</a>
+                                        href="<%=products_path('Hybrid-Indica', state: @site_visitor_state.name)%>">Hybrid-Indica</a>
                                 
                                 <% else %>
                                 
                                     <a class="bg-cat-3 cat-btn" 
-                                        href="<%=products_path('Hybrid-Sativa')%>">Hybrid-Sativa</a>
+                                        href="<%=products_path('Hybrid-Sativa', state: @site_visitor_state.name)%>">Hybrid-Sativa</a>
                                 
                                 <% end %>
                                 
                             <% else %>
                                 <a class="bg-cat-3 cat-btn" 
-                                    href="<%=products_path(dispProduct.product.sub_category)%>"><%= dispProduct.product.sub_category %></a>   
+                                    href="<%=products_path(dispProduct.product.sub_category, state: @site_visitor_state.name)%>"><%= dispProduct.product.sub_category %></a>   
                             <% end %>
                             
                         <% end %>

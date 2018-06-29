@@ -73,7 +73,9 @@ class DispensariesController < ApplicationController
         end
         
         def set_into_redis
-            $redis.set("dispensary_#{params[:id]}", marshal_dump(@dispensary))
+            if $redis.info['used_memory_human'].to_f < $redis.info['maxmemory_human'].to_f
+                $redis.set("dispensary_#{params[:id]}", marshal_dump(@dispensary))
+            end
         end
 
         def get_from_redis

@@ -213,7 +213,9 @@ class ProductsController < ApplicationController
         end
         
         def set_into_redis
-            $redis.set("product_#{params[:id]}", marshal_dump(@product))
+            if $redis.info['used_memory_human'].to_f < $redis.info['maxmemory_human'].to_f
+                $redis.set("product_#{params[:id]}", marshal_dump(@product))
+            end
         end
 
         def get_from_redis

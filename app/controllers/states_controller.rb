@@ -26,7 +26,9 @@ class StatesController < ApplicationController
         end
 
         def set_into_redis
-            $redis.set("state_#{params[:id]}", marshal_dump(@state))
+            if $redis.info['used_memory_human'].to_f < $redis.info['maxmemory_human'].to_f
+                $redis.set("state_#{params[:id]}", marshal_dump(@state))
+            end
         end
 
         def get_from_redis

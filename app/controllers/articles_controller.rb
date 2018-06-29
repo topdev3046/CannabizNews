@@ -107,7 +107,9 @@ class ArticlesController < ApplicationController
         end
 
         def set_into_redis
-            $redis.set("article_#{params[:id]}", marshal_dump(@article))
+            if $redis.info['used_memory_human'].to_f < $redis.info['maxmemory_human'].to_f
+                $redis.set("article_#{params[:id]}", marshal_dump(@article))
+            end
         end
 
         def get_from_redis
