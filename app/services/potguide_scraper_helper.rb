@@ -312,7 +312,10 @@ class PotguideScraperHelper
 
 			returned_dispensary_source_product['prices'].each do |price_quantity_pair|
 				
-				if price_quantity_pair.size > 0 #not trying to send email if null
+				UnitMissing.email('PotGuide', price_quantity_pair, price_quantity_pair).deliver_now
+				
+				#not trying to send email if null
+				if price_quantity_pair.size > 0 || price_quantity_pair[0] == nil
 				
 					puts 'HERE ARE THE VARIABLES: '
 					puts price_quantity_pair[0]
@@ -345,7 +348,9 @@ class PotguideScraperHelper
 
 			returned_dispensary_source_product['prices'].each do |price_quantity_pair|
 				
-				if price_quantity_pair.size > 0
+				UnitMissing.email('PotGuide', price_quantity_pair, price_quantity_pair).deliver_now
+				
+				if price_quantity_pair.size > 0 || price_quantity_pair[0] == nil
 
 					puts 'HERE ARE THE VARIABLES: '
 					puts price_quantity_pair[0]
