@@ -30,7 +30,7 @@ class PotguideScraperHelper
 			# 'two_grams' => '2 Grams',	
 			'1/8' => 'Eighth',	
 			'1/4' => 'Quarter Ounce',
-			# 'half_ounce' => 'Half Ounce',
+			'1/2' => 'Half Ounce',
 			'oz' => 'Ounce'
 			# 'unit' => 'Each'
 		}
@@ -315,23 +315,23 @@ class PotguideScraperHelper
 				UnitMissing.email('PotGuide', price_quantity_pair, price_quantity_pair).deliver_now
 				
 				#not trying to send email if null
-				if price_quantity_pair.size > 0 || price_quantity_pair[0] == nil
+				if price_quantity_pair.size > 0 || price_quantity_pair[0].key != nil
 				
 					puts 'HERE ARE THE VARIABLES: '
-					puts price_quantity_pair[0]
-					puts price_quantity_pair[1]
-					puts @quantity_to_quantity.has_key?(price_quantity_pair[0])
+					puts price_quantity_pair[0].key
+					puts price_quantity_pair[0].value
+					puts @quantity_to_quantity.has_key?(price_quantity_pair[0].key)
 	
-					if @quantity_to_quantity.has_key?(price_quantity_pair[0])
+					if @quantity_to_quantity.has_key?(price_quantity_pair[0].key)
 						dsp_price = DspPrice.new(
-							:unit => @quantity_to_quantity[price_quantity_pair[0]],
-							:price => price_quantity_pair[1]
+							:unit => @quantity_to_quantity[price_quantity_pair[0].key],
+							:price => price_quantity_pair[0].value
 						)
 						unless dsp_price.save
 			        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
 			        	end 
-					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0])
-						UnitMissing.email('PotGuide', price_quantity_pair[0], price_quantity_pair[1]).deliver_now
+					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0].key)
+						UnitMissing.email('PotGuide', price_quantity_pair[0].key, price_quantity_pair[0].value).deliver_now
 					end
 				end
 			end
@@ -350,23 +350,23 @@ class PotguideScraperHelper
 				
 				UnitMissing.email('PotGuide', price_quantity_pair, price_quantity_pair).deliver_now
 				
-				if price_quantity_pair.size > 0 || price_quantity_pair[0] == nil
+				if price_quantity_pair.size > 0 || price_quantity_pair[0].key != nil
 
 					puts 'HERE ARE THE VARIABLES: '
-					puts price_quantity_pair[0]
-					puts price_quantity_pair[1]
-					puts @quantity_to_quantity.has_key?(price_quantity_pair[0])
+					puts price_quantity_pair[0].key
+					puts price_quantity_pair[0].value
+					puts @quantity_to_quantity.has_key?(price_quantity_pair[0].key)
 	
-					if @quantity_to_quantity.has_key?(price_quantity_pair[0]) 
+					if @quantity_to_quantity.has_key?(price_quantity_pair[0].key) 
 	
 						#see if we have any dsp prices with this quantity
-						if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0]]).any?
+						if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0].key]).any?
 	
 							#compare the price - if its different we update
-							if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0]]).first.price != price_quantity_pair[1]
+							if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0].key]).first.price != price_quantity_pair[0].value
 								
 								existing_dispensary_source_product.dsp_prices.
-									where(unit: @quantity_to_quantity[price_quantity_pair[0]]).first.update_attribute :price, price_quantity_pair[1]
+									where(unit: @quantity_to_quantity[price_quantity_pair[0].key]).first.update_attribute :price, price_quantity_pair[0].value
 								
 								@updated_menu = true
 							end
@@ -375,16 +375,16 @@ class PotguideScraperHelper
 							#create new dsp price
 							dsp_price =  DspPrice.new(
 								:dispensary_source_product_id => existing_dispensary_source_product.id,
-								:unit => @quantity_to_quantity[price_quantity_pair[0]],
-								:price => price_quantity_pair[1]
+								:unit => @quantity_to_quantity[price_quantity_pair[0].key],
+								:price => price_quantity_pair[0].value
 							)
 							unless dsp_price.save
 				        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
 				        	end 
 							@updated_menu = true
 						end
-					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0])
-						UnitMissing.email('PotGuide', price_quantity_pair[0], price_quantity_pair[1]).deliver_now
+					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0].key)
+						UnitMissing.email('PotGuide', price_quantity_pair[0].key, price_quantity_pair[0].value).deliver_now
 					end
 				end
 			end		
