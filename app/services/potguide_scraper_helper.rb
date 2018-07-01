@@ -312,24 +312,24 @@ class PotguideScraperHelper
 
 			returned_dispensary_source_product['prices'].each do |price_quantity_pair|
 				
-				# price_key = price_quantity_pair.key
+				if price_quantity_pair.size > 0 #not trying to send email if null
 				
-				
-				puts 'HERE ARE THE VARIABLES: '
-				puts price_quantity_pair[0]
-				puts price_quantity_pair[0]
-				puts @quantity_to_quantity.has_key?(price_quantity_pair[0])
-
-				if @quantity_to_quantity.has_key?(price_quantity_pair[0])
-					dsp_price = DspPrice.new(
-						:unit => @quantity_to_quantity[price_quantity_pair[0]],
-						:price => price_quantity_pair[0]
-					)
-					unless dsp_price.save
-		        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
-		        	end 
-				elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0])
-					UnitMissing.email('PotGuide', price_quantity_pair[0], price_quantity_pair[0]).deliver_now
+					puts 'HERE ARE THE VARIABLES: '
+					puts price_quantity_pair[0]
+					puts price_quantity_pair[1]
+					puts @quantity_to_quantity.has_key?(price_quantity_pair[0])
+	
+					if @quantity_to_quantity.has_key?(price_quantity_pair[0])
+						dsp_price = DspPrice.new(
+							:unit => @quantity_to_quantity[price_quantity_pair[0]],
+							:price => price_quantity_pair[1]
+						)
+						unless dsp_price.save
+			        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
+			        	end 
+					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0])
+						UnitMissing.email('PotGuide', price_quantity_pair[0], price_quantity_pair[1]).deliver_now
+					end
 				end
 			end
 		end
@@ -344,41 +344,43 @@ class PotguideScraperHelper
 			# [["dispensary_source_product_id", 9479], ["unit", "Ounce"]]
 
 			returned_dispensary_source_product['prices'].each do |price_quantity_pair|
+				
+				if price_quantity_pair.size > 0
 
-				puts 'HERE ARE THE VARIABLES: '
-				puts price_quantity_pair[0]
-				puts price_quantity_pair[1]
-				puts @quantity_to_quantity.has_key?(price_quantity_pair[0])
-
-
-				if @quantity_to_quantity.has_key?(price_quantity_pair[0]) 
-
-					#see if we have any dsp prices with this quantity
-					if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0]]).any?
-
-						#compare the price - if its different we update
-						if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0]]).first.price != price_quantity_pair[1]
-							
-							existing_dispensary_source_product.dsp_prices.
-								where(unit: @quantity_to_quantity[price_quantity_pair[0]]).first.update_attribute :price, price_quantity_pair[1]
-							
+					puts 'HERE ARE THE VARIABLES: '
+					puts price_quantity_pair[0]
+					puts price_quantity_pair[1]
+					puts @quantity_to_quantity.has_key?(price_quantity_pair[0])
+	
+					if @quantity_to_quantity.has_key?(price_quantity_pair[0]) 
+	
+						#see if we have any dsp prices with this quantity
+						if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0]]).any?
+	
+							#compare the price - if its different we update
+							if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0]]).first.price != price_quantity_pair[1]
+								
+								existing_dispensary_source_product.dsp_prices.
+									where(unit: @quantity_to_quantity[price_quantity_pair[0]]).first.update_attribute :price, price_quantity_pair[1]
+								
+								@updated_menu = true
+							end
+						else
+	
+							#create new dsp price
+							dsp_price =  DspPrice.new(
+								:dispensary_source_product_id => existing_dispensary_source_product.id,
+								:unit => @quantity_to_quantity[price_quantity_pair[0]],
+								:price => price_quantity_pair[1]
+							)
+							unless dsp_price.save
+				        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
+				        	end 
 							@updated_menu = true
 						end
-					else
-
-						#create new dsp price
-						dsp_price =  DspPrice.new(
-							:dispensary_source_product_id => existing_dispensary_source_product.id,
-							:unit => @quantity_to_quantity[price_quantity_pair[0]],
-							:price => price_quantity_pair[1]
-						)
-						unless dsp_price.save
-			        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
-			        	end 
-						@updated_menu = true
+					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0])
+						UnitMissing.email('PotGuide', price_quantity_pair[0], price_quantity_pair[1]).deliver_now
 					end
-				elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0])
-					UnitMissing.email('PotGuide', price_quantity_pair[0], price_quantity_pair[1]).deliver_now
 				end
 			end		
 			
