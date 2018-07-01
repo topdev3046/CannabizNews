@@ -14,19 +14,19 @@ if Rails.env.production?
 	
 	# LEAFLY
 	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA', cron: '0 1 * * *', class: 'LeaflyDispensaryWorker1')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO', cron: '15 3 * * *', class: 'LeaflyDispensaryWorker2')
-	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV', cron: '30 5 * * *', class: 'LeaflyDispensaryWorker3')
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp WA 4', cron: '45 1 * * *', class: 'LeaflyDispensaryWorker4')
+	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO', cron: '20 1 * * *', class: 'LeaflyDispensaryWorker2')
+	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV', cron: '40 1 * * *', class: 'LeaflyDispensaryWorker3')
 	
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 5', cron: '0 3 * * *', class: 'LeaflyDispensaryWorker5')
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 6', cron: '15 3 * * *', class: 'LeaflyDispensaryWorker6')
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 7', cron: '30 3 * * *', class: 'LeaflyDispensaryWorker7')
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp CO 8', cron: '45 3 * * *', class: 'LeaflyDispensaryWorker8')
+	#POTGUIDE
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp WA 1', cron: '0 3 * * *', class: 'PotguideWorker1')
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp WA 2', cron: '15 3 * * *', class: 'PotguideWorker2')
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp WA 3', cron: '30 3 * * *', class: 'PotguideWorker3')
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp WA 4', cron: '45 3 * * *', class: 'PotguideWorker4')
 	
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 9', cron: '0 5 * * *', class: 'LeaflyDispensaryWorker9')
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 10', cron: '15 5 * * *', class: 'LeaflyDispensaryWorker10')
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 11', cron: '30 5 * * *', class: 'LeaflyDispensaryWorker11')
-	# Sidekiq::Cron::Job.create(name: 'Leafly Disp NV 12', cron: '45 5 * * *', class: 'LeaflyDispensaryWorker12')	
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp CO 5', cron: '0 5 * * *', class: 'PotguideWorker5')
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp CO 6', cron: '15 5 * * *', class: 'PotguideWorker6')
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp CO 7', cron: '30 5 * * *', class: 'PotguideWorker7')
+	Sidekiq::Cron::Job.create(name: 'Potguide Disp CO 8', cron: '45 5 * * *', class: 'PotguideWorker8')
 
 	# WEED MAPS
 	Sidekiq::Cron::Job.create(name: 'Weedmaps Disp WA 1', cron: '0 7 * * *', class: 'WeedMapsWorker1')
@@ -46,12 +46,4 @@ if Rails.env.production?
 
 	# HEADSET
 	Sidekiq::Cron::Job.create(name: 'Headset Scraper', cron: '0 0 * * *', class: 'HeadsetWorker')
-
-	# REDIS RESET KEYS
-	# Sidekiq::Cron::Job.create(name: 'Redis Category Worker', cron: '10 0 * * *', class: 'RedisCategoryWorker')
-	# Sidekiq::Cron::Job.create(name: 'Redis Dispensary Worker', cron: '20 0 * * *', class: 'RedisDispensaryWorker')
-	# Sidekiq::Cron::Job.create(name: 'Redis Source Worker', cron: '30 0 * * *', class: 'RedisSourceWorker')
-	# Sidekiq::Cron::Job.create(name: 'Redis State Worker', cron: '40 0 * * *', class: 'RedisStateWorker')
-	# Sidekiq::Cron::Job.create(name: 'Redis Vendor Worker', cron: '50 0 * * *', class: 'RedisVendorWorker')
-
 end
