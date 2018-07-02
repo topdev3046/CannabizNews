@@ -342,7 +342,7 @@ class PotguideScraperHelper
 				price_quantity_pair.keys.size > 0
 
 					puts	'HERE ARE THE VARIABLES: '
-					put 	price_quantity_pair
+					puts 	price_quantity_pair
 					puts	price_quantity_pair.keys[0]
 					puts	price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f
 					puts	@quantity_to_quantity.has_key?(price_quantity_pair.keys[0])
