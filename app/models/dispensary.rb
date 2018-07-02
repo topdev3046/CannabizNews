@@ -45,15 +45,15 @@ class Dispensary < ActiveRecord::Base
     end
     
     #set redis key after save
-    after_save :set_redis_key
-    def set_redis_key
-        begin
-            if self.slug.present?
-                $redis.set("dispensary_#{self.slug}", Marshal.dump(self))   
-            end
-        rescue => ex
-            ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
-        end
-    end
+    # after_save :set_redis_key
+    # def set_redis_key
+    #     begin
+    #         if self.slug.present?
+    #             $redis.set("dispensary_#{self.slug}", Marshal.dump(self))   
+    #         end
+    #     rescue => ex
+    #         ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+    #     end
+    # end
     
 end #end dispensary class
