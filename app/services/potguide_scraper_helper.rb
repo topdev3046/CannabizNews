@@ -25,14 +25,14 @@ class PotguideScraperHelper
 
 		#quantity map
 		@quantity_to_quantity = {
-			# 'half_gram' => 'Half Gram',
+			'.5 gr' => 'Half Gram',
 			'gr' => 'Gram',	
 			# 'two_grams' => '2 Grams',	
 			'1/8' => 'Eighth',	
 			'1/4' => 'Quarter Ounce',
 			'1/2' => 'Half Ounce',
-			'oz' => 'Ounce'
-			# 'unit' => 'Each'
+			'oz' => 'Ounce',
+			'ea' => 'Each'
 		}
 		
 		output = IO.popen(["python", "#{Rails.root}/app/scrapers/potGuide_disp_scraper.py", @state_name, '-city='+ @city_range])
@@ -40,14 +40,6 @@ class PotguideScraperHelper
 		
 		puts 'content number: '
 		puts contents[@state.name.downcase].size
-		
-		# contents[@state.name.downcase].each do |just_print|
-			
-		# 	puts "name: #{just_print['name']}, city: #{just_print['city']}"
-		
-		# end
-		
-		# contents.clear
 		
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state.name.downcase].each do |returned_dispensary_source|
@@ -312,26 +304,24 @@ class PotguideScraperHelper
 
 			returned_dispensary_source_product['prices'].each do |price_quantity_pair|
 				
-				UnitMissing.email('PotGuide', price_quantity_pair, price_quantity_pair).deliver_now
-				
 				#not trying to send email if null
-				if price_quantity_pair.size > 0 || price_quantity_pair[0].key != nil
+				if price_quantity_pair.keys.size > 0
 				
 					puts 'HERE ARE THE VARIABLES: '
-					puts price_quantity_pair[0].key
-					puts price_quantity_pair[0].value
-					puts @quantity_to_quantity.has_key?(price_quantity_pair[0].key)
+					puts  price_quantity_pair.keys[0]
+					puts price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f
+					puts @quantity_to_quantity.has_key?(price_quantity_pair.keys[0])
 	
-					if @quantity_to_quantity.has_key?(price_quantity_pair[0].key)
+					if @quantity_to_quantity.has_key?(price_quantity_pair.keys[0])
 						dsp_price = DspPrice.new(
-							:unit => @quantity_to_quantity[price_quantity_pair[0].key],
-							:price => price_quantity_pair[0].value
+							:unit => @quantity_to_quantity[price_quantity_pair.keys[0]],
+							:price => price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f
 						)
 						unless dsp_price.save
 			        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
 			        	end 
-					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0].key)
-						UnitMissing.email('PotGuide', price_quantity_pair[0].key, price_quantity_pair[0].value).deliver_now
+					elsif !@quantity_to_quantity.has_key?(price_quantity_pair.keys[0])
+						UnitMissing.email('PotGuide', price_quantity_pair.keys[0], price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f).deliver_now
 					end
 				end
 			end
@@ -348,25 +338,23 @@ class PotguideScraperHelper
 
 			returned_dispensary_source_product['prices'].each do |price_quantity_pair|
 				
-				UnitMissing.email('PotGuide', price_quantity_pair, price_quantity_pair).deliver_now
-				
-				if price_quantity_pair.size > 0 || price_quantity_pair[0].key != nil
+				if price_quantity_pair.size > 0 || price_quantity_pair.keys[0] != nil
 
 					puts 'HERE ARE THE VARIABLES: '
-					puts price_quantity_pair[0].key
-					puts price_quantity_pair[0].value
-					puts @quantity_to_quantity.has_key?(price_quantity_pair[0].key)
+					puts price_quantity_pair.keys[0]
+					puts price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f
+					puts @quantity_to_quantity.has_key?(price_quantity_pair.keys[0])
 	
-					if @quantity_to_quantity.has_key?(price_quantity_pair[0].key) 
+					if @quantity_to_quantity.has_key?(price_quantity_pair.keys[0]) 
 	
 						#see if we have any dsp prices with this quantity
-						if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0].key]).any?
+						if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair.keys[0]]).any?
 	
 							#compare the price - if its different we update
-							if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair[0].key]).first.price != price_quantity_pair[0].value
+							if existing_dispensary_source_product.dsp_prices.where(unit: @quantity_to_quantity[price_quantity_pair.keys[0]]).first.price != price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f
 								
 								existing_dispensary_source_product.dsp_prices.
-									where(unit: @quantity_to_quantity[price_quantity_pair[0].key]).first.update_attribute :price, price_quantity_pair[0].value
+									where(unit: @quantity_to_quantity[price_quantity_pair.keys[0]]).first.update_attribute :price, price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f
 								
 								@updated_menu = true
 							end
@@ -375,16 +363,16 @@ class PotguideScraperHelper
 							#create new dsp price
 							dsp_price =  DspPrice.new(
 								:dispensary_source_product_id => existing_dispensary_source_product.id,
-								:unit => @quantity_to_quantity[price_quantity_pair[0].key],
-								:price => price_quantity_pair[0].value
+								:unit => @quantity_to_quantity[price_quantity_pair.keys[0]],
+								:price => price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f
 							)
 							unless dsp_price.save
 				        		puts "dsp_price Save Error: #{dsp_price.errors.messages}"
 				        	end 
 							@updated_menu = true
 						end
-					elsif !@quantity_to_quantity.has_key?(price_quantity_pair[0].key)
-						UnitMissing.email('PotGuide', price_quantity_pair[0].key, price_quantity_pair[0].value).deliver_now
+					elsif !@quantity_to_quantity.has_key?(price_quantity_pair.keys[0])
+						UnitMissing.email('PotGuide', price_quantity_pair.keys[0], price_quantity_pair[price_quantity_pair.keys[0]].gsub(/[^\d\.]/, '').to_f).deliver_now
 					end
 				end
 			end		
