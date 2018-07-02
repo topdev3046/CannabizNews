@@ -26,8 +26,7 @@ class PotguideScraperHelper
 		#quantity map
 		@quantity_to_quantity = {
 			'.5 gr' => 'Half Gram',
-			'gr' => 'Gram',	
-			# 'two_grams' => '2 Grams',	
+			'gr' => 'Gram',
 			'1/8' => 'Eighth',	
 			'1/4' => 'Quarter Ounce',
 			'1/2' => 'Half Ounce',
@@ -99,19 +98,19 @@ class PotguideScraperHelper
 			#get the category products
 			@category_products = nil
 			
-			if ['Indica', 'Hybrid', 'Sativa', 'Flower'].include? category_key
+			if ['Indica', 'Hybrid', 'Sativa', 'Flower'].include? category_key.strip
 				@category_products = Category.where(name: 'Flower').first.products.includes(:vendors, :vendor)
-			elsif category_key == 'Edibles'
+			elsif ['Edibles', 'Edible'].include? category_key.strip
 				@category_products = Category.where(name: 'Edibles').first.products.includes(:vendors, :vendor)
-			elsif category_key == 'Concentrate'
+			elsif ['Extract', 'Extracts'].include? category_key.strip
 				@category_products = Category.where(name: 'Concentrates').first.products.includes(:vendors, :vendor)
-			elsif category_key == 'Drinks'
+			elsif ['Beverage', 'Beverages', 'Drink', 'Drinks'].include? category_key.strip
 				@category_products = Category.where(name: 'Beverage').first.products.includes(:vendors, :vendor)
-			elsif category_key == 'Tincture'
+			elsif ['Tincture', 'Tinctures'].include? category_key.strip
 				@category_products = Category.where(name: 'Tincture & Sublingual').first.products.includes(:vendors, :vendor)
-			elsif category_key == 'Pre-Rolls'
+			elsif ['Pre-Rolls', 'Pre-rolls', 'pre-rolls', 'Prerolls', 'prerolls'].include? category_key.strip
 				@category_products = Category.where(name: 'Pre-Rolls').first.products.includes(:vendors, :vendor)
-			elsif category_key == 'Topicals'
+			elsif ['Topical', 'Topicals'].include? category_key.strip
 				@category_products = Category.where(name: 'Topical').first.products.includes(:vendors, :vendor)
 			end
 
