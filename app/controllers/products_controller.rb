@@ -83,7 +83,7 @@ class ProductsController < ApplicationController
             
             render 'index' 
         rescue => ex
-            ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+            ErrorFound.email('Product Refine Index', ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
             redirect_to root_path
         end
     end
@@ -134,7 +134,7 @@ class ProductsController < ApplicationController
                 result = ProductHelper.new(@product, state_used, avg_price).buildProductDisplay
                 @dispensary_to_product, @table_header_options = result[0], result[1]    
             rescue => ex
-                ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+                ErrorFound.email("Product Show Page for product: #{@product.slug}", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
                 redirect_to root_path
             end 
         else
@@ -180,7 +180,7 @@ class ProductsController < ApplicationController
                 
                 render 'show'
             rescue => ex
-                ErrorFound.email(ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+                ErrorFound.email("Product Change State for product: #{@product.slug}", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
                 redirect_to root_path              
             end
         else

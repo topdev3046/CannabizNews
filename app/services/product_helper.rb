@@ -69,7 +69,19 @@ class ProductHelper
 	    end
         
         @dispensary_to_product = Hash.new
+        
+        #change to two maps
+        @dispensary_to_dispensary_source = Hash.new
+        @dispensary_to_dsp = Hash.new
+        
         @dispensary_source_products.each do |dsp|
+            
+            if !@dispensary_to_dispensary_source.has_key?(dsp.dispensary_source.dispensary)
+                
+                @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
+                @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)
+            end
+            
             
             if !@dispensary_to_product.has_key?(dsp.dispensary_source)
                 if @average_price.present?
