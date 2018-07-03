@@ -76,29 +76,45 @@ class ProductHelper
         
         @dispensary_source_products.each do |dsp|
             
+            #new maps
             if !@dispensary_to_dispensary_source.has_key?(dsp.dispensary_source.dispensary)
+                
+                if @average_price.present?
+                
+                    dsp.dsp_prices.each do |dsp_price|
+                        if dsp_price.unit == @average_price.average_price_unit && dsp_price.price <= @average_price.average_price 
+                            @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
+                            @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)  
+                        end
+                    end
+                else
+                    @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
+                    @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)
+                    # @dispensary_to_product.store(dsp.dispensary_source, dsp)
+                end
                 
                 @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
                 @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)
             end
             
             
-            if !@dispensary_to_product.has_key?(dsp.dispensary_source)
-                if @average_price.present?
+            #old maps
+            # if !@dispensary_to_product.has_key?(dsp.dispensary_source)
+            #     if @average_price.present?
                 
-                    dsp.dsp_prices.each do |dsp_price|
-                        if dsp_price.unit == @average_price.average_price_unit && dsp_price.price <= @average_price.average_price 
-                            @dispensary_to_product.store(dsp.dispensary_source, dsp)    
-                        end
-                    end
-                else
-                    @dispensary_to_product.store(dsp.dispensary_source, dsp)
-                end
-            end
+            #         dsp.dsp_prices.each do |dsp_price|
+            #             if dsp_price.unit == @average_price.average_price_unit && dsp_price.price <= @average_price.average_price 
+            #                 @dispensary_to_product.store(dsp.dispensary_source, dsp)    
+            #             end
+            #         end
+            #     else
+            #         @dispensary_to_product.store(dsp.dispensary_source, dsp)
+            #     end
+            # end
                 
         end
 
         #return
-        [@dispensary_to_product, @table_header_options]
+        [@dispensary_to_product, @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp]
 	end
 end

@@ -42,10 +42,10 @@
         </thead>
             
         <!--loop through dispensaries-->
-        <% @dispensary_to_dispensary_source.each do |dispensary, dispensary_source| %>
+        <% @dispensary_to_product.each do |dispensary_source, product| %>
             <tr>
                 <td class="dispensary-td">
-                    <%=link_to dispensary.name, dispensary_path(dispensary)%>
+                    <%=link_to dispensary_source.name, dispensary_path(dispensary_source.dispensary)%>
                 </td>
                 <td>
                     <%=dispensary_source.location%>
@@ -53,7 +53,7 @@
                 <% if @table_header_options.present? %>
                     <% @table_header_options.each do |unit| %>
                         <% index_count = 0 %>
-                        <% @dispensary_to_dsp[dispensary].dsp_prices.each do |dps| %>
+                        <% product.dsp_prices.each do |dps| %>
                             <% if unit.to_s == dps.unit.to_s && index_count == 0 %>
                                 <% index_count += 1 %>
                                 <td>$<%=dps.price.to_f %></td>
