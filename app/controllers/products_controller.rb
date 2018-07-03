@@ -81,6 +81,10 @@ class ProductsController < ApplicationController
             
             @products = @products.paginate(page: params[:page], per_page: 16)
             
+            if @searched_state.present? && @searched_state.product_state
+                @site_visitor_state = @searched_state
+            end
+            
             render 'index' 
         rescue => ex
             ErrorFound.email('Product Refine Index', ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
