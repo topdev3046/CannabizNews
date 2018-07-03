@@ -102,6 +102,9 @@ class LeaflyScraperHelper
 			existing_dispensary_sources = @dispensary_sources.select { |dispensary_source| dispensary_source.name.casecmp(returned_dispensary_source['name']) == 0 }
 			
 			if existing_dispensary_sources.size > 0 #DISPENSARY SOURCE ALREADY EXISTS
+			
+				#trying to just update menu once
+				@updated_menu = false
 				
 				#if exists, then I have to compare fields to see if any need to be updated
 				compareAndUpdateDispensarySourceValues(returned_dispensary_source, existing_dispensary_sources[0])
@@ -110,6 +113,11 @@ class LeaflyScraperHelper
 				if returned_dispensary_source['menu'] != nil
 					analyzeReturnedDispensarySourceMenu(returned_dispensary_source['menu'], existing_dispensary_sources[0], false)
 				end
+				
+				#update the last_menu_update of the dispensary_source
+				if @updated_menu
+					existing_dispensary_sources[0].update_attribute :last_menu_update, DateTime.now
+				end	
 				
 			else #THE DISPENSARYSOURCE DOES NOT EXIST
 				
@@ -331,8 +339,6 @@ class LeaflyScraperHelper
 	def compareAndUpdateDispensarySourceProduct(returned_dispensary_source_product, existing_dispensary_source_product, existing_dispensary_source)
 		
 		if  returned_dispensary_source_product['prices'] != nil
-			#see if we need to update the last_menu_update for the dispensary source
-			updated_menu = false
 
 			returned_dispensary_source_product['prices'].each do |quantity_price_pair|
 
@@ -347,7 +353,7 @@ class LeaflyScraperHelper
 							existing_dispensary_source_product.dsp_prices.
 								where(unit: @quantityToQuantity[quantity_price_pair['quantity']]).first.update_attribute :price, quantity_price_pair['price']
 							
-							updated_menu = true
+							@updated_menu = true
 						end
 					else
 						#create new dsp price
@@ -356,19 +362,13 @@ class LeaflyScraperHelper
 							:unit => @quantityToQuantity[quantity_price_pair['quantity']],
 							:price => quantity_price_pair['price']
 						)
-						updated_menu = true
+						@updated_menu = true
 					end
 				else
 					UnitMissing.email('Leafly', quantity_price_pair['quantity'], quantity_price_pair['price']).deliver_now	
 				end
 			end
-			
-			#update the last_menu_update of the dispensary_source
-			if updated_menu
-				existing_dispensary_source.update_attribute :last_menu_update, DateTime.now
-			end
-			
-			
+
 		end #end of check to see if returned_dispensary_product['prices'] != nil
 	end
 
