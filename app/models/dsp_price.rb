@@ -46,6 +46,7 @@ class DspPrice < ActiveRecord::Base
         "Ounce" => 7,
         "10mg" => 0,
         "20mg" => 1,
+        "25mg" => 1.5,
         "30mg" => 2,
         "32mg" => 3,
         "50mg" => 4,
