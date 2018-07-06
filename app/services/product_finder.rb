@@ -63,9 +63,10 @@ class ProductFinder
             end
         end
         
-        if params[:location_search].present?
+        if params[:location_search].present? #city, street, zip_code
             @searched_location = params[:location_search]
-            @products = @products.where('dispensary_sources.location like ?', "%#{params[:location_search]}%")
+            @products = @products.references(:dispensary_sources).where('dispensary_sources.city like ? OR dispensary_sources.street like ? OR dispensary_sources.zip_code like ?', 
+                                        "%#{params[:location_search]}%", "%#{params[:location_search]}%", "%#{params[:location_search]}%")
             add_to_search(params[:location_search], ' in ')
         end
         
