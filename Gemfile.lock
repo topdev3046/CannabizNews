@@ -560,7 +560,7 @@ DEPENDENCIES
   font-awesome-rails (~> 4.7, >= 4.7.0.2)
   font-awesome-sass (~> 4.7)
   friendly_id (~> 5.0.0)
-  geocoder (~> 1.4, >= 1.4.4)
+  geocoder (~> 1.4, >= 1.4.9)
   gmaps4rails (~> 2.1, >= 2.1.2)
   hairtrigger (~> 0.2.20)
   heroku-deflater
