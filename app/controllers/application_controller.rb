@@ -37,12 +37,14 @@ class ApplicationController < ActionController::Base
             if request.location && request.location.state.present?
                 @site_visitor_state = State.where(name: request.location.state).first
             else
+                 ErrorFound.email('Site Visitor Location', ex.inspect, ex.message, "request: #{request.location} request_location: #{request.location.state}").deliver_now
                 default_visitor_location
             end
             if @site_visitor_state.blank?
                 default_visitor_location    
             end
         rescue => ex
+            ErrorFound.email('Site Visitor Location', ex.inspect, ex.message, "request: #{request.location} request_location: #{request.location.state}").deliver_now
             default_visitor_location
         end
     end
