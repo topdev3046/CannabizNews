@@ -43,28 +43,30 @@
             
         <!--loop through dispensaries-->
         <% @dispensary_to_dispensary_source.each do |dispensary, dispensary_source| %>
-            <tr>
-                <td class="dispensary-td">
-                    <%=link_to dispensary.name, dispensary_path(dispensary)%>
-                </td>
-                <td>
-                    <%=dispensary_source.location%>
-                </td>
-                <% if @table_header_options.present? %>
-                    <% @table_header_options.each do |unit| %>
-                        <% index_count = 0 %>
-                        <% @dispensary_to_dsp[dispensary].dsp_prices.each do |dps| %>
-                            <% if unit.to_s == dps.unit.to_s && index_count == 0 %>
-                                <% index_count += 1 %>
-                                <td>$<%=dps.price.to_f %></td>
+            <% if dispensary.present? && dispensary_source.present?
+                <tr>
+                    <td class="dispensary-td">
+                        <%=link_to dispensary.name, dispensary_path(dispensary)%>
+                    </td>
+                    <td>
+                        <%=dispensary_source.location%>
+                    </td>
+                    <% if @table_header_options.present? %>
+                        <% @table_header_options.each do |unit| %>
+                            <% index_count = 0 %>
+                            <% @dispensary_to_dsp[dispensary].dsp_prices.each do |dps| %>
+                                <% if unit.to_s == dps.unit.to_s && index_count == 0 %>
+                                    <% index_count += 1 %>
+                                    <td>$<%=dps.price.to_f %></td>
+                                <% end %>
+                            <% end %>
+                            <% unless index_count == 1 %>
+                                <td>--</td>
                             <% end %>
                         <% end %>
-                        <% unless index_count == 1 %>
-                            <td>--</td>
-                        <% end %>
                     <% end %>
-                <% end %>
-            </tr>
+                </tr>
+            <% end %>
         <% end %>
             
     </table>
