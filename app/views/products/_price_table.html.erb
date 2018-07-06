@@ -43,7 +43,7 @@
             
         <!--loop through dispensaries-->
         <% @dispensary_to_dispensary_source.each do |dispensary, dispensary_source| %>
-            <% if dispensary.present? && dispensary_source.present?
+            <% if dispensary.present? && dispensary_source.present? %>
                 <tr>
                     <td class="dispensary-td">
                         <%=link_to dispensary.name, dispensary_path(dispensary)%>
