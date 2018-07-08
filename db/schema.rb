@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180707202101) do
+ActiveRecord::Schema.define(version: 20180708083436) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -100,7 +100,10 @@ ActiveRecord::Schema.define(version: 20180707202101) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
+
+  add_index "authors", ["slug"], name: "index_authors_on_slug", unique: true
 
   create_table "average_prices", force: :cascade do |t|
     t.integer  "product_id"
