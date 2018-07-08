@@ -1,0 +1,156 @@
+<meta charset="UTF-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<%= favicon_link_tag 'favicon.ico' %>
+
+<!--universal meta tags-->
+<meta name="robots" content="index, follow"/>
+<meta name="keywords" content="weed, marijuana, cannabis, cannabiz, hemp, cbd, cannabiz network, medical, legal, pot, recreational, strain, dispensary, vape, decriminalize, medicinal, cannabusiness, news, ganja, hydroponics, legalization, THC, terpene, cannabinoid, collective, MMJ, medical marijuana, Bong, dab, Vaporizer, medicinal, charlottes web" />
+
+<% if @product != nil %>
+    <title>Cannabiz Network: <%=@product.name%></title>
+    <meta name ="description" content="<%= truncate_html @product.description, :length => 100 %>" />
+    <meta property="og:description" content="<%= truncate_html @product.description, :length => 100 %>" />
+    <meta name="twitter:description" content="<%= truncate_html @product.description, :length => 100 %>" />
+
+<% elsif @dispensary != nil %>
+    <title>Cannabiz Network: <%=@dispensary.name%></title>
+    <meta name ="description" 
+        content="<%=@dispensary.name%> is a medical marijuana dispensary located at <%=@dispensary.location%>"/>
+    <meta name ="og:description" 
+        content="<%=@dispensary.name%> is a medical marijuana dispensary located at <%=@dispensary.location%>"/>
+    <meta name ="twitter:description" 
+        content="<%=@dispensary.name%> is a medical marijuana dispensary located at <%=@dispensary.location%>"/>    
+
+<% elsif @vendor != nil %>
+    <title>Cannabiz Network: <%=@vendor.name%></title>
+    <meta name ="description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+    <meta property="og:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+    <meta name="twitter:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+
+
+<% elsif @article != nil %>
+
+    <title>Cannabiz Network: <%=@article.title%></title>
+    
+    <!--facebook-->
+    <meta property="og:title" content="Cannabiz Network: <%=@article.title%>" />
+    
+    <meta property="og:url" content="https://cannabiznetwork.com" />
+    <meta property="og:type" content="article" />
+
+    <!--twitter-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@CannabizNetwork" />
+    <meta name="twitter:title" content="<%=@article.title%>"/>
+    
+    <meta name="twitter:url" content="https://cannabiznetwork.com" />
+    
+    <!--images-->
+    <% if @article.image_url != nil && @article.image_url != ''%>
+        <meta name="twitter:image" content="<%=@article.image%>" />
+        <meta property="og:image" content="<%=@article.image%>" />
+    <% else %>
+        <meta name="twitter:image" content="<%= asset_url(@article.source.sidebar_logo) if @article.source %>" />
+        <meta property="og:image" content="<%= asset_url(@article.source.sidebar_logo) if @article.source %>" />
+    <% end %>
+    
+    <!--description-->
+    <%frag = Nokogiri::HTML(@article.body)%>
+    <meta name ="description" content="<%= truncate_html frag, :length => 100 %>" />
+    <meta property="og:description" content="<%= truncate_html frag, :length => 100 %>" />
+    <meta name="twitter:description" content="<%= truncate_html frag, :length => 100 %>" />
+
+<% elsif @blog != nil %>
+
+    <title>Cannabiz Network: <%=@blog.title%></title>
+    
+    <!--facebook-->
+    <meta property="og:title" content="Cannabiz Network: <%=@blog.title%>" />
+    
+    <meta property="og:url" content="https://cannabiznetwork.com" />
+    <meta property="og:type" content="article" />
+
+    <!--twitter-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@CannabizNetwork" />
+    <meta name="twitter:title" content="<%=@blog.title%>"/>
+    
+    <meta name="twitter:url" content="https://cannabiznetwork.com" />
+    
+    <!--images-->
+    <% if @blog.image_url != nil && @blog.image_url != ''%>
+        <meta name="twitter:image" content="<%=@blog.image%>" />
+        <meta property="og:image" content="<%=@blog.image%>" />
+    <% else %>
+        <meta name="twitter:image" content="<%= asset_url('substitutes/news-substitute.jpg') %>" />
+        <meta property="og:image" content="<%= asset_url('substitutes/news-substitute.jpg') %>" />
+    <% end %>
+    
+    <!--description-->
+    <%frag = Nokogiri::HTML(@blog.body)%>
+    <meta name ="description" content="<%= truncate_html frag, :length => 100 %>" />
+    <meta property="og:description" content="<%= truncate_html frag, :length => 100 %>" />
+    <meta name="twitter:description" content="<%= truncate_html frag, :length => 100 %>" />
+
+<% elsif @recents != nil && @mostviews != nil %>
+    <!--article index-->
+    <title>Latest Cannabis News and Updates - Cannabiz Network</title>
+    <meta name ="description" 
+        content="Never miss an update about Cannabis News, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network"/>
+    
+<% elsif @products != nil %>
+    <!--product index-->
+    <title>Cannabiz Network - Online Cannabis Store</title>
+    <meta name ="description"
+        content="Shop from our best quality collection of cannabis, legal marijuana, haze, hybrid sativa & hybrid-indica online. We assure the best quality online and fastest service."/>
+
+<% elsif @blogs != nil %>
+    <!--blog index-->
+    <title>Cannabiz Network Blog</title>
+    <meta name ="description" 
+        content="Never miss an update about Cannabis News, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network"/>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/contact_us') %>
+    <!--contact us-->
+    <title>Contact - Cannabiz Network</title>
+    <meta name ="description"
+        content="Contact us today for any kind of help, queries, and suggestions related to our website. We promise you to help in best possible way."/>
+ 
+<% elsif current_page?('https://www.cannabiznetwork.com/feedback') %>
+    <!--feedback-->
+    <title>Feedback - Cannabiz Network</title>
+    <meta name ="description"
+        content="Leave us a feedback to help us grow better and bring improvements to our site and online store."/>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/login') %>
+    <!--login -->
+    <title>Cannabiz Network - Member Login</title>
+    <meta name ="description"
+        content="Create an account on Cannabiz Network to shop online among the trending cannabis, legal marijuana, haze, CBD, and Weed products."/>
+
+<% else %>
+    <!--home page-->
+    <title>Cannabiz Network - The Leading Source of Cannabis and Haze News</title>
+    <meta name ="description" 
+        content="Cannabiz Network is Washington's leading source of breaking news and expert opinions on cannabis-related developments and news like CBD, Legalization of Marijuana, Haze, Weed, Hybrid etc in Washington."/>
+
+<% end %>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<%= javascript_include_tag 'application' %>
+<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= stylesheet_link_tag 'style', media: 'all', 'data-turbolinks-track' => true %>
+<%= csrf_meta_tags %>
+
+<!--google analytics-->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-96167975-1', 'auto');
+  ga('send', 'pageview');
+</script>

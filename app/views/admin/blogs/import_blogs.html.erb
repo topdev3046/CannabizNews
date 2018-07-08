@@ -1,0 +1,6 @@
+<%= semantic_form_for 'blog', url: admin_blogs_import_blogs_path, :authenticity_token => true ,builder: ActiveAdmin::FormBuilder do |f| %>
+    <%= f.inputs "Import Blog Posts" do %>
+      <%= f.input :file_name, as: :file %>
+      <%= f.action :submit, :label => "Upload" %>
+    <% end %>
+<% end %>

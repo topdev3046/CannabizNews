@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   match "/admin/categories/import_categories" => 'admin/categories#import_categories', via: [:get, :post]
   match "/admin/dispensaries/import_dispensaries" => 'admin/dispensaries#import_dispensaries', via: [:get, :post]
   match "/admin/products/import_products" => 'admin/products#import_products', via: [:get, :post]
+  match "/admin/blogs/import_blogs" => 'admin/blogs#import_blogs', via: [:get, :post]
   
   #SIDEKIQ Routes
   require 'sidekiq/web'
@@ -71,6 +72,7 @@ Rails.application.routes.draw do
   match "/500", :to => "errors#internal_server_error", :via => :all
   match "/503", :to => "errors#application_error", :via => :all
   
+  resources :blog
   resources :categories
   resources :sources
   resources :average_prices

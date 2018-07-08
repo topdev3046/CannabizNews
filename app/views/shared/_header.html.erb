@@ -59,13 +59,6 @@
                                     <nav class="primary-menu uppercase">
                                         <ul class="clearfix customnavfont">
                                             <li><%= link_to 'Home', root_path %></li>
-                                            <li>
-                                                <% if current_user %>
-                                                    <a href="<%= user_path(current_user)%>">My Page</a>
-                                                <% else %>
-                                                    <a href="<%= login_path %>">My Page</a>
-                                                <% end %>
-                                            </li>
                                             <% if @site_visitor_state.present? %>
                                                 <li><a href="<%= state_path(@site_visitor_state) %>">News</a></li>
                                             <% else %>
@@ -77,6 +70,7 @@
                                             <% else %>
                                                 <li><a href="<%= products_path %>">Products</a></li>
                                             <% end %>
+                                            <li><a href="<%= blog_index_path(state: @site_visitor_state.name) %>">Blog</a></li>
                                             <li>
                                                 <%= render 'shared/dropdown_states_header' %>
                                             </li>
@@ -120,13 +114,6 @@
                     <ul class="customnavfont">
                         
                         <li><%= link_to 'Home', root_path %></li>
-                        <li>
-                            <% if current_user %>
-                                <a href="<%= user_path(current_user)%>">My Page</a>
-                            <% else %>
-                                <a href="<%= login_path %>">My Page</a>
-                            <% end %>
-                        </li>
                         <li><a href="<%= articles_path %>">News</a></li>
                         
                         <% if @site_visitor_state.product_state %>
@@ -134,7 +121,7 @@
                         <% else %>
                             <li><a href="<%= products_path %>">Products</a></li>
                         <% end %>
-                        
+                        <li><a href="<%= blog_index_path(state: @site_visitor_state.name) %>">Blog</a></li>
                         <li>
                             <%= render 'shared/dropdown_states_header_mobile' %>    
                         </li>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180619194517) do
+ActiveRecord::Schema.define(version: 20180707202101) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -96,6 +96,12 @@ ActiveRecord::Schema.define(version: 20180619194517) do
 
   add_index "articles", ["slug"], name: "index_articles_on_slug", unique: true
 
+  create_table "authors", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "average_prices", force: :cascade do |t|
     t.integer  "product_id"
     t.decimal  "average_price"
@@ -105,6 +111,21 @@ ActiveRecord::Schema.define(version: 20180619194517) do
     t.datetime "updated_at"
     t.decimal  "display_order"
   end
+
+  create_table "blog", force: :cascade do |t|
+    t.string   "title"
+    t.text     "body"
+    t.string   "slug"
+    t.decimal  "num_views"
+    t.string   "image"
+    t.boolean  "published"
+    t.date     "published_date"
+    t.integer  "author_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "blog", ["slug"], name: "index_blog_on_slug", unique: true
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
