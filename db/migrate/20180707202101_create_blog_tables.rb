@@ -1,5 +1,10 @@
 class CreateBlogTables < ActiveRecord::Migration
   def change
+    create_table :authors do |t|
+      t.string :name
+      t.timestamps
+    end
+    
     create_table :blog do |t|
       t.string :title
       t.text :body
@@ -14,9 +19,5 @@ class CreateBlogTables < ActiveRecord::Migration
     
     add_index :blog, :slug, unique: true
     
-    create_table :authors do |t|
-      t.string :name
-      t.timestamps
-    end
   end
 end
