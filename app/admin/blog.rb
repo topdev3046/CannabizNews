@@ -68,7 +68,7 @@ ActiveAdmin.register Blog do
 			f.input :image, :as => :file
 			f.input :author_id, :label => 'Author', :as => :select, 
 					:collection => Author.order('name DESC').map{|u| ["#{u.name}", u.id]}
-			f.input :body, as: :froala_editor, input_html: {data: {options: {toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic']}}}, :input_html => {:rows => 5, :cols => 50}
+			#f.input :body, as: :froala_editor, input_html: {data: {options: {toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic']}}}, :input_html => {:rows => 5, :cols => 50}
 			f.input :published_date
 			f.input :published
 		end
