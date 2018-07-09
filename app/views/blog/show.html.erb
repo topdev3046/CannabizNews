@@ -41,7 +41,9 @@
                                                             <span itemprop="name"><%=@blog.author.name%></span></span>
                                                     </li>
                                                 <% end %>
-                                                <li itemprop="datePublished" class="s-meta" style="color: #7c8c99;"><%= @blog.published_date.to_formatted_s(:long) %></li>
+                                                <% if @blog.published_date.present? %>
+                                                    <li itemprop="datePublished" class="s-meta" style="color: #7c8c99;"><%= @blog.published_date.to_formatted_s(:long) %></li>
+                                                <% end %>
                                             </ul>
                                         </div>
                                     </div>
