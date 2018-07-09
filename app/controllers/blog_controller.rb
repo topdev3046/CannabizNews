@@ -51,7 +51,7 @@ class BlogController < ApplicationController
                 end
             end
             
-            @blogs = Blog.order("published_date DESC").paginate(:page => params[:page], :per_page => 8)
+            @blogs = Blog.published.order("published_date DESC").paginate(:page => params[:page], :per_page => 8)
            
             #product sidebar
             if @site_visitor_state.present? && @site_visitor_state.product_state

@@ -5,6 +5,7 @@ class SitemapsController < ApplicationController
     @vendors = Vendor.all
     @dispensaries = Dispensary.all
     @articles = Article.all
+    @blogs = Blog.published.order("published_date DESC")
 
     respond_to do |format|
       format.xml
