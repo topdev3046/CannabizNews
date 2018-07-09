@@ -41,6 +41,7 @@ class LeaflyScraperHelper
 			'1 G' => 'Gram',
 			'2 g' => '2 Grams',
 			'4 G' => '4 Grams',
+			'4G' => '4 Grams',
 			'⅛ oz' => 'Eighth',
 			'3.5 G' => 'Eighth',
 			'3.5 g' => 'Eighth',
