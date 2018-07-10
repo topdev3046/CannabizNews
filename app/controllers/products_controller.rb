@@ -125,10 +125,14 @@ class ProductsController < ApplicationController
                 state_used = @site_visitor_state
             end
         
-            #default state to washington
+            #default state to a product state or washington
             if !state_used.product_state
-               state_used = State.find_by(name: 'Washington')
-               @searched_state = state_used
+                if @product.states.any? 
+                    state_used = @product.states.first   
+                else
+                    state_used = State.find_by(name: 'Washington')    
+                end
+                @searched_state = state_used
             end
         
             begin

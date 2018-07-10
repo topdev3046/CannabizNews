@@ -35,7 +35,7 @@ ActiveAdmin.register ProductState do
 		f.input :product_id, :label => 'Product', :as => :select, 
 				:collection => Product.order('name ASC').map{|u| ["#{u.name}", u.id]}
 		f.input :state_id, :label => 'State', :as => :select, 
-				:collection => State.order('name ASC').map{|u| ["#{u.name}", u.id]}
+				:collection => State.product_state.order('name ASC').map{|u| ["#{u.name}", u.id]}
     	f.actions
     end
 
