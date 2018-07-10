@@ -38,6 +38,7 @@ ActiveAdmin.register Product do
 	
 	#export csv
 	csv do
+		id_column
 		column :name
 		column :image
 		column :description
