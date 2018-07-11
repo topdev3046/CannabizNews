@@ -11,6 +11,10 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
 
+// blog body editor 
+@import 'font-awesome/font-awesome';
+@import 'activeadmin/froala_editor_input';
+
 
 // skin changes
 $skinLogo: none;

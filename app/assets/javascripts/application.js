@@ -18,6 +18,8 @@
 //= require social-share-button
 //= require gmaps/google
 //= require owl.carousel
+//= require jquery-ui/widgets/autocomplete
+//= require autocomplete-rails
 
 
 
