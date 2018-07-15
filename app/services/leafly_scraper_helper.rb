@@ -54,6 +54,7 @@ class LeaflyScraperHelper
 			'PREROLL' => 'Each',
 			'pre-roll' => 'Each',
 			'preroll' => 'Each',
+			'pre roll' => 'Each',
 			'Pre-Roll' => 'Each',
 			'Joint' => 'Each',
 			'E-Joint' => 'Each',
