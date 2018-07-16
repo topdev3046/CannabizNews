@@ -1,9 +1,9 @@
 <meta charset="UTF-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <%= favicon_link_tag 'favicon.ico' %>
-
-<!--universal meta tags-->
 <meta name="robots" content="index, follow"/>
+
+<!--need to change keywords to be different for each page-->
 <meta name="keywords" content="weed, marijuana, cannabis, cannabiz, hemp, cbd, cannabiz network, medical, legal, pot, recreational, strain, dispensary, vape, decriminalize, medicinal, cannabusiness, news, ganja, hydroponics, legalization, THC, terpene, cannabinoid, collective, MMJ, medical marijuana, Bong, dab, Vaporizer, medicinal, charlottes web" />
 
 <% if @product != nil %>
@@ -112,12 +112,35 @@
     <meta property="og:description" content="<%= truncate_html frag, :length => 100 %>" />
     <meta name="twitter:description" content="<%= truncate_html frag, :length => 100 %>" />
 
+
+<!--article indexes-->
+<% elsif @state != nil %>
+    <!--state news page -->
+    <title><%= "#{@state.name} Cannabiz News" %></title>
+    <% desc = "Cannabiz Network is #{@state.name.titlecase}'s leading source of breaking news and expert opinions on cannabis-related developments and news like CBD, Legalization of Marijuana, Haze, Weed, Hybrid etc in #{@state.name.titlecase}."%>
+    <meta name ="description" 
+        content="<%= desc %>"/>
+    
+<% elsif @category != nil %>
+    <title><%= "#{@category.name} Cannabiz News" %></title>
+    <% desc = "Cannabiz Network provides aggregated news related to Cannabis, Marijuana, Haze, Cannabiz and related subjects - here under the category of #{@category.name}"%>
+    <meta name ="description" 
+        content="<%= desc %>"/>
+
+<% elsif @source != nil %>
+    <title><%= "#{@source.name} Cannabiz News" %></title>
+    <% desc = "Cannabiz Network features articles from #{@source.name} related to Cannabis, Marijuana, Haze, Cannabiz, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network!}" %>
+    <meta name ="description" 
+        content="<%= desc %>"/>
+
+<!--just article index now-->
 <% elsif @recents != nil && @mostviews != nil %>
     <!--article index-->
     <title>Latest Cannabis News and Updates - Cannabiz Network</title>
     <meta name ="description" 
-        content="Never miss an update about Cannabis News, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network"/>
-    
+        content="Never miss an update about Cannabis News, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network!"/>
+
+
 <% elsif @products != nil %>
     <!--product index-->
     <title>Cannabiz Network - Online Cannabis Store</title>
@@ -130,15 +153,18 @@
     <meta name ="description" 
         content="Never miss an update about Cannabis News, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network"/>
 
+
+<!--one off pages-->
+
 <% elsif current_page?('https://www.cannabiznetwork.com/contact_us') %>
     <!--contact us-->
-    <title>Contact - Cannabiz Network</title>
+    <title>Cannabiz Network - Contact</title>
     <meta name ="description"
         content="Contact us today for any kind of help, queries, and suggestions related to our website. We promise you to help in best possible way."/>
  
 <% elsif current_page?('https://www.cannabiznetwork.com/feedback') %>
     <!--feedback-->
-    <title>Feedback - Cannabiz Network</title>
+    <title>Cannabiz Network - Feedback</title>
     <meta name ="description"
         content="Leave us a feedback to help us grow better and bring improvements to our site and online store."/>
 
@@ -146,13 +172,30 @@
     <!--login -->
     <title>Cannabiz Network - Member Login</title>
     <meta name ="description"
-        content="Create an account on Cannabiz Network to shop online among the trending cannabis, legal marijuana, haze, CBD, and Weed products."/>
+        content="Login to your account on Cannabiz Network to update your personalized experience featuring saving articles and products related to Weed, Haze, Cannabis, and State News. Online shopping coming soon!"/>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/privacy_policy') %>
+    <!--login -->
+    <title>Cannabiz Network - Privacy Policy</title>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/terms_conditions') %>
+    <!--login -->
+    <title>Cannabiz Network - Terms & Conditions</title>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/signup') %>
+    <!--login -->
+    <title>Cannabiz Network - Member Signup</title>
+    <meta name ="description"
+        content="Register for an Account on Cannabiz Network to create your personalized experience featuring saving articles and products related to Weed, Haze, Cannabis, and State News. Online shopping coming soon!"/>
+
+<!--one off pages-->
+
 
 <% else %>
     <!--home page-->
-    <title>Cannabiz Network - The Leading Source of Cannabis and Haze News</title>
+    <title>Cannabiz Network</title>
     <meta name ="description" 
-        content="Cannabiz Network is Washington's leading source of breaking news and expert opinions on cannabis-related developments and news like CBD, Legalization of Marijuana, Haze, Weed, Hybrid etc in Washington."/>
+        content="Cannabiz Network is the leading source of breaking news and expert opinions on cannabis-related developments and news like CBD, Legalization of Marijuana, Haze, Weed, Hybrid etc. We also feature over 200 trending products and inform users where they can be legally purchased"/>
 
 <% end %>
 
