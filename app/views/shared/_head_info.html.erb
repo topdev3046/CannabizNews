@@ -7,6 +7,8 @@
 <meta name="keywords" content="weed, marijuana, cannabis, cannabiz, hemp, cbd, cannabiz network, medical, legal, pot, recreational, strain, dispensary, vape, decriminalize, medicinal, cannabusiness, news, ganja, hydroponics, legalization, THC, terpene, cannabinoid, collective, MMJ, medical marijuana, Bong, dab, Vaporizer, medicinal, charlottes web" />
 
 <% if @product != nil %>
+
+    <!--check if there is a searched state and / or average price-->
     <title>Cannabiz Network: <%=@product.name%></title>
     <meta name ="description" content="<%= truncate_html @product.description, :length => 100 %>" />
     <meta property="og:description" content="<%= truncate_html @product.description, :length => 100 %>" />
@@ -15,18 +17,36 @@
 <% elsif @dispensary != nil %>
     <title>Cannabiz Network: <%=@dispensary.name%></title>
     <meta name ="description" 
-        content="<%=@dispensary.name%> is a medical marijuana dispensary located at <%=@dispensary.location%>"/>
+        content="<%=@dispensary.name%> is a medical cannabiz dispensary located at <%=@dispensary.location%>"/>
     <meta name ="og:description" 
-        content="<%=@dispensary.name%> is a medical marijuana dispensary located at <%=@dispensary.location%>"/>
+        content="<%=@dispensary.name%> is a medical cannabiz dispensary located at <%=@dispensary.location%>"/>
     <meta name ="twitter:description" 
-        content="<%=@dispensary.name%> is a medical marijuana dispensary located at <%=@dispensary.location%>"/>    
+        content="<%=@dispensary.name%> is a medical cannabiz dispensary located at <%=@dispensary.location%>"/>    
 
 <% elsif @vendor != nil %>
     <title>Cannabiz Network: <%=@vendor.name%></title>
-    <meta name ="description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
-    <meta property="og:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
-    <meta name="twitter:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+    
+    <% if @vendor.description.present? %>
+    
+        <meta name ="description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+        <meta property="og:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+        <meta name="twitter:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
 
+    <% else %>
+        <% desc = '' %>
+        <% 
+            if @vendor.states.present?
+                desc = "#{@vendor.name} is a Cannabiz Cultivator in #{@vendor.states.first.name}"
+            else 
+                desc = "#{@vendor.name} is a Cannabiz Cultivator"
+            end
+        %>
+        
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+        
+    <% end %>
 
 <% elsif @article != nil %>
 
