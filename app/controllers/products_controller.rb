@@ -133,6 +133,8 @@ class ProductsController < ApplicationController
                     state_used = State.find_by(name: 'Washington')    
                 end
                 @searched_state = state_used
+            else
+                @title_state = state_used    
             end
         
             begin
@@ -178,6 +180,8 @@ class ProductsController < ApplicationController
             if !state_used.product_state
                 @searched_state = State.find_by(name: 'Washington')
                 state_used = @searched_state
+            else
+                @title_state = state_used    
             end
             
             begin

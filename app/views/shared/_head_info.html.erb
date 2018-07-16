@@ -9,10 +9,39 @@
 <% if @product != nil %>
 
     <!--check if there is a searched state and / or average price-->
-    <title>Cannabiz Network: <%=@product.name%></title>
-    <meta name ="description" content="<%= truncate_html @product.description, :length => 100 %>" />
-    <meta property="og:description" content="<%= truncate_html @product.description, :length => 100 %>" />
-    <meta name="twitter:description" content="<%= truncate_html @product.description, :length => 100 %>" />
+    <% if @average_price.present? && @title_state.present? %>
+    
+        <title><%=@product.name%> at $<%=@average_price.average_price%> per <%=@average_price.average_price_unit%> in <%=@title_state.name%></title>
+        
+        <% desc = "See all of the medical/recreational marijuana dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit} in #{@title_state.name}" %>
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+    
+    <% elsif @average_price.present? %>
+    
+        <title><%=@product.name%> at $<%=@average_price.average_price%> per <%=@average_price.average_price_unit%></title>
+        
+        <% desc = "See all of the medical/recreational marijuana dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit}" %>
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+    
+    <% elsif @title_state.present? %>
+    
+        <title><%=@product.name%> in <%=@title_state.name%></title>
+        
+        <% desc = "See all of the medical/recreational marijuana dispensaries where you can find and purchase #{@product.name} in the state of #{@title_state.name}" %>
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+    
+    <% else %>
+        <title>Cannabiz Network: <%=@product.name%></title>
+        <meta name ="description" content="<%= truncate_html @product.description, :length => 100 %>" />
+        <meta property="og:description" content="<%= truncate_html @product.description, :length => 100 %>" />
+        <meta name="twitter:description" content="<%= truncate_html @product.description, :length => 100 %>" />
+    <% end %>
 
 <% elsif @dispensary != nil %>
     <title>Cannabiz Network: <%=@dispensary.name%></title>
