@@ -35,6 +35,8 @@ class ApplicationController < ActionController::Base
     def site_visitor_location
         
         begin
+            ErrorFound.email('Request Location', request.safe_location, request.safe_location.state.strip, '').deliver_now
+        
             if request.safe_location && request.safe_location.state.present?
                 @site_visitor_state = State.where(name: request.safe_location.state.strip).first
             else
