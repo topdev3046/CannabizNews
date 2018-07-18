@@ -1,7 +1,8 @@
 ActiveAdmin.register Blog do
     menu :if => proc{ current_admin_user.admin? }, :label => 'Blog'
 	
-	permit_params :title, :body, :published, :published_date, :num_views, :image, :author_id
+	permit_params :title, :body, :published, :published_date, :num_views, :image, :author_id, 
+					:description, :sub_header, :keywords
 	
 	#use with friendly id
     before_filter :only => [:show, :edit, :update, :delete] do
@@ -71,6 +72,9 @@ ActiveAdmin.register Blog do
 			f.input :body, as: :froala_editor, input_html: {data: {options: {toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic']}}}, :input_html => {:rows => 5, :cols => 50}
 			f.input :published_date
 			f.input :published
+			f.input :description
+			f.input :keywords
+			f.input :sub_header
 		end
 		f.actions
 	end
