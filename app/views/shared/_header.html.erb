@@ -10,11 +10,11 @@
                                 <!--desktop logo-->
                                 <% if @state.present? && @state.logo.present? %>
                                     <a href="<%=root_path%>">
-                                        <img style ="margin-top: -10px" src="<%=asset_path(@state.logo)%>" alt="<%=@state.abbreviation%>Cannabiz">
+                                        <img style ="margin-top: -10px" src="<%=asset_path(@state.logo)%>" alt="<%=@state.abbreviation%>Cannabiz" title="<%=@state.abbreviation%>Cannabiz">
                                     </a>
                                 <% elsif @site_visitor_state.present? %>
                                     <a href="<%=root_path%>">
-                                        <img style ="margin-top: -10px" src="<%=asset_path(@site_visitor_state.logo)%>" alt="<%=@site_visitor_state.abbreviation%>Cannabiz">
+                                        <img style ="margin-top: -10px" src="<%=asset_path(@site_visitor_state.logo)%>" alt="<%=@site_visitor_state.abbreviation%>Cannabiz" title="<%=@site_visitor_state.abbreviation%>Cannabiz">
                                     </a>    
                                 <% else %>
                             	    <%= link_to image_tag("header_footer/cbz-logo-color.svg"), root_path %>
