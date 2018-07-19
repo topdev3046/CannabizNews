@@ -123,8 +123,11 @@ class PotguideScraperHelper
 					
 					#if its not a new dispensary, we will check if the dispensary source already has the product
 					if is_new_dispensary == false
-						existing_dispensary_source_products = existing_dispensary_source.products.select { |product| 
-																product.name.casecmp(returned_dispensary_source_product['name']) == 0 }
+
+						#7-19
+						searchString = "%#{returned_dispensary_source_product['name'].downcase.strip}%"
+						existing_dispensary_source_products = existing_dispensary_source.products.
+								where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
 					
 						#try alternate names or combine with vendors
 						if existing_dispensary_source_products.size == 0
