@@ -191,8 +191,11 @@ class LeaflyScraperHelper
 
 						#if its not a new dispensary, we will check if the dispensary source already has the product
 						if is_new_dispensary == false
-							existing_dispensary_source_products = existing_dispensary_source.products.select { |product| 
-																	product.name.casecmp(strain_name) == 0 }
+
+							#7-19
+							searchString = "%#{strain_name.downcase.strip}%"
+							existing_dispensary_source_products = existing_dispensary_source.products.
+								where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
 
 							#try alternate names or combine with vendors
 							if existing_dispensary_source_products.size == 0
@@ -222,8 +225,11 @@ class LeaflyScraperHelper
 						
 						else #dispensary source does not have the product / it is a new dispensary source
 
-							#first check if product is in the system	
-							existing_products = @category_products.select { |product| product.name.casecmp(strain_name) == 0 }
+							#first check if product is in the system
+
+							#7-19
+							searchString = "%#{strain_name.downcase.strip}%"
+							existing_products = @category_products.where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
 							
 							if existing_products.size > 0 #product is in the system
 								

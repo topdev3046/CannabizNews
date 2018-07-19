@@ -98,6 +98,8 @@ class ProductsController < ApplicationController
         
         puts 'steve in show'
         
+        puts @product.to_s
+        
         begin
         
             #only show featured product
