@@ -81,6 +81,7 @@ class LeaflyScraperHelper
 			'200mg' => '200mg',
 			'300 mg' => '300mg',
 			'300mg' => '300mg',
+			'300 MG' => '300mg',
 			'500 mg' => '500mg',
 			'500mg' => '500mg',
 			'500MG' => '500mg',

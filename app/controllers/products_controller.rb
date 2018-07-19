@@ -96,61 +96,63 @@ class ProductsController < ApplicationController
     
     def show
         
-        #only show featured product
-        if @product.featured_product
+        begin
         
-            avg_price = nil
-            if params[:average_price_id].present?
-                if @average_price = AveragePrice.find_by(id: params[:average_price_id])
-                    avg_price = @average_price
-                end
-            end
+            #only show featured product
+            if @product.featured_product
             
-            #hold state throughout
-            if params[:state].present?
-                if state = State.find_by(name: params[:state])
-                    @site_visitor_state = state
+                avg_price = nil
+                if params[:average_price_id].present?
+                    if @average_price = AveragePrice.find_by(id: params[:average_price_id])
+                        avg_price = @average_price
+                    end
                 end
-            end
-            
-            state_used = nil
-            if params[:state_id].present?
-                if @searched_state = State.find_by(id: params[:state_id])
-                    state_used = @searched_state
-                    @site_visitor_state = state_used
+                
+                #hold state throughout
+                if params[:state].present?
+                    if state = State.find_by(name: params[:state])
+                        @site_visitor_state = state
+                    end
+                end
+                
+                state_used = nil
+                if params[:state_id].present?
+                    if @searched_state = State.find_by(id: params[:state_id])
+                        state_used = @searched_state
+                        @site_visitor_state = state_used
+                    else 
+                        state_used = @site_visitor_state
+                    end
                 else 
                     state_used = @site_visitor_state
                 end
-            else 
-                state_used = @site_visitor_state
-            end
-        
-            #default state to a product state or washington
-            if !state_used.product_state
-                if @product.states.any? 
-                    state_used = @product.states.first   
+            
+                #default state to a product state or washington
+                if !state_used.product_state
+                    if @product.states.any? 
+                        state_used = @product.states.first   
+                    else
+                        state_used = State.find_by(name: 'Washington')    
+                    end
+                    @searched_state = state_used
                 else
-                    state_used = State.find_by(name: 'Washington')    
+                    @title_state = state_used    
                 end
-                @searched_state = state_used
-            else
-                @title_state = state_used    
-            end
-        
-            begin
+            
                 result = ProductHelper.new(@product, state_used, avg_price).buildSimilarProducts
                 @similar_products = result[0]
             
                 result = ProductHelper.new(@product, state_used, avg_price).buildProductDisplay
                 @dispensary_to_product, @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp = 
                     result[0], result[1], result[2], result[3]  
-            rescue => ex
-                ErrorFound.email("Product Show Page for product: #{@product.slug}", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+                
+            else
                 redirect_to root_path
-            end 
-        else
+            end
+        rescue => ex
+            ErrorFound.email("Product Show Page for product: #{@product.slug}", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
             redirect_to root_path
-        end
+        end 
     end
     
     def change_state
