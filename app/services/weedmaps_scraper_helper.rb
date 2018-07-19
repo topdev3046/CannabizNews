@@ -153,8 +153,11 @@ class WeedmapsScraperHelper
 					
 					#if its not a new dispensary, we will check if the dispensary source already has the product
 					if is_new_dispensary == false
-						existing_dispensary_source_products = existing_dispensary_source.products.select { |product| 
-																product.name.casecmp(returned_dispensary_source_product['name']) == 0 }
+
+						#7-19
+						searchString = "%#{returned_dispensary_source_product['name'].downcase.strip}%"
+						existing_dispensary_source_products = existing_dispensary_source.products.
+								where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
 					
 						#try alternate names or combine with vendors
 						if existing_dispensary_source_products.size == 0
@@ -225,8 +228,12 @@ class WeedmapsScraperHelper
 					else #dispensary source does not have the product / it is a new dispensary source
 						
 						#first check if product is in the system - used to be all_products
-						existing_products = @category_products.select { |product| product.name.casecmp(returned_dispensary_source_product['name']) == 0 }
-						
+
+						#7-19
+						searchString = "%#{returned_dispensary_source_product['name'].downcase.strip}%"
+						existing_products = @category_products.
+								where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
+								
 						if existing_products.size > 0 #product is in the system
 							
 							#just create a dispensary source product

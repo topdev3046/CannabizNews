@@ -198,7 +198,10 @@ class PotguideScraperHelper
 					else #dispensary source does not have the product / it is a new dispensary source
 						
 						#first check if product is in the system - used to be all_products
-						existing_products = @category_products.select { |product| product.name.casecmp(returned_dispensary_source_product['name']) == 0 }
+						#7-19
+						searchString = "%#{returned_dispensary_source_product['name'].downcase.strip}%"
+						existing_products = @category_products.
+								where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
 						
 						if existing_products.size > 0 #product is in the system
 							
