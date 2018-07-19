@@ -96,10 +96,14 @@ class ProductsController < ApplicationController
     
     def show
         
+        puts 'steve in show'
+        
         begin
         
             #only show featured product
             if @product.featured_product
+                
+                puts 'steve in featured'
             
                 avg_price = nil
                 if params[:average_price_id].present?
@@ -108,12 +112,16 @@ class ProductsController < ApplicationController
                     end
                 end
                 
+                puts 'steve past 1'
+                
                 #hold state throughout
                 if params[:state].present?
                     if state = State.find_by(name: params[:state])
                         @site_visitor_state = state
                     end
                 end
+                
+                puts 'steve past 2'
                 
                 state_used = nil
                 if params[:state_id].present?
@@ -126,6 +134,8 @@ class ProductsController < ApplicationController
                 else 
                     state_used = @site_visitor_state
                 end
+                
+                puts 'steve past 3'
             
                 #default state to a product state or washington
                 if !state_used.product_state
@@ -138,13 +148,19 @@ class ProductsController < ApplicationController
                 else
                     @title_state = state_used    
                 end
+                
+                puts 'steve past 4'
             
                 result = ProductHelper.new(@product, state_used, avg_price).buildSimilarProducts
                 @similar_products = result[0]
+                
+                puts 'steve past 5'
             
                 result = ProductHelper.new(@product, state_used, avg_price).buildProductDisplay
                 @dispensary_to_product, @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp = 
                     result[0], result[1], result[2], result[3]  
+                    
+                puts 'steve past 6'
                 
             else
                 redirect_to root_path
