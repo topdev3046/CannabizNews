@@ -12,7 +12,7 @@
     
         <title><%=@product.name%> at $<%=@average_price.average_price%> per <%=@average_price.average_price_unit%> in <%=@title_state.name%></title>
         
-        <% desc = "See all of the medical/recreational marijuana dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit} in #{@title_state.name}" %>
+        <% desc = "See the dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit} in #{@title_state.name}" %>
         <meta name ="description" content="<%= desc %>" />
         <meta property="og:description" content="<%= desc %>" />
         <meta name="twitter:description" content="<%= desc %>" />
@@ -22,7 +22,7 @@
     
         <title><%=@product.name%> at $<%=@average_price.average_price%> per <%=@average_price.average_price_unit%></title>
         
-        <% desc = "See all of the medical/recreational marijuana dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit}" %>
+        <% desc = "See the dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit}" %>
         <meta name ="description" content="<%= desc %>" />
         <meta property="og:description" content="<%= desc %>" />
         <meta name="twitter:description" content="<%= desc %>" />
@@ -32,7 +32,7 @@
     
         <title><%=@product.name%> in <%=@title_state.name%></title>
         
-        <% desc = "See all of the medical/recreational marijuana dispensaries where you can find and purchase #{@product.name} in the state of #{@title_state.name}" %>
+        <% desc = "See the dispensaries where you can find and purchase #{@product.name} in the state of #{@title_state.name}" %>
         <meta name ="description" content="<%= desc %>" />
         <meta property="og:description" content="<%= desc %>" />
         <meta name="twitter:description" content="<%= desc %>" />
@@ -113,17 +113,21 @@
 <% elsif @blog != nil %>
 
     <title><%=@blog.title%></title>
+    <meta name ="keywords" content="<%= @blog.keywords %>" />
+    <meta name ="description" content="<%= @blog.description %>" />
     
     <!--facebook-->
     <meta property="og:title" content="<%=@blog.title%>" />
     <meta property="og:url" content="https://cannabiznetwork.com" />
     <meta property="og:type" content="article" />
+    <meta property="og:description" content="<%= @blog.description %>" />
 
     <!--twitter-->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@CannabizNetwork" />
     <meta name="twitter:title" content="<%=@blog.title%>"/>
     <meta name="twitter:url" content="https://cannabiznetwork.com" />
+    <meta name="twitter:description" content="<%= @blog.description %>" />
     
     <!--images-->
     <% if @blog.image_url != nil && @blog.image_url != ''%>
@@ -133,19 +137,12 @@
         <meta name="twitter:image" content="<%= asset_url('substitutes/news-substitute.jpg') %>" />
         <meta property="og:image" content="<%= asset_url('substitutes/news-substitute.jpg') %>" />
     <% end %>
-    
-    <!--description-->
-    <%frag = Nokogiri::HTML(@blog.body)%>
-    <meta name ="description" content="<%= truncate_html frag, :length => 100 %>" />
-    <meta property="og:description" content="<%= truncate_html frag, :length => 100 %>" />
-    <meta name="twitter:description" content="<%= truncate_html frag, :length => 100 %>" />
-
 
 <!--article indexes-->
 <% elsif @state != nil %>
     <!--state news page -->
     <title><%= "#{@state.name} Cannabiz News" %></title>
-    <% desc = "Cannabiz Network is #{@state.name.titlecase}'s leading source of breaking news and expert opinions on cannabis-related developments and news like CBD, Legalization of Marijuana, Haze, Weed, Hybrid etc in #{@state.name.titlecase}."%>
+    <% desc = "Cannabiz Network is #{@state.name.titlecase}'s leading source of breaking news and expert opinions on cannabis-related developments and news"%>
     <meta name ="description" content="<%= desc %>"/>
     
 <% elsif @category != nil %>
@@ -155,7 +152,7 @@
 
 <% elsif @source != nil %>
     <title><%= "#{@source.name} Cannabiz News" %></title>
-    <% desc = "Cannabiz Network features articles from #{@source.name} related to Cannabis, Marijuana, Haze, Cannabiz, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network!}" %>
+    <% desc = "Cannabiz Network features articles from #{@source.name} related to Cannabis, Marijuana, Cannabiz, CBD, THC, State Laws and Legalization." %>
     <meta name ="description" content="<%= desc %>"/>
 
 <!--just article index now-->
@@ -223,7 +220,7 @@
     <!--home page-->
     <title>Cannabiz Network</title>
     <meta name ="description" 
-        content="Cannabiz Network is the leading source of breaking news and expert opinions on cannabis-related developments and news like CBD, Legalization of Marijuana, Haze, Weed, Hybrid etc. We also feature over 200 trending products and inform users where they can be legally purchased"/>
+        content="Cannabiz Network features information and legal purchase options for over 200 of the top-trending cannabis flowers, pre-rolls, edibles, and concentrates."/>
 
 <% end %>
 
