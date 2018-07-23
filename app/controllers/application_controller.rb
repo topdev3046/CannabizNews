@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
             if request.remote_ip.present?
                 
                 name = GeoIP.new('GeoLiteCity.dat').city(request.remote_ip).real_region_name
-                if @site_visitor_state = State.find_by(name: name.strip)
+                if name.present? && @site_visitor_state = State.find_by(name: name.strip)
                     puts 'i got a state from first one'
                 else
                     if request.safe_location && request.safe_location.state.present?
