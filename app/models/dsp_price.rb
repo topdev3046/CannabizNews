@@ -41,6 +41,7 @@ class DspPrice < ActiveRecord::Base
         "2 Grams" => 2, 
         "Eighth" => 3,
         "4 Grams" => 4,
+        "7 Grams" => 4.5,
         "Quarter Ounce" => 5,
         "Half Ounce" => 6, 
         "Ounce" => 7,
