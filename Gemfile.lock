@@ -283,6 +283,7 @@ GEM
     friendly_id (5.0.5)
       activerecord (>= 4.0.0)
     geocoder (1.4.9)
+    geoip (1.6.4)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     gmaps4rails (2.1.2)
@@ -566,6 +567,7 @@ DEPENDENCIES
   font-awesome-sass (~> 4.7)
   friendly_id (~> 5.0.0)
   geocoder (~> 1.4, >= 1.4.9)
+  geoip
   gmaps4rails (~> 2.1, >= 2.1.2)
   hairtrigger (~> 0.2.20)
   heroku-deflater

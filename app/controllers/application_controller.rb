@@ -35,13 +35,26 @@ class ApplicationController < ActionController::Base
     def site_visitor_location
         
         begin
-            # ErrorFound.email('Request Location', request.safe_location.inspect, request.safe_location.state.strip, '').deliver_now
-        
-            if request.safe_location && request.safe_location.state.present?
+            if request.remote_ip.present?
+                
+                name = GeoIP.new('GeoLiteCity.dat').city(request.remote_ip).real_region_name
+                if @site_visitor_state = State.find_by(name: name.strip)
+                    puts 'i got a state from first one'
+                else
+                    if request.safe_location && request.safe_location.state.present?
+                        @site_visitor_state = State.where(name: request.safe_location.state.strip).first
+                        puts 'i got a state from second one'
+                    else
+                        default_visitor_location
+                    end
+                end
+            elsif request.safe_location && request.safe_location.state.present?
                 @site_visitor_state = State.where(name: request.safe_location.state.strip).first
+                puts 'i got a state from second one'
             else
                 default_visitor_location
             end
+            
             if @site_visitor_state.blank?
                 default_visitor_location    
             end
