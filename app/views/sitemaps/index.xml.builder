@@ -35,13 +35,4 @@ xml.tag! 'urlset', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9' do
       xml.priority(0.8)
     }
   end
-
-  @articles.each do |article|
-    xml.url {
-      xml.loc "#{article_url(article)}"
-      xml.lastmod article.updated_at.strftime("%F")
-      xml.changefreq("never")
-      xml.priority(0.5)
-    }
-  end
 end

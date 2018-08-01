@@ -5,7 +5,7 @@ class SitemapsController < ApplicationController
     @blogs = Blog.published_blogs.order("published_date DESC")
     @vendors = Vendor.all
     @dispensaries = Dispensary.all
-    @articles = Article.all
+    # @articles = Article.all
     
 
     respond_to do |format|
