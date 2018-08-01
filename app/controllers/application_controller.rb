@@ -95,7 +95,7 @@ class ApplicationController < ActionController::Base
   
         def handle_error(exception)
             if Rails.env.production?
-                ErrorFound.email("There is an error:", 'Application Controller', '', exception).deliver_now
+                # ErrorFound.email("There is an error:", 'Application Controller', '', exception).deliver_now
                 redirect_to root_path
             end
         end
