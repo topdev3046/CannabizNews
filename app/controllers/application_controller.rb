@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
     def site_visitor_location
         
         begin
-            if request.remote_ip.present?
+            if request.remote_ip.present? && GeoIP.new('GeoLiteCity.dat').city(request.remote_ip).real_region_name.present?
                 
                 name = GeoIP.new('GeoLiteCity.dat').city(request.remote_ip).real_region_name
                 if name.present? && @site_visitor_state = State.find_by(name: name.strip)
@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
                 default_visitor_location    
             end
         rescue => ex
-            ErrorFound.email('Site Visitor Location', ex.inspect, ex.message, "request: #{request.safe_location} request_safe_location: #{request.safe_location.state}").deliver_now
+            ErrorFound.email('Site Visitor Location', ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
             default_visitor_location
         end
     end

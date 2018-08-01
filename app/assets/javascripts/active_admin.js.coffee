@@ -2,13 +2,7 @@
 //= require activeadmin/froala_editor/froala_editor.pkgd.min
 //= require activeadmin/froala_editor_input
 
-$(function() {
-  $('#edit').froalaEditor({
-    // Set the image upload URL.
-    imageUploadURL: '/upload_image',
-
-    imageUploadParams: {
-      id: 'my_editor'
-    }
-  })
-});
+$ ->
+  $('.froala_editor').froalaEditor
+    imageUploadURL: '/admin/blogs/upload_froala_image'
+    imageUploadParams: authenticity_token: $('meta[name="csrf-token"]').attr 'content'

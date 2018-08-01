@@ -3,6 +3,9 @@ class PagesController < ApplicationController
     before_action :require_admin, only: [:admin]
     
     def home
+        
+        #DispWeedmaps.perform_later('Washington', 'S-Z')
+        
         #dont display nav search
         @nav_search = false
         

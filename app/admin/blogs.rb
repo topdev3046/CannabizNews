@@ -14,7 +14,7 @@ ActiveAdmin.register Blog do
 	
 	#filters
 	filter :"author_id" , :as => :select, :collection => Author.all.map{|u| [u.name , u.id]}
-    
+
 	#-----CSV ACTIONS ----------#
     
     #import csv
@@ -23,6 +23,7 @@ ActiveAdmin.register Blog do
 			link_to 'Import Blog Posts', admin_blogs_import_blogs_path, class: 'import_csv'
 		end
 	end
+
 	
 	collection_action :import_blogs do
 		if request.method == "POST"
@@ -69,7 +70,7 @@ ActiveAdmin.register Blog do
 			f.input :image, :as => :file
 			f.input :author_id, :label => 'Author', :as => :select, 
 					:collection => Author.order('name DESC').map{|u| ["#{u.name}", u.id]}
-			f.input :body, as: :froala_editor, input_html: {data: {options: {toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic']}}}, :input_html => {:rows => 5, :cols => 50}
+			f.input :body, :input_html => {:class => "froala_editor", :rows => 5, :cols => 50}
 			f.input :published_date
 			f.input :published
 			f.input :description
@@ -77,6 +78,24 @@ ActiveAdmin.register Blog do
 			f.input :sub_header
 		end
 		f.actions
+	end
+ 
+    # upload image to AWS
+	collection_action :upload_froala_image, method: :post do
+		uploader = FroalaS3Uploader.new
+		uploader.store!(params[:file])
+		render json: {link: uploader.url(:small)}
+	end
+
+	def froala_aws_upload
+		options = {
+			bucket: ENV['AWS_BUCKET'],
+			keyStart: 'uploads',
+			acl: 'public-read',
+			accessKey: ENV['AWS_ACCESS_KEY_ID'],
+			secretKey: ENV['AWS_SECRET_ACCESS_KEY']
+		}
+		@aws_data = FroalaEditorSDK::S3.data_hash(options)
 	end
 
 end
