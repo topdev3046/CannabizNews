@@ -61,21 +61,21 @@ class BlogController < ApplicationController
             @blogs = Blog.published_blogs.order("published_date DESC").paginate(:page => params[:page], :per_page => 8)
            
             #product sidebar
-            # if @site_visitor_state.present? && @site_visitor_state.product_state
-                
-            #     if Rails.env.production? 
-            #         @top_products = @site_visitor_state.products.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
-            #                             includes(:vendors, :category, :average_prices).
-            #                             order("RANDOM()").limit(10)
-            #     else
-                    @top_products = Product.featured.includes(:vendors, :category, :average_prices).
-                                        order("RANDOM()").limit(10)
-            #     end
-            # else 
-            #     @top_products = Product.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
-            #                             includes(:vendors, :category, :average_prices).
-            #                             order("RANDOM()").limit(10)
-            # end
+            if @site_visitor_state.present? && @site_visitor_state.product_state
+                    
+                if Rails.env.production? 
+                    @top_products = @site_visitor_state.products.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
+                                        includes(:vendors, :category, :average_prices).
+                                        order("RANDOM()").limit(3)
+                else
+                    @top_products = @site_visitor_state.products.featured.includes(:vendors, :category, :average_prices).
+                                        order("RANDOM()").limit(3)
+                end
+            else 
+                @top_products = Product.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
+                                        includes(:vendors, :category, :average_prices).
+                                        order("RANDOM()").limit(3)
+            end
         rescue => ex
             puts 'HERE IS THE ERROR: '
             puts ex
