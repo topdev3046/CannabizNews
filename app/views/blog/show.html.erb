@@ -8,6 +8,8 @@
     .blog-body ol {padding-left: 30px; list-style-type:decimal;}
     .blog_sub_header {font-size: 16px; margin: 10px 0; font-weight: 300}
 </style>
+
+<% begin %>
 <!-- Start page content -->
 <div id="page-content" class="page-wrapper">
     <div class="zm-section single-post-wrap bg-white ptb-70 xs-pt-30">
@@ -139,3 +141,7 @@
 	}]);
 </script>
 <script type="text/javascript" data-cfasync="false" src="https://assets.mantisadnetwork.com/recommend.min.js" async></script>
+
+<% rescue => ex
+    ErrorFound.email("Blog Show for: #{@blog.slug}" , ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+end %>
