@@ -3,7 +3,7 @@ class Blog < ActiveRecord::Base
     self.table_name = 'blog'
     
     #scopes
-    scope :published, -> { where(published: true) }
+    scope :published_blogs, -> { where(published: true) }
     
     #validations
     validates :title, presence: true, length: {minimum: 3, maximum: 300}

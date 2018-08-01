@@ -32,7 +32,7 @@ class BlogController < ApplicationController
                                             order("RANDOM()").limit(3)
                 end
         
-                @other_blog_posts = Blog.where.not(id: @blog.id).order("RANDOM()").limit(3)
+                @other_blog_posts = Blog.published_blogs.where.not(id: @blog.id).order("RANDOM()").limit(3)
                 
                 #add view to post for sorting
                 @blog.increment(:num_views, by = 1)
@@ -58,7 +58,7 @@ class BlogController < ApplicationController
                 end
             end
             
-            @blogs = Blog.published.order("published_date DESC").paginate(:page => params[:page], :per_page => 8)
+            @blogs = Blog.published_blogs.order("published_date DESC").paginate(:page => params[:page], :per_page => 8)
            
             #product sidebar
             # if @site_visitor_state.present? && @site_visitor_state.product_state

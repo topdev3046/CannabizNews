@@ -10,7 +10,7 @@ ActiveAdmin.register Blog do
     end
     
     scope :all, default: true
-	scope :published
+	scope :published_blogs
 	
 	#filters
 	filter :"author_id" , :as => :select, :collection => Author.all.map{|u| [u.name , u.id]}
