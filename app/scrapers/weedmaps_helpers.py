@@ -3,117 +3,168 @@ from lxml import html
 from jsonutils import *
 
 class WeedMapsDespensaryExtractor(object):
-    def __init__(self, dispensary_filter, detailsExtractor):
-        self.detailsExtractor = detailsExtractor
-        self._dispensary_filter = dispensary_filter
 
-    def extract(self, data):
-        listingLst = try_get_list(data, 'listing')
+    def get_details(self, details_obj):
+        result = {}
+        listingLst = try_get_list(details_obj, 'data','listing')
         if len(listingLst) == 0:
-            return None
+            return result
 
         listing = listingLst[0]
-        cityLst = try_get_list(listing, 'city')
-        if len(cityLst) == 0 or not self._dispensary_filter.match_city(cityLst[0]):
-            return None
+        
+        self._fill_details(result,listing)
+        result['contact'] = self._get_contact(listing)
+        result['region'] = self._get_region(listing)
+        result['social_media'] = self._get_social_media(listing)
+        result['hours_of_operation'] = self._get_hours_info(listing)
+        
+        return result
+    
+    def _fill_details(self,result, listing):
+        result['name'] = get_key_or_default(listing, 'name')
+        result['url'] = get_key_or_default(listing, 'web_url')
+        result['reviews_count'] = get_key_or_default(listing, 'reviews_count')
+        result['rating'] = get_key_or_default(listing, 'rating')
+        result['min_age'] = get_key_or_default(listing, 'min_age')
+        result['intro_body'] = get_key_or_default(listing, 'intro_body')
+        result['description'] = get_key_or_default(listing, 'description')
+        result['first_time_announcement'] = get_key_or_default(listing, 'first_time_announcement')
+        result['announcement'] = get_key_or_default(listing, 'announcement')
+        result['member_since'] = get_key_or_default(listing, 'member_since')
+        
+        result['avatar_url'] = ''
+        logo_list = try_get_list(listing, 'avatar_image')
+        
+        if len(logo_list)>0:
+            result['avatar_url'] = get_key_or_default(logo_list[0],'small_url')
 
+    def _get_contact(self, listing):
         result = {}
-        self.fill_menu(result, data)
-        self.fill_social_details(result, listing)
-        self.fill_details(result, listing)
+        
+        result['website'] = get_key_or_default(listing, 'website')
+        result['city'] = get_key_or_default(listing, 'city')
+        result['email'] = get_key_or_default(listing, 'email')
+        result['zip'] = get_key_or_default(listing, 'zip_code')
+        result['lon'] = get_key_or_default(listing, 'longitude')
+        result['phone'] = get_key_or_default(listing, 'phone_number')
+        result['state'] = get_key_or_default(listing, 'state')
+        result['address'] = get_key_or_default(listing, 'address')
+        result['lat'] = get_key_or_default(listing, 'latitude')
+        result['website'] = get_key_or_default(listing, 'website')
+        result['country'] = get_key_or_default(listing,'country')
+        
+        return result
+        
+    def _get_region(self, listing):
+        result = {}
+        
+        region_list = try_get_list(listing, 'region')
+        
+        if len(region_list) > 0:
+            result['name'] = get_key_or_default(region_list[0],'name')
+            result['path'] = 'https://weedmaps.com/dispensaries/in/' + get_key_or_default(region_list[0], 'region_path')
+        
+        return result
+        
+    def _get_social_media(self, listing):
+        result = {}
+        
+        info_list = try_get_list(listing, 'social')
+        if len(info_list) > 0:
+            facebook_id = get_key_or_default(info_list[0], 'facebook_id')
+            twitter_id = get_key_or_default(info_list[0], 'twitter_id')
+            instagram_id = get_key_or_default(info_list[0],'instagram_id')
+            
+            result['facebook'] = self._reconstruc_social_url(facebook_id, 'https://www.facebook.com/') if facebook_id else ''
+            result['twitter'] = self._reconstruc_social_url(twitter_id, 'https://twitter.com/') if twitter_id else ''
+            result['instagram'] = self._reconstruc_social_url(instagram_id, 'https://www.instagram.com/') if instagram_id else ''
+        
+        return result
+        
+    def _reconstruc_social_url(self, unkonw_url, absolute_url):
+        return unkonw_url if unkonw_url.startswith('http') else absolute_url + unkonw_url
 
+    def _get_hours_info(self, listing):
+        return get_key_or_default(listing, 'business_hours', {})
+    
+    def get_menu(self, menu_obj):
+        result = {}
+         
+        result['info'] = {}
+        result['items'] = []
+        
+        info_list = try_get_list(menu_obj, "meta")
+        
+        if len(info_list):
+            result['info'] = self._get_menu_info(info_list[0])
+       
+        items_list = try_get_list(menu_obj, 'data', 'menu_items')
+        if len(items_list) > 0:
+            result['items'] = self._group_dic_by_key(self._get_menu_items(items_list[0]), "category")
+        
         return result
 
 
-    def fill_details(self, result, source):
-        paths = {'city': 'city',
-                 'url': 'url',
-                 'email': 'email',
-                 'phone_number': 'phone_number',
-                 'name': 'name',
-                 'avatar_url': 'avatar_url',
-                 'reviews_count': 'reviews_count',
-                 'rating': 'rating',
-                 'address': 'address',
-                 'region': 'region',
-                 'state': 'state',
-                 'zip_code': 'zip_code',
-                 'latitude': 'latitude',
-                 'longitude': 'longitude',
-                 'hours_of_operation': 'hours_of_operation'}
-
-        fill_obj(result, source, paths)
-
-
-    def fill_menu(self, result, source):
-        catLst = try_get_list(source, 'categories')
-
-        if len(catLst) == 0:
-            return
-
-        result["menu"] = self.get_menu(catLst[0])
-
-
-    def fill_social_details(self, result, source):
-        urlLst = try_get_list(source, 'url')
-
-        if len(urlLst) == 0:
-            return result
-
-        result["details"] = self.detailsExtractor.getDetails(urlLst[0])
-
-
-    def get_menu(self, menuData):
-        menu = []
-        for c in menuData:
-            category = {}
-            fill_obj(category, c, {'title' : 'title'})
-
-            items = []
-            for i in c["items"]:
-                o = {}
-                self.fill_menu_details(o, i)
-                items.append(o)
-
-            category["items"] = items
-            menu.append(category)
-        return menu
-
-    def fill_menu_details(self, result, source):
-        paths = {'name': 'name',
-                 'grams_per_eighth': 'grams_per_eighth',
-                 'prices': 'prices',
-                 'image_url': 'image_url',
-                 'url': 'url'}
-        fill_obj(result, source, paths)
-        result['url'] = 'https://weedmaps.com/dispensaries/' + result['url']
-
-
-class WeedMapsDetailsExtractor(object):
-    def __init__(self, http_client):
-        self._http_client = http_client
-
-    def getDetails(self, url):
-        response = self._http_client.get(url)
-        if response.success:
-            home = html.fromstring(response.content)
-            divDetails = home.xpath(
-                "//div[@class='details-card-items social-links']/div[@class='details-card-item']")
-            result = {}
-            for div in divDetails:
-                namelist = div.xpath("./div[contains(@class,'label')]/text()")
-                if len(namelist) == 0:
-                    continue
-                urllist = div.xpath("./div[contains(@class,'item-data')]/a/@href")
-                if len(urllist) == 0:
-                    continue
-                result[namelist[0].lower()] = urllist[0]
-            result["age"] = self._getAge(home)
-            return result
-        return {}
-
-    def _getAge(self, htmlDocument):
-        textList = htmlDocument.xpath("//div[@class='tag-icon']//div[contains(@class, 'icon_age')]/@class")
-        if len(textList) == 0:
-            return "not specified"
-        return re.findall(r'\d+', textList[0])[0] + '+'
+    def _get_menu_info(self, menu_meta):
+        result = {}
+        
+        result['last_updated'] = get_key_or_default(menu_meta, 'updated_at')
+        return result
+        
+    def _get_menu_items(self, items):
+        result = []
+        for item in items:
+            result.append(self._get_menu_item(item))
+            
+        return result
+        
+    def _get_menu_item(self, item):
+        result = {}
+        
+        result['name'] = get_key_or_default(item,'name')
+        result['is_online_orderable'] = get_key_or_default(item,'is_online_orderable')
+        result['avatar_image'] = self._get_first_key_or_empty(item, 'avatar_image', 'large_url')
+        result['category'] = self._get_first_key_or_empty(item, 'category', 'name')
+        result['prices'] = self._get_prices(item)
+        return result
+        
+    def _get_first_key_or_empty(self, item, *args):
+        lst = try_get_list(item, *args)
+        
+        return lst[0] if len(lst) > 0 else ''
+        
+    def _get_prices(self, item):
+        prices = item['prices']
+        
+        if prices and 'grams_per_eighth' in prices:
+            del prices['grams_per_eighth']
+        
+        result = []
+        for key, value in prices.iteritems():
+            if type(value) is list:
+                for v in value:
+                    result.append(self._get_price(v, key))
+            else:
+                result.append(self._get_price(value, key))
+        
+        return result
+        
+    def _get_price(self, priceObj, unit):
+        result = {}
+        result['price'] = priceObj['price']
+        result['unit'] = priceObj['units'] + ' ' + unit
+        
+        return result
+    
+    def _group_dic_by_key(self, items, key):
+        result = {}
+        
+        for item in items:
+            if not item[key] in result:
+                result[item[key]] = []
+            result[item[key]].append(item)
+        
+        return result
+        
+def get_key_or_default(dic, key, default=''):
+    return dic[key] if key in dic else default

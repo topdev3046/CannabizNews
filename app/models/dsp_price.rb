@@ -109,10 +109,14 @@ class DspPrice < ActiveRecord::Base
         "15 pack, 75mg THC, 45mg CBD" => 2,
         "5ml, 75mg" => 3,
 
-        "3 Pack" => 0,
-        "5 Pack" => 0,
+        "2 Pack" => 0,
+        "3 Pack" => 0.2,
+        "5 Pack" => 0.5,
+        "7 Pack" => 0.6,
+        "78 Pack" => 0.7,
         '10 Pack' => 1,
-        '16 Pack' => 2
+        '16 Pack' => 2,
+        '28 Pack' => 2,
     }
 
     def set_display_order
