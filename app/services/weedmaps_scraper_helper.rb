@@ -31,6 +31,7 @@ class WeedmapsScraperHelper
 			'1 gram' => 'Gram',	
 			'two_grams' => '2 Grams',	
 			'2 grams' => '2 Grams',	
+			'2 gram' => '2 Grams',	
 			'eighth' => 'Eighth',	
 			'1/8 ounce' => 'Eighth',	
 			'quarter' => 'Quarter Ounce',
