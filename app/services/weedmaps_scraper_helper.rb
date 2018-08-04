@@ -439,32 +439,32 @@ class WeedmapsScraperHelper
 		if returned_dispensary_source['hours_of_operation'].present?
 
 			if returned_dispensary_source['hours_of_operation']['monday'].present?
-				dispensary_source.monday_open_time = returned_dispensary_source['hours_of_operation']['monday']['open'].to_time
-				dispensary_source.monday_close_time = returned_dispensary_source['hours_of_operation']['monday']['close'].to_time
+				dispensary_source.monday_open_time = returned_dispensary_source['hours_of_operation']['monday']['open'].to_time if returned_dispensary_source['hours_of_operation']['monday']['open'].present?
+				dispensary_source.monday_close_time = returned_dispensary_source['hours_of_operation']['monday']['close'].to_time if returned_dispensary_source['hours_of_operation']['monday']['close'].present?
 			end
 			if returned_dispensary_source['hours_of_operation']['tuesday'].present?
-				dispensary_source.tuesday_open_time = returned_dispensary_source['hours_of_operation']['tuesday']['open'].to_time
-				dispensary_source.tuesday_close_time = returned_dispensary_source['hours_of_operation']['tuesday']['close'].to_time
+				dispensary_source.tuesday_open_time = returned_dispensary_source['hours_of_operation']['tuesday']['open'].to_time if returned_dispensary_source['hours_of_operation']['tuesday']['open'].present?
+				dispensary_source.tuesday_close_time = returned_dispensary_source['hours_of_operation']['tuesday']['close'].to_time if returned_dispensary_source['hours_of_operation']['tuesday']['close'].present?
 			end
 			if returned_dispensary_source['hours_of_operation']['wednesday'].present?
-				dispensary_source.wednesday_open_time = returned_dispensary_source['hours_of_operation']['wednesday']['open'].to_time
-				dispensary_source.wednesday_close_time = returned_dispensary_source['hours_of_operation']['wednesday']['close'].to_time
+				dispensary_source.wednesday_open_time = returned_dispensary_source['hours_of_operation']['wednesday']['open'].to_time if returned_dispensary_source['hours_of_operation']['wednesday']['open'].present?
+				dispensary_source.wednesday_close_time = returned_dispensary_source['hours_of_operation']['wednesday']['close'].to_time if returned_dispensary_source['hours_of_operation']['wednesday']['close'].present?
 			end
 			if returned_dispensary_source['hours_of_operation']['thursday'].present?
-				dispensary_source.thursday_open_time = returned_dispensary_source['hours_of_operation']['thursday']['open'].to_time
-				dispensary_source.thursday_close_time = returned_dispensary_source['hours_of_operation']['thursday']['close'].to_time
+				dispensary_source.thursday_open_time = returned_dispensary_source['hours_of_operation']['thursday']['open'].to_time if returned_dispensary_source['hours_of_operation']['thursday']['open'].present?
+				dispensary_source.thursday_close_time = returned_dispensary_source['hours_of_operation']['thursday']['close'].to_time if returned_dispensary_source['hours_of_operation']['thursday']['close'].present?
 			end
 			if returned_dispensary_source['hours_of_operation']['friday'].present?
-				dispensary_source.friday_open_time = returned_dispensary_source['hours_of_operation']['friday']['open'].to_time
-				dispensary_source.friday_close_time = returned_dispensary_source['hours_of_operation']['friday']['close'].to_time
+				dispensary_source.friday_open_time = returned_dispensary_source['hours_of_operation']['friday']['open'].to_time if returned_dispensary_source['hours_of_operation']['friday']['open'].present?
+				dispensary_source.friday_close_time = returned_dispensary_source['hours_of_operation']['friday']['close'].to_time if returned_dispensary_source['hours_of_operation']['friday']['close'].present?
 			end
 			if returned_dispensary_source['hours_of_operation']['saturday'].present?
-				dispensary_source.saturday_open_time = returned_dispensary_source['hours_of_operation']['saturday']['open'].to_time
-				dispensary_source.saturday_close_time = returned_dispensary_source['hours_of_operation']['saturday']['close'].to_time
+				dispensary_source.saturday_open_time = returned_dispensary_source['hours_of_operation']['saturday']['open'].to_time if returned_dispensary_source['hours_of_operation']['saturday']['open'].present?
+				dispensary_source.saturday_close_time = returned_dispensary_source['hours_of_operation']['saturday']['close'].to_time if returned_dispensary_source['hours_of_operation']['saturday']['close'].present?
 			end
 			if returned_dispensary_source['hours_of_operation']['sunday'].present?
-				dispensary_source.sunday_open_time = returned_dispensary_source['hours_of_operation']['sunday']['open'].to_time
-				dispensary_source.sunday_close_time = returned_dispensary_source['hours_of_operation']['sunday']['close'].to_time
+				dispensary_source.sunday_open_time = returned_dispensary_source['hours_of_operation']['sunday']['open'].to_time if returned_dispensary_source['hours_of_operation']['sunday']['open'].present?
+				dispensary_source.sunday_close_time = returned_dispensary_source['hours_of_operation']['sunday']['close'].to_time if returned_dispensary_source['hours_of_operation']['sunday']['close'].present?
 			end
 		end
 
@@ -545,7 +545,8 @@ class WeedmapsScraperHelper
 		#hours
 		if returned_dispensary_source['hours_of_operation'].present?
 
-			if returned_dispensary_source['hours_of_operation']['monday'].present?
+			if returned_dispensary_source['hours_of_operation']['monday'].present? && returned_dispensary_source['hours_of_operation']['monday']['open'] &&
+					returned_dispensary_source['hours_of_operation']['monday']['close'].present?
 
 				monday_open = returned_dispensary_source['hours_of_operation']['monday']['open'].to_time
 				monday_close = returned_dispensary_source['hours_of_operation']['monday']['close'].to_time
@@ -568,7 +569,8 @@ class WeedmapsScraperHelper
 				end
 			end
 
-			if returned_dispensary_source['hours_of_operation']['tuesday'].present?
+			if returned_dispensary_source['hours_of_operation']['tuesday'].present? && returned_dispensary_source['hours_of_operation']['tuesday']['open'].present? &&
+					returned_dispensary_source['hours_of_operation']['tuesday']['close'].present?
 
 				tuesday_open = returned_dispensary_source['hours_of_operation']['tuesday']['open'].to_time
 				tuesday_close = returned_dispensary_source['hours_of_operation']['tuesday']['close'].to_time
@@ -591,7 +593,8 @@ class WeedmapsScraperHelper
 				end
 			end
 
-			if returned_dispensary_source['hours_of_operation']['wednesday'].present?
+			if returned_dispensary_source['hours_of_operation']['wednesday'].present? && returned_dispensary_source['hours_of_operation']['wednesday']['open'] &&
+					returned_dispensary_source['hours_of_operation']['wednesday']['close'].present?
 
 				wednesday_open = returned_dispensary_source['hours_of_operation']['wednesday']['open'].to_time
 				wednesday_close = returned_dispensary_source['hours_of_operation']['wednesday']['close'].to_time
@@ -614,7 +617,8 @@ class WeedmapsScraperHelper
 				end
 			end
 
-			if returned_dispensary_source['hours_of_operation']['thursday'].present?
+			if returned_dispensary_source['hours_of_operation']['thursday'].present? && returned_dispensary_source['hours_of_operation']['thursday']['open'] &&
+					returned_dispensary_source['hours_of_operation']['thursday']['close'].present?
 
 				thursday_open = returned_dispensary_source['hours_of_operation']['thursday']['open'].to_time
 				thursday_close = returned_dispensary_source['hours_of_operation']['thursday']['close'].to_time
@@ -637,7 +641,8 @@ class WeedmapsScraperHelper
 				end
 			end
 
-			if returned_dispensary_source['hours_of_operation']['friday'].present?
+			if returned_dispensary_source['hours_of_operation']['friday'].present? && returned_dispensary_source['hours_of_operation']['friday']['open'] &&
+					returned_dispensary_source['hours_of_operation']['friday']['close'].present?
 
 				friday_open = returned_dispensary_source['hours_of_operation']['friday']['open'].to_time
 				friday_close = returned_dispensary_source['hours_of_operation']['friday']['close'].to_time
@@ -660,7 +665,8 @@ class WeedmapsScraperHelper
 				end
 			end
 
-			if returned_dispensary_source['hours_of_operation']['saturday'].present?
+			if returned_dispensary_source['hours_of_operation']['saturday'].present? && returned_dispensary_source['hours_of_operation']['saturday']['open'] &&
+					returned_dispensary_source['hours_of_operation']['saturday']['close'].present?
 
 				saturday_open = returned_dispensary_source['hours_of_operation']['saturday']['open'].to_time
 				saturday_close = returned_dispensary_source['hours_of_operation']['saturday']['close'].to_time
@@ -683,7 +689,8 @@ class WeedmapsScraperHelper
 				end
 			end
 
-			if returned_dispensary_source['hours_of_operation']['sunday'].present?
+			if returned_dispensary_source['hours_of_operation']['sunday'].present? && returned_dispensary_source['hours_of_operation']['sunday']['open'] &&
+					returned_dispensary_source['hours_of_operation']['sunday']['close'].present?
 
 				sunday_open = returned_dispensary_source['hours_of_operation']['sunday']['open'].to_time
 				sunday_close = returned_dispensary_source['hours_of_operation']['sunday']['close'].to_time
