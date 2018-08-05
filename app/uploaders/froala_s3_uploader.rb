@@ -16,6 +16,10 @@ class FroalaS3Uploader < CarrierWave::Uploader::Base
         "uploads/blog/#{DateTime.now.to_i}"
     end
     
+    version :small do
+        process :resize_to_fit => [500, 500]  
+    end
+    
     #specifies the file types we can take
     #if we wanted file upload we would use different file sizes
     def extension_white_list
