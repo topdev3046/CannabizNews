@@ -31,14 +31,14 @@
             <option value = "<%= root_path %>">Products</option>
             <% @product_categories.each do |category| %>
                 
-                <option value = "<%=products_path(cat: category.name)%>"><%=category.name%></option>
+                <option value = "<%=products_path(category.name)%>"><%=category.name%></option>
     
                 <% if category.name == 'Flower' %>
-                    <option value="<%=products_path(sub_cat: 'Indica')%>">&nbsp&nbsp&nbsp&nbspIndica</option>
-                    <option value="<%=products_path(sub_cat: 'Sativa')%>">&nbsp&nbsp&nbsp&nbspSativa</option>
-                    <option value="<%=products_path(sub_cat: 'Hybrid')%>">&nbsp&nbsp&nbsp&nbspHybrid</option>
-                    <option value="<%=products_path(is_dom: 'Hybrid-Indica')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Indica</option>
-                    <option value="<%=products_path(is_dom:'Hybrid-Sativa')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Sativa</option>
+                    <option value="<%=products_path('Indica')%>">&nbsp&nbsp&nbsp&nbspIndica</option>
+                    <option value="<%=products_path('Sativa')%>">&nbsp&nbsp&nbsp&nbspSativa</option>
+                    <option value="<%=products_path('Hybrid')%>">&nbsp&nbsp&nbsp&nbspHybrid</option>
+                    <option value="<%=products_path('Hybrid-Indica')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Indica</option>
+                    <option value="<%=products_path('Hybrid-Sativa')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Sativa</option>
                 <% end %>
                 
         	<% end %>
