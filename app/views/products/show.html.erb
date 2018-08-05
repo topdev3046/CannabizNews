@@ -2,6 +2,8 @@
     .record-show-name {font-weight:700;height:30px;letter-spacing:2px;line-height: 30px !important;padding:0 15px;position:relative;z-index:2;}
 </style>
 
+<% begin %>
+
 <!-- Start page content -->
 <div id="page-content" class="page-wrapper">
     <div class="zm-section single-post-wrap bg-white ptb-70">
@@ -166,3 +168,7 @@
 
 <div class="spacer"></div>
 <!-- End page content -->
+
+<% rescue => ex
+    ErrorFound.email("Product Show Page for product: #{@product.slug}", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
+end %>

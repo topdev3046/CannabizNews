@@ -4,12 +4,8 @@ class PagesController < ApplicationController
     
     def home
         
-<<<<<<< HEAD
         #test scraper
         #ProductHeadset.perform_later('washington colorado nevada')
-=======
-        #DispWeedmaps.perform_later('Washington', 'S-Z')
->>>>>>> 3a55d553c00f257ab4cba9a4af323fa4f7c36251
         
         #dont display nav search
         @nav_search = false
