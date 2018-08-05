@@ -39,6 +39,7 @@ class Product < ActiveRecord::Base
        self.save
     end
     
+<<<<<<< HEAD
     def self.import_from_csv(products)
         csv = CSV.parse(products, :headers => true, :quote_char => "|", :row_sep => :auto, :col_sep => ";")
         csv.each do |row|
@@ -92,6 +93,23 @@ class Product < ActiveRecord::Base
             end
         end
     end
+=======
+    #import CSV file
+    def self.import_from_csv(file)
+        CSV.foreach(file.path, headers: true, skip_blanks: true) do |row|
+            
+            #change to update record if id matches
+            product_hash = row.to_hash
+            product = self.where(id: product_hash["id"])
+            
+            if product.present? 
+                product.first.update_attributes(product_hash)
+            else
+                Product.create! product_hash
+            end
+        end
+    end   
+>>>>>>> 3a55d553c00f257ab4cba9a4af323fa4f7c36251
     
     #export CSV file
     def self.to_csv
@@ -108,15 +126,12 @@ class Product < ActiveRecord::Base
     
     #stock image
     def default_image
-        
-        # return_image = 'substitutes/product-flower.png'
-        
         if Rails.env.production? && self.category.present?
             if self.category.name == 'Flower'
                 return_image = 'substitutes/default_flower.jpg'
             
             elsif self.category.name == 'Concentrates'
-                return_image = 'substitutes/default_concentrate.jpg'
+                return_image = 'substitutes/default_concentrate.jpeg'
             
             elsif self.category.name == 'Edibles'
                 return_image = 'substitutes/default_edible.jpg'
@@ -142,4 +157,15 @@ class Product < ActiveRecord::Base
        self.product_states.destroy_all
     end
     
+    after_validation :set_redis_key
+	def set_redis_key
+	    begin
+    	    if self.slug.present?
+                $redis.set("product_#{self.slug}", Marshal.dump(self))   
+            end
+        rescue => ex
+            puts ex
+            #should send error email here
+        end
+	end
 end

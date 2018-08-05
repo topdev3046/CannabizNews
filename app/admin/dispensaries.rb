@@ -11,6 +11,10 @@ ActiveAdmin.register Dispensary do
     #save queries
 	includes :state
 	
+	#filters
+	filter :name
+    filter :"state_id" , :as => :select, :collection => State.all.map{|u| [u.name , u.id]}
+	
 	#-----CSV ACTIONS ----------#
     
     #import csv
@@ -24,6 +28,11 @@ ActiveAdmin.register Dispensary do
 	csv do
 		column :name
 		column :state_id
+		column "State" do |dispensary|
+			if dispensary.state.present?
+				dispensary.state.name
+			end
+		end
 		column :has_hypur
 		column :has_payqwick
 	end
@@ -31,16 +40,8 @@ ActiveAdmin.register Dispensary do
 	collection_action :import_dispensaries do
 		if request.method == "POST"
 			if params[:dispensary][:file_name].present?
-				file_data = params[:dispensary][:file_name]
-				if file_data.respond_to?(:read)
-					dispensaries = file_data.read
-					Dispensary.import_from_csv(dispensaries)
-					flash[:notice] = "Dispensaries imported successfully."
-				elsif file_data.respond_to?(:path)
-					dispensaries = File.read(file_data.path)
-					Dispensary.import_from_csv(dispensaries)
-					flash[:notice] = "Dispensaries imported successfully."
-				end
+				Dispensary.import_from_csv(params[:dispensary][:file_name])
+				flash[:notice] = "Dispensaries imported successfully."
 			end
 			redirect_to admin_dispensaries_path
 		end
@@ -50,7 +51,7 @@ ActiveAdmin.register Dispensary do
 
     index do
         column :name
-        column "State" do |dispensary|
+        column "State", :sortable=>:"states.name" do |dispensary|
 			if dispensary.state.present?
 				link_to dispensary.state.name, admin_state_path(dispensary.state)
 			end
@@ -60,9 +61,6 @@ ActiveAdmin.register Dispensary do
         column :updated_at
         actions
     end
-
-    filter :name
-    filter :state_id
   
     form do |f|
         f.inputs "Dispensary" do

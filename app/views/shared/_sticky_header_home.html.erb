@@ -1,5 +1,5 @@
 <form action="#">
-    <h3 align="center" style="margin-top: 10px; margin-bottom: -5px;">What Are You Looking For?</h3>
+    <h3 align="center" style="margin-top: 10px;">What Are You Looking For?</h3>
     <div class="sing-option zm-trending">
         <select name="Category" class="selectDropdown" data-live-search="true" onChange="window.location.href=this.value">
             <option value = "<%= root_path %>">News</option>
@@ -16,15 +16,13 @@
     </div>
     <div class="sing-option zm-state">
         <select name="State" class="selectDropdown" data-live-search="true" onChange="window.location.href=this.value">
-        	<option value = "<%= root_path %>">States</option>
+        	<option value = "<%= root_path %>">Change State</option>
         	<% @all_states.each do |state| %>
-        	
-        	    <% if @state != nil && @state.name == state.name %>
-                    <option value = "<%=state_path(state)%>" selected="selected"><%=state.name%></option>
-                <% else %>
-                    <option value = "<%=state_path(state)%>"><%=state.name%></option>
-                <% end %>
-    
+        	    <% if @site_visitor_state.present? && @site_visitor_state.name == state.name %>
+        	        <option value = "<%=root_path(state: state.name)%>" selected="selected"><%=state.name%></option>
+        	    <% else %>
+        	        <option value = "<%=root_path(state: state.name)%>"><%=state.name%></option>
+        	    <% end %>
         	<% end %>
         </select>
     </div>
@@ -33,14 +31,14 @@
             <option value = "<%= root_path %>">Products</option>
             <% @product_categories.each do |category| %>
                 
-                <option value = "<%=products_path(category.name)%>"><%=category.name%></option>
+                <option value = "<%=products_path(cat: category.name)%>"><%=category.name%></option>
     
                 <% if category.name == 'Flower' %>
-                    <option value="<%=products_path('Indica')%>">&nbsp&nbsp&nbsp&nbspIndica</option>
-                    <option value="<%=products_path('Sativa')%>">&nbsp&nbsp&nbsp&nbspSativa</option>
-                    <option value="<%=products_path('Hybrid')%>">&nbsp&nbsp&nbsp&nbspHybrid</option>
-                    <option value="<%=products_path('Hybrid-Indica')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Indica</option>
-                    <option value="<%=products_path('Hybrid-Sativa')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Sativa</option>
+                    <option value="<%=products_path(sub_cat: 'Indica')%>">&nbsp&nbsp&nbsp&nbspIndica</option>
+                    <option value="<%=products_path(sub_cat: 'Sativa')%>">&nbsp&nbsp&nbsp&nbspSativa</option>
+                    <option value="<%=products_path(sub_cat: 'Hybrid')%>">&nbsp&nbsp&nbsp&nbspHybrid</option>
+                    <option value="<%=products_path(is_dom: 'Hybrid-Indica')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Indica</option>
+                    <option value="<%=products_path(is_dom:'Hybrid-Sativa')%>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspHybrid-Sativa</option>
                 <% end %>
                 
         	<% end %>

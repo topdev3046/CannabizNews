@@ -9,26 +9,11 @@ class CategoriesController < ApplicationController
             redirect_to root_path 
         end
         
-        if marshal_load($redis.get("#{@category.name.downcase}_recent_articles")).blank?
-            @recents = @category.articles.active_source.
-                        includes(:source, :categories, :states).
-                        order("created_at DESC").
-                        paginate(:page => params[:page], :per_page => 24)
-            $redis.set("#{@category.name.downcase}_recent_articles", Marshal.dump(@recents))           
-        else
-            @recents = Marshal.load($redis.get("#{@category.name.downcase}_recent_articles"))
-        end
-        
-        if marshal_load($redis.get("#{@category.name.downcase}_mostview_articles")).blank?
-            @mostviews = @category.articles.active_source.
-                        includes(:source, :categories, :states).
-                        order("num_views DESC").
-                        paginate(:page => params[:page], :per_page => 24) 
-            $redis.set("#{@category.name.downcase}_mostview_articles", Marshal.dump(@mostviews))           
-        else
-            @mostviews = Marshal.load($redis.get("#{@category.name.downcase}_mostview_articles"))
-        end
-        
+        @recents = @category.articles.active_source.includes(:source, :categories, :states).
+                            order("created_at DESC").paginate(:page => params[:page], :per_page => 24)
+                            
+        @mostviews = @category.articles.active_source.includes(:source, :categories, :states).
+                                order("num_views DESC").paginate(:page => params[:page], :per_page => 24)
     end
   
     private
@@ -52,7 +37,9 @@ class CategoriesController < ApplicationController
         end
 
         def set_into_redis
-            $redis.set("category_#{params[:id]}", marshal_dump(@category))
+            if $redis.info['used_memory_human'].to_f < $redis.info['maxmemory_human'].to_f
+                $redis.set("category_#{params[:id]}", marshal_dump(@category))
+            end
         end
 
         def get_from_redis

@@ -14,12 +14,12 @@ ActiveAdmin.register DspPrice do
 	index do
 		selectable_column
 		id_column
-		column "Dispensary Source" do |dsp|
-			if dsp.dispensary_source_product.present? && dsp.dispensary_source_product.dispensary_source.present?
-				link_to dsp.dispensary_source_product.dispensary_source.name, admin_dispensary_source_path(dsp.dispensary_source_product.dispensary_source)
+		column "Dispensary Source", :sortable=>:"dispensary_sources.name" do |dsp|
+			if dsp.dispensary_source_product.present? && dsp.dispensary_source_product.dispensary_source.present? && dsp.dispensary_source_product.dispensary_source.source.present?
+				link_to "#{dsp.dispensary_source_product.dispensary_source.name} - #{dsp.dispensary_source_product.dispensary_source.source.name}", admin_dispensary_source_path(dsp.dispensary_source_product.dispensary_source)
 			end
 		end
-		column "Product" do |dsp|
+		column "Product", :sortable=>:"products.name" do |dsp|
 			if dsp.dispensary_source_product.present? && dsp.dispensary_source_product.product.present?
 				link_to dsp.dispensary_source_product.product.name, admin_product_path(dsp.dispensary_source_product.product)
 			end
@@ -57,7 +57,7 @@ ActiveAdmin.register DspPrice do
 		panel " " do	
 			f.input :unit
 		end 
-	    	f.actions
-	    end
+    	f.actions
+    end
 
 end

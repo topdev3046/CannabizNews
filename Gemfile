@@ -4,7 +4,8 @@ source 'https://rubygems.org'
 gem 'will_paginate', '3.0.7' # PAGINATION
 gem 'bootstrap-will_paginate', '0.0.10' # BOOTSTRAP STYLING
 gem 'bootstrap-sass', '~> 3.3.6' # BOOTSTRAP STYLING
-gem 'geocoder', '~> 1.4', '>= 1.4.4' #GET USER / DISPENSARY LOCATION
+gem 'geocoder', '~> 1.4', '>= 1.4.9' #GET USER / DISPENSARY LOCATION
+gem 'geoip'
 gem 'gmaps4rails', '~> 2.1', '>= 2.1.2' #INTEGRATE GOOGLE MAPS
 gem 'httparty', '~> 0.13.7' #External API Integration
 gem 'bcrypt', '~> 3.1.7' #PASSWORD DIGEST
@@ -20,6 +21,7 @@ gem 'canonical-rails', '~> 0.2.1' #automatically add canonical meta tag to each 
 gem 'owlcarousel-rails', github: 'acrogenesis/owlcarousel-rails', branch: 'master'
 gem 'left_join', '~> 0.2.1' #do left_join queries
 gem 'hairtrigger', '~> 0.2.20' #allow for trigger use
+gem 'newrelic_rpm'
 
 
 #ACTIVE ADMIN
@@ -28,6 +30,7 @@ gem 'cancancan'
 gem 'activeadmin'
 gem 'active_admin_role'
 gem 'active_skin'
+gem 'activeadmin_froala_editor'
 
 #BACKGROUND JOBS
 gem 'sucker_punch', '~> 2.0' #BACKGROUND JOB ENQUEUE
@@ -85,6 +88,7 @@ gem 'jquery-ui-rails', '~> 6.0', '>= 6.0.1'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'rails-jquery-autocomplete'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

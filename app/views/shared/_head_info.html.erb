@@ -1,0 +1,242 @@
+<%= favicon_link_tag 'favicon.ico' %>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<% if @product != nil %>
+
+    <!--check if there is a searched state and / or average price-->
+    <% if @average_price.present? && @title_state.present? %>
+    
+        <title><%=@product.name%> at $<%=@average_price.average_price%> per <%=@average_price.average_price_unit%> in <%=@title_state.name%></title>
+        
+        <% desc = "See the dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit} in #{@title_state.name}" %>
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+        <meta name="robots" content="noindex"/>
+    
+    <% elsif @average_price.present? %>
+    
+        <title><%=@product.name%> at $<%=@average_price.average_price%> per <%=@average_price.average_price_unit%></title>
+        
+        <% desc = "See the dispensaries where you can find and purchase #{@product.name} at or below the average price of $#{@average_price.average_price} per #{@average_price.average_price_unit}" %>
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+        <meta name="robots" content="noindex"/>
+    
+    <% elsif @title_state.present? %>
+    
+        <title><%=@product.name%> in <%=@title_state.name%></title>
+        
+        <% desc = "See the dispensaries where you can find and purchase #{@product.name} in the state of #{@title_state.name}" %>
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+        <meta name="robots" content="noindex"/>
+    
+    <% else %>
+        <title><%=@product.name%></title>
+        <meta name ="description" content="<%= truncate_html @product.description, :length => 100 %>" />
+        <meta property="og:description" content="<%= truncate_html @product.description, :length => 100 %>" />
+        <meta name="twitter:description" content="<%= truncate_html @product.description, :length => 100 %>" />
+    <% end %>
+
+<% elsif @dispensary != nil %>
+    <title><%=@dispensary.name%></title>
+    <% desc = "#{@dispensary.name} is a medical cannabiz dispensary located at #{@dispensary.location}"%>
+    <meta name ="description" 
+        content="<%= desc %>"/>
+    <meta name ="og:description" 
+        content="<%= desc %>"/>
+    <meta name ="twitter:description" 
+        content="<%= desc %>"/>   
+
+<% elsif @vendor != nil %>
+    <title><%=@vendor.name%></title>
+    
+    <% if @vendor.description.present? %>
+    
+        <meta name ="description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+        <meta property="og:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+        <meta name="twitter:description" content="<%= truncate_html @vendor.description, :length => 100 %>" />
+
+    <% else %>
+        <% desc = '' %>
+        <% 
+            if @vendor.states.present?
+                desc = "#{@vendor.name} is a Cannabiz Cultivator in #{@vendor.states.first.name}"
+            else 
+                desc = "#{@vendor.name} is a Cannabiz Cultivator"
+            end
+        %>
+        
+        <meta name ="description" content="<%= desc %>" />
+        <meta property="og:description" content="<%= desc %>" />
+        <meta name="twitter:description" content="<%= desc %>" />
+        
+    <% end %>
+
+<% elsif @article != nil %>
+
+    <title><%=@article.title%></title>
+    
+    <!--facebook-->
+    <meta property="og:title" content="<%=@article.title%>" />
+    <meta property="og:url" content="https://cannabiznetwork.com" />
+    <meta property="og:type" content="article" />
+
+    <!--twitter-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@CannabizNetwork" />
+    <meta name="twitter:title" content="<%=@article.title%>"/>
+    <meta name="twitter:url" content="https://cannabiznetwork.com" />
+    
+    <!--images-->
+    <% if @article.image_url != nil && @article.image_url != ''%>
+        <meta name="twitter:image" content="<%=@article.image%>" />
+        <meta property="og:image" content="<%=@article.image%>" />
+    <% else %>
+        <meta name="twitter:image" content="<%= asset_url(@article.source.sidebar_logo) if @article.source %>" />
+        <meta property="og:image" content="<%= asset_url(@article.source.sidebar_logo) if @article.source %>" />
+    <% end %>
+    
+    <!--description-->
+    <%frag = Nokogiri::HTML(@article.body)%>
+    <meta name ="description" content="<%= truncate_html frag, :length => 100 %>" />
+    <meta property="og:description" content="<%= truncate_html frag, :length => 100 %>" />
+    <meta name="twitter:description" content="<%= truncate_html frag, :length => 100 %>" />
+
+<% elsif @blog != nil %>
+
+    <title><%=@blog.title%></title>
+    <meta name ="keywords" content="<%= @blog.keywords %>" />
+    <meta name ="description" content="<%= @blog.description %>" />
+    
+    <!--facebook-->
+    <meta property="og:title" content="<%=@blog.title%>" />
+    <meta property="og:url" content="https://cannabiznetwork.com" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="<%= @blog.description %>" />
+
+    <!--twitter-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@CannabizNetwork" />
+    <meta name="twitter:title" content="<%=@blog.title%>"/>
+    <meta name="twitter:url" content="https://cannabiznetwork.com" />
+    <meta name="twitter:description" content="<%= @blog.description %>" />
+    
+    <!--images-->
+    <% if @blog.image_url != nil && @blog.image_url != ''%>
+        <meta name="twitter:image" content="<%=@blog.image%>" />
+        <meta property="og:image" content="<%=@blog.image%>" />
+    <% else %>
+        <meta name="twitter:image" content="<%= asset_url('substitutes/news-substitute.jpg') %>" />
+        <meta property="og:image" content="<%= asset_url('substitutes/news-substitute.jpg') %>" />
+    <% end %>
+
+<!--article indexes-->
+<% elsif @state != nil %>
+    <!--state news page -->
+    <title><%= "#{@state.name} Cannabiz News" %></title>
+    <% desc = "Cannabiz Network is #{@state.name.titlecase}'s leading source of breaking news and expert opinions on cannabis-related developments and news"%>
+    <meta name ="description" content="<%= desc %>"/>
+    
+<% elsif @category != nil %>
+    <title><%= "#{@category.name} Cannabiz News" %></title>
+    <% desc = "Cannabiz Network provides aggregated news related to Cannabis, Marijuana, Haze, Cannabiz and related subjects - here under the category of #{@category.name}"%>
+    <meta name ="description" content="<%= desc %>"/>
+
+<% elsif @source != nil %>
+    <title><%= "#{@source.name} Cannabiz News" %></title>
+    <% desc = "Cannabiz Network features articles from #{@source.name} related to Cannabis, Marijuana, Cannabiz, CBD, THC, State Laws and Legalization." %>
+    <meta name ="description" content="<%= desc %>"/>
+
+<!--just article index now-->
+<% elsif @recents != nil && @mostviews != nil %>
+    <!--article index-->
+    <title>Latest Cannabis News and Updates - Cannabiz Network</title>
+    <meta name ="description" 
+        content="Never miss an update about Cannabis News, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network!"/>
+
+<% elsif @products != nil %>
+    <!--product index-->
+    <title>Cannabiz Network - Online Cannabis Store</title>
+    <meta name ="description"
+        content="Shop from our best quality collection of cannabis, legal marijuana, haze, hybrid sativa & hybrid-indica online. We assure the best quality online and fastest service."/>
+    <% if params[:format].present?%>
+        <meta name="robots" content="noindex"/>
+    <% end %>
+
+<% elsif @blogs != nil %>
+    <!--blog index-->
+    <title>Cannabiz Network Blog</title>
+    <meta name ="description" 
+        content="Never miss an update about Cannabis News, CBD, THC, Legal Marijuana, Marijuana laws, State Laws and Political Movements. Stay tuned to Cannabiz Network"/>
+
+<!--one off pages-->
+
+<% elsif current_page?('https://www.cannabiznetwork.com/contact_us') %>
+    <!--contact us-->
+    <title>Cannabiz Network - Contact</title>
+    <meta name ="description"
+        content="Contact us today for any kind of help, queries, and suggestions related to our website. We promise you to help in best possible way."/>
+ 
+<% elsif current_page?('https://www.cannabiznetwork.com/feedback') %>
+    <!--feedback-->
+    <title>Cannabiz Network - Feedback</title>
+    <meta name ="description"
+        content="Leave us a feedback to help us grow better and bring improvements to our site and online store."/>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/login') %>
+    <!--login -->
+    <title>Cannabiz Network - Member Login</title>
+    <meta name ="description"
+        content="Login to your account on Cannabiz Network to update your personalized experience featuring saving articles and products related to Weed, Haze, Cannabis, and State News. Online shopping coming soon!"/>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/privacy_policy') %>
+    <!--login -->
+    <title>Cannabiz Network - Privacy Policy</title>    
+    <meta name ="description" content="Cannabiz Network Privacy Policy"/>
+
+
+<% elsif current_page?('https://www.cannabiznetwork.com/terms_conditions') %>
+    <!--login -->
+    <title>Cannabiz Network - Terms & Conditions</title>
+    <meta name ="description" content="Cannabiz Network Terms & Conditions"/>
+
+<% elsif current_page?('https://www.cannabiznetwork.com/signup') %>
+    <!--login -->
+    <title>Cannabiz Network - Member Signup</title>
+    <meta name ="description"
+        content="Register for an Account on Cannabiz Network to create your personalized experience featuring saving articles and products related to Weed, Haze, Cannabis, and State News. Online shopping coming soon!"/>
+
+<!--one off pages-->
+
+<% else %>
+    <!--home page-->
+    <title>Cannabiz Network</title>
+    <meta name ="description" 
+        content="Cannabiz Network features information and legal purchase options for over 200 of the top-trending cannabis flowers, pre-rolls, edibles, and concentrates."/>
+
+<% end %>
+
+
+<%= javascript_include_tag 'application' %>
+<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= stylesheet_link_tag 'style', media: 'all', 'data-turbolinks-track' => true %>
+<%= csrf_meta_tags %>
+
+<!--google analytics-->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-96167975-1', 'auto');
+  ga('send', 'pageview');
+</script>

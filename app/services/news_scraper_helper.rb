@@ -8,16 +8,16 @@ class NewsScraperHelper
 	end
 	
 	def addArticles
-        @categories = Category.active.news
-        @random_category = @categories.where(:name => 'Random')
-        @states = State.all
+        categories = Category.active.news
+        random_category = categories.where(:name => 'Random').first
+        states = State.all
         source = Source.find_by name: @source_name
         
-        articles.each do |article|
+        @articles.each do |article|
         
 	        #MATCH ARTICLE CATEGORIES BASED ON KEYWORDS IN CATEGORY ARRAYS
 	        relateCategoriesSet = Set.new
-	        @categories.each do |category|
+	        categories.each do |category|
 	            if category.keywords.present?
 	                category.keywords.split(',').each do |keyword|
 	                    if  (article["title"] != nil && article["title"].include?(keyword))
@@ -30,7 +30,7 @@ class NewsScraperHelper
 	        
 	        #MATCH ARTICLE STATES
 	        relateStatesSet = Set.new
-	        @states.each do |state|
+	        states.each do |state|
 	            if state.keywords.present?
 	                state.keywords.split(',').each do |keyword|
 	                    if  (article["title"] != nil && article["title"].include?(keyword))
@@ -78,7 +78,7 @@ class NewsScraperHelper
 	        #CREATE ARTICLE CATEGORIES
 	        #If no category, set category to random
 	        if relateCategoriesSet.empty?
-	           relateCategoriesSet.add(@random_category[0].id) 
+	           relateCategoriesSet.add(random_category.id) 
 	        end
 	        
 	        relateCategoriesSet.each do |setObject|

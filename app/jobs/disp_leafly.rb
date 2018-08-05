@@ -1,11 +1,10 @@
 class DispLeafly < ActiveJob::Base
     include SuckerPunch::Job
 
-	def perform(state_abbreviation, city_range)
+	def perform(state_abbreviation)
 		logger.info "Leafly Dispensary background job is running"
 		@state_abbreviation = state_abbreviation
-		@city_range = city_range
-		LeaflyScraperHelper.new(@state_abbreviation, @city_range).scrapeLeafly
+		LeaflyScraperHelper.new(@state_abbreviation).scrapeLeafly
 	end
 	
 end #end of class

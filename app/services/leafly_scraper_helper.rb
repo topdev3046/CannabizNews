@@ -1,60 +1,198 @@
 class LeaflyScraperHelper
 
-	attr_reader :state_abbreviation, :city_range
+	attr_reader :state_abbreviation
 	
-	def initialize(state_abbreviation, city_range)
+	def initialize(state_abbreviation)
 		@state_abbreviation = state_abbreviation
-		@city_range = city_range
 	end   
 	
 	def scrapeLeafly()
 		
 		require "json"
 		require 'open-uri'
-		
-		puts 'i am here'
 
 		#GLOBAL VARIABLES
 		@source = Source.where(name: 'Leafly').first #source we are scraping
 		@state = State.where(abbreviation: @state_abbreviation).first #state we are scraping from the source
 		
-		puts 'i am here 2'
-		puts @state.name
+		puts 'steve is here 18'
 
 		#query the dispensarysources from this source and this state that have a dispensary lookup
 		@dispensary_sources = DispensarySource.where(state_id: @state.id).where(source_id: @source.id).
 								includes(:dispensary, :products, :products => :vendors, :dispensary_source_products => :dsp_prices)
-								
-		puts 'i am also here'
 
 		#the actual dispensaries that we will really display
 		@real_dispensaries = Dispensary.where(state_id: @state.id)
 		
-		puts 'i am also here 3'
-		puts @real_dispensaries.count
+		puts 'steve is here 27'
+		
+		#map of their quantities to our quantities
+		@quantityToQuantity = {
+			'½ g' => 'Half Gram',
+			'.2g' => 'Half Gram',
+			'0.25g' => 'Half Gram',
+			'0.7 gram' => 'Half Gram',
+			'1/4 G' => 'Half Gram',
+			'0.3G' => 'Half Gram',
+			'.5' => 'Half Gram',
+			'.5g' => 'Half Gram',
+			'.5g Cartridge' => 'Half Gram',
+			'.5g Cartrdge' => 'Half Gram',
+			'.5G' => 'Half Gram',
+			'0.5 G' => 'Half Gram',
+			'.6G' => '.6g',
+			'.7g' => '.7g',
+			'0.7 g' => '.7g',
+			'0.8 gram' => '.8g',
+			'1 g' => 'Gram',
+			'1g' => 'Gram',
+			'1 G' => 'Gram',
+			'1G' => 'Gram',
+			'1.25G' => 'Gram',
+			'1.25 Gram' => 'Gram',
+			'1.5g' => 'Gram',
+			'1g Cartridge' => 'Gram',
+			'1.8' => '2 Grams',
+			'1.8g' => '2 Grams',
+			'2 g' => '2 Grams',
+			'2g' => '2 Grams',
+			'2.5g' => '2 Grams',
+			'2G' => '2 Grams',
+			'1/16' => '2 Grams',
+			'1/16 OZ' => '2 Grams',
+			'4 G' => '4 Grams',
+			'4G' => '4 Grams',
+			'4g' => '4 Grams',
+			'4' => '4 Grams',
+			'7 G' => '7 Grams',
+			'7g' => '7 Grams',
+			'10grams' => '10 Grams',
+			'⅛ oz' => 'Eighth',
+			'3.5 G' => 'Eighth',
+			'3.5g' => 'Eighth',
+			'3 G' => 'Eighth',
+			'3G' => 'Eighth',
+			'3g' => 'Eighth',
+			'3.5 g' => 'Eighth',
+			'¼ oz' => 'Quarter Ounce',
+			'1/4 OZ' => 'Quarter Ounce',
+			'14g' => 'Half Ounce',
+			'½ oz' => 'Half Ounce',
+			'1/2 OZ' => 'Half Ounce',
+			'1 oz' => 'Ounce',
+			'1 OZ' => 'Ounce',
+			'28g' => 'Ounce',
+			'Each' => 'Each',
+			'(1)' => 'Each',
+			'1' => 'Each',
+			'each' => 'Each',
+			'Single' => 'Each',
+			'MED' => 'Each',
+			'Med' => 'Each',
+			'REC' => 'Each',
+			'REC w/TX' => 'Each',
+			'Rec' => 'Each',
+			'PREROLL' => 'Each',
+			'PRE ROLL' => 'Each',
+			'PreRoll' => 'Each',
+			'Preroll' => 'Each',
+			'pre-roll' => 'Each',
+			'preroll' => 'Each',
+			'pre roll' => 'Each',
+			'Pre-Roll' => 'Each',
+			'0.5g pre-roll' => 'Each',
+			'Joint' => 'Each',
+			'E-Joint' => 'Each',
+			'.5G E-Joint' => 'Each',
+			'Tin' => 'Each',
+			'VFire System' => 'Each',
+			'VFire System - GT' => 'Each',
+			'10 mg' => '10mg',
+			'10mg' => '10mg',
+			'20 mg' => '20mg',
+			'.25g' => '25mg',
+			'30 mg' => '30mg',
+			'32 mg' => '32mg',
+			'50 mg' => '50mg',
+			'50mg' => '50mg',
+			'60 mg' => '60mg',
+			'60mg' => '60mg',
+			'75 mg' => '75mg',
+			'80 mg' => '80mg',
+			'80MG' => '80mg',
+			'85 mg' => '85mg',
+			'90 mg' => '90mg',
+			'100 mg' => '100mg',
+			'100mg' => '100mg',
+			'100MG' => '100mg',
+			'125 mg' => '125mg',
+			'130 mg' => '130mg',
+			'200mg' => '200mg',
+			'MED .3g' => '300mg',
+			'REC .3g' => '300mg',
+			'300 mg' => '300mg',
+			'300mg' => '300mg',
+			'300MG' => '300mg',
+			'300 MG' => '300mg',
+			'500 mg' => '500mg',
+			'500mg' => '500mg',
+			'500MG' => '500mg',
+			'550mg' => '550mg',
+			'250MG' => '250mg',
+			'250mg' => '250mg',
+			'0.7g' => '.7g',
+			'.75g' => '750mg',
+			'PRE ROLL PACK' => 'Pack',
+			'2' => '2 Pack',
+			'2 pack' => '2 Pack',
+			'2pack' => '2 Pack',
+			'2 Pack' => '2 Pack',
+			'.5g 2pk' => '2 Pack',
+			'0.5g 2 pack' => '2 Pack',
+			'2/.5g' => '2 Pack',
+			'3' => '3 Pack',
+			'1g 3 pack' => '3 Pack',
+			'3 PACK' => '3 Pack',
+			'3-pack' => '3 Pack',
+			'3 pack' => '3 Pack',
+			'5 pack' => '5 Pack',
+			'5' => '5 Pack',
+			'0.5g 5 pack' => '5 Pack',
+			'5 sticks 15 mg' => '5 Pack',
+			'1g 7 pack' => '7 Pack',
+			'7- .5g = 3.5g' => '7 Pack',
+			'7 Pack' => '7 Pack',
+			'0.5g 7 pack' => '7 Pack',
+			'8 jar' => '8 Pack',
+			'Pack of 10' => '10 Pack',
+			'10 Pack' => '10 Pack',
+			'10-Pack' => '10 Pack',
+			'Pack of 16' => '16 Pack',
+			'0.5g 28 pack' => '28 Pack',
+			'0.5g 28 jar' => '28 Pack',
+			'28 pack' => '28 Pack'
+		}
+		
+		puts 'steve is here 77'
 
 		#MAKE CALL AND CREATE JSON
-		output = nil
-		if @city_range.present?
-            output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation, '--city='+ @city_range])
-		else
-            output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation])
-		end
-
+        output = IO.popen(["python", "#{Rails.root}/app/scrapers/leafly_disp_scraper.py", @state_abbreviation])
 		contents = JSON.parse(output.read)
 		
-		puts 'contents: '
-		puts contents
+		puts 'steve is here 83'
 
 		#LOOP THROUGH CONTENTS RETURNED (DISPENSARIES)
 		contents[@state_abbreviation.downcase].each do |returned_dispensary_source|
 			
-			puts 'i am in the content loop'
+			puts 'in the content loop'
 			
 			#check if the dispensary source already exists
 			existing_dispensary_sources = @dispensary_sources.select { |dispensary_source| dispensary_source.name.casecmp(returned_dispensary_source['name']) == 0 }
 			
 			if existing_dispensary_sources.size > 0 #DISPENSARY SOURCE ALREADY EXISTS
+			
+				#trying to just update menu once
+				@updated_menu = false
 				
 				#if exists, then I have to compare fields to see if any need to be updated
 				compareAndUpdateDispensarySourceValues(returned_dispensary_source, existing_dispensary_sources[0])
@@ -63,6 +201,11 @@ class LeaflyScraperHelper
 				if returned_dispensary_source['menu'] != nil
 					analyzeReturnedDispensarySourceMenu(returned_dispensary_source['menu'], existing_dispensary_sources[0], false)
 				end
+				
+				#update the last_menu_update of the dispensary_source
+				if @updated_menu
+					existing_dispensary_sources[0].update_attribute :last_menu_update, DateTime.now
+				end	
 				
 			else #THE DISPENSARYSOURCE DOES NOT EXIST
 				
@@ -126,8 +269,11 @@ class LeaflyScraperHelper
 
 						#if its not a new dispensary, we will check if the dispensary source already has the product
 						if is_new_dispensary == false
-							existing_dispensary_source_products = existing_dispensary_source.products.select { |product| 
-																	product.name.casecmp(strain_name) == 0 }
+
+							#7-19
+							searchString = "%#{strain_name.downcase.strip}%"
+							existing_dispensary_source_products = existing_dispensary_source.products.
+								where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
 
 							#try alternate names or combine with vendors
 							if existing_dispensary_source_products.size == 0
@@ -157,8 +303,11 @@ class LeaflyScraperHelper
 						
 						else #dispensary source does not have the product / it is a new dispensary source
 
-							#first check if product is in the system	
-							existing_products = @category_products.select { |product| product.name.casecmp(strain_name) == 0 }
+							#first check if product is in the system
+
+							#7-19
+							searchString = "%#{strain_name.downcase.strip}%"
+							existing_products = @category_products.where("lower(name) LIKE ? or lower(alternate_names) LIKE ?", searchString, searchString)
 							
 							if existing_products.size > 0 #product is in the system
 								
@@ -257,19 +406,6 @@ class LeaflyScraperHelper
 			)
 		end
 
-
-		#map of their quantities to our quantities
-		quantityToQuantity = {
-			'½ g' => 'Half Gram',
-			'1 g' => 'Gram',	
-			'2 g' => '2 Grams',	
-			'⅛ oz' => 'Eighth',	
-			'¼ oz' => 'Quarter Ounce',
-			'½ oz' => 'Half Ounce',
-			'1 oz' => 'Ounce',
-			'each' => 'Each'
-		}
-
 		#create dispensary source product
 		if returned_dispensary_source_product['prices'] != nil
 			
@@ -279,10 +415,10 @@ class LeaflyScraperHelper
 			returned_dispensary_source_product['prices'].each do |quantity_price_pair|
 
 				#only create if the quantity matches - if not we should email to create a new quantity
-				if quantityToQuantity.has_key?(quantity_price_pair['quantity'])
+				if @quantityToQuantity.has_key?(quantity_price_pair['quantity'])
 					DspPrice.create(
 						:dispensary_source_product_id => dsp.id,
-						:unit => quantityToQuantity[quantity_price_pair['quantity']],
+						:unit => @quantityToQuantity[quantity_price_pair['quantity']],
 						:price => quantity_price_pair['price']
 					)
 				else
@@ -297,56 +433,36 @@ class LeaflyScraperHelper
 	def compareAndUpdateDispensarySourceProduct(returned_dispensary_source_product, existing_dispensary_source_product, existing_dispensary_source)
 		
 		if  returned_dispensary_source_product['prices'] != nil
-			#see if we need to update the last_menu_update for the dispensary source
-			updated_menu = false
-
-			#need more for other categories
-			quantityToQuantity = {
-				'½ g' => 'Half Gram',
-				'1 g' => 'Gram',	
-				'2 g' => '2 Grams',	
-				'⅛ oz' => 'Eighth',	
-				'¼ oz' => 'Quarter Ounce',
-				'½ oz' => 'Half Ounce',
-				'1 oz' => 'Ounce',
-				'each' => 'Each'
-			}
 
 			returned_dispensary_source_product['prices'].each do |quantity_price_pair|
 
 				#use the same map like above - only update if we have a match
-				if quantityToQuantity.has_key?(quantity_price_pair['quantity'])
+				if @quantityToQuantity.has_key?(quantity_price_pair['quantity'])
 					#see if we have any dsp prices with this quantity
 
-					if existing_dispensary_source_product.dsp_prices.where(unit: quantityToQuantity[quantity_price_pair['quantity']]).any?
+					if existing_dispensary_source_product.dsp_prices.where(unit: @quantityToQuantity[quantity_price_pair['quantity']]).any?
 						#compare the price - if its different we update
-						if existing_dispensary_source_product.dsp_prices.where(unit: quantityToQuantity[quantity_price_pair['quantity']]).first.price != quantity_price_pair['price']
+						if existing_dispensary_source_product.dsp_prices.where(unit: @quantityToQuantity[quantity_price_pair['quantity']]).first.price != quantity_price_pair['price']
 							
 							existing_dispensary_source_product.dsp_prices.
-								where(unit: quantityToQuantity[quantity_price_pair['quantity']]).first.update_attribute :price, quantity_price_pair['price']
+								where(unit: @quantityToQuantity[quantity_price_pair['quantity']]).first.update_attribute :price, quantity_price_pair['price']
 							
-							updated_menu = true
+							@updated_menu = true
 						end
 					else
 						#create new dsp price
 						DspPrice.create(
 							:dispensary_source_product_id => existing_dispensary_source_product.id,
-							:unit => quantityToQuantity[quantity_price_pair['quantity']],
+							:unit => @quantityToQuantity[quantity_price_pair['quantity']],
 							:price => quantity_price_pair['price']
 						)
-						updated_menu = true
+						@updated_menu = true
 					end
 				else
 					UnitMissing.email('Leafly', quantity_price_pair['quantity'], quantity_price_pair['price']).deliver_now	
 				end
 			end
-			
-			#update the last_menu_update of the dispensary_source
-			if updated_menu
-				existing_dispensary_source.update_attribute :last_menu_update, DateTime.now
-			end
-			
-			
+
 		end #end of check to see if returned_dispensary_product['prices'] != nil
 	end
 

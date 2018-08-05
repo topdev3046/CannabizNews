@@ -4,14 +4,12 @@ class DispensariesController < ApplicationController
     
     def index
         
-        if @site_visitor_state != nil
-            @dispensaries = Dispensary.where(state: @site_visitor_state).
-                                order("name ASC").paginate(page: params[:page], per_page: 16)
-            @search_string = @site_visitor_state.name
+        if @site_visitor_state.product_state?
+            @dispensaries = Dispensary.where(state_id: @site_visitor_state.id).order("RANDOM()").
+                                paginate(page: params[:page], per_page: 16)
         else
-            @dispensaries = Dispensary.order("name ASC").paginate(page: params[:page], per_page: 16)
+            @dispensaries = Dispensary.order("RANDOM()").paginate(page: params[:page], per_page: 16)
         end
-        
     end
     
     def refine_index
@@ -34,11 +32,11 @@ class DispensariesController < ApplicationController
     def show
         
         require 'uri' #google map / facebook
-        
         @dispensary_source = @dispensary.dispensary_sources.order('last_menu_update DESC').first
-        @dispensary_source_products = @dispensary_source.dispensary_source_products.
-                    includes(:dsp_prices, product: [:category, :vendors, :vendor])
         
+        @dispensary_source_products = @dispensary_source.dispensary_source_products.
+                        includes(:dsp_prices, product: [:category, :vendors, :vendor])
+            
         @category_to_products = Hash.new
         
         @dispensary_source_products.each do |dsp|
@@ -50,9 +48,7 @@ class DispensariesController < ApplicationController
                     @category_to_products.store(dsp.product.category.name, [dsp])
                 end
             end
-            
         end
-        
     end
     
     #-------------------------------------
@@ -77,7 +73,9 @@ class DispensariesController < ApplicationController
         end
         
         def set_into_redis
-            $redis.set("dispensary_#{params[:id]}", marshal_dump(@dispensary))
+            if $redis.info['used_memory_human'].to_f < $redis.info['maxmemory_human'].to_f
+                $redis.set("dispensary_#{params[:id]}", marshal_dump(@dispensary))
+            end
         end
 
         def get_from_redis

@@ -9,10 +9,10 @@ ActiveAdmin.register Vendor do
 		selectable_column
 		id_column
 		column :name
-		column "Description" do |vendor|
+		column "Description", :sortable=>:"vendors.description" do |vendor|
 			truncate(vendor.description, omision: "...", length: 50) if vendor.description
         end
-        column "Image" do |vendor|
+        column "Image", :sortable=>:"vendors.image" do |vendor|
 			truncate(vendor.image_url, omision: "...", length: 50) if vendor.image_url
         end
 		column :created_at

@@ -18,9 +18,25 @@
 				<% @product.average_prices.each_with_index do |average_price, index| %>
 					
                     <% if index == 0 %>
-    					<td><span itemprop="price">$<%=average_price.average_price%></span></td>
+    					<td><span itemprop="price">
+    					    <% if @searched_state.present? %>
+    					        <a href="<%=product_path(@product, average_price_id: average_price.id, state_id: @searched_state.id)%>" style="color: #2ab081;">
+                                    <%="$#{average_price.average_price}"%></a>
+    					    <% else %>
+    					        <a href="<%=product_path(@product, average_price_id: average_price.id)%>" style="color: #2ab081;">
+                                    <%="$#{average_price.average_price}"%></a>
+    					    <% end %>
+    					 </span></td>
     				<% else %>
-    					<td>$<%=average_price.average_price%></td>
+    					<td>
+    					    <% if @searched_state.present? %>
+    					        <a href="<%=product_path(@product, average_price_id: average_price.id, state_id: @searched_state.id)%>" style="color: #2ab081;">
+                                    <%="$#{average_price.average_price}"%></a>
+                            <% else %>
+                                <a href="<%=product_path(@product, average_price_id: average_price.id)%>" style="color: #2ab081;">
+                                    <%="$#{average_price.average_price}"%></a>
+                            <% end %>
+    			        </td>
     				<% end %>
     			<% end %>
 			</tr>

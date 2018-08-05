@@ -4,11 +4,22 @@ class PagesController < ApplicationController
     
     def home
         
+<<<<<<< HEAD
         #test scraper
         #ProductHeadset.perform_later('washington colorado nevada')
+=======
+        #DispWeedmaps.perform_later('Washington', 'S-Z')
+>>>>>>> 3a55d553c00f257ab4cba9a4af323fa4f7c36251
         
         #dont display nav search
         @nav_search = false
+        
+        #state dropdown
+        if params[:state].present?
+            if state = State.find_by(name: params[:state])
+                @site_visitor_state = state
+            end
+        end
         
         #ARTICLES --  
         @recent_articles = @site_visitor_state.articles.active_source.
@@ -18,7 +29,8 @@ class PagesController < ApplicationController
         #trending news - we should have num_views created this past week - not of all time - will do when moving live
         if Rails.env.production?
             @trending_articles = Article.active_source.
-                        where("created_at >= ?", 1.week.ago.utc).order("num_views DESC").limit(10)
+                        where("created_at >= ?", 1.week.ago.utc).order("num_views DESC").
+                        includes(:states, :source, :categories).limit(10)
         else
             @trending_articles = Article.active_source.order("num_views DESC").
                                     includes(:states, :source, :categories).
@@ -26,14 +38,14 @@ class PagesController < ApplicationController
         end
 
         #PRODUCTS
-        if @site_visitor_state != nil && @site_visitor_state.product_state
+        if @site_visitor_state.present? && @site_visitor_state.product_state
             
             if Rails.env.production? 
-                @top_products = Product.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
+                @top_products = @site_visitor_state.products.featured.joins(:dispensary_source_products).group("products.id").having("count(dispensary_source_products.id)>4").
                                     includes(:vendors, :category, :average_prices).
                                     order("RANDOM()").limit(10)
             else
-                @top_products = Product.featured.includes(:vendors, :category, :average_prices).
+                @top_products = @site_visitor_state.products.featured.includes(:vendors, :category, :average_prices).
                                     order("RANDOM()").limit(10)
             end
         else 
@@ -53,16 +65,16 @@ class PagesController < ApplicationController
         #allowing search for product and news
         if params[:query].present? 
             query = "%#{params[:query].downcase.strip}%"
-            #query_no_sc = "%#{params[:query].downcase.strip.gsub!(/[^0-9A-Za-z]/, '')}%"
             @searchQuery = params[:query].strip
+
             #PRODUCTS
             @product_results = Product.featured.includes(:vendors, :dispensary_sources, :category).
                         where("LOWER(products.name) LIKE ? or LOWER(products.alternate_names) LIKE ?", query, query)
-            
+                        
             @product_results_two = Product.featured.includes(:vendors, :dispensary_sources, :category).
-                        where("LOWER(products.is_dom) LIKE ? or LOWER(categories.name) LIKE ? or LOWER(vendors.name) LIKE ? or LOWER(dispensary_sources.name) LIKE ? or LOWER(dispensary_sources.location) LIKE ? or LOWER(products.description) LIKE ?", 
-                                query, query, query, query, query, query).
-                        references(:vendors, :dispensary_sources, :categories)
+                        where("LOWER(products.is_dom) LIKE ? or LOWER(products.sub_category) LIKE ? or LOWER(products.description) LIKE ? or LOWER(categories.name) LIKE ? or LOWER(vendors.name) LIKE ? or LOWER(dispensary_sources.name) LIKE ? or LOWER(dispensary_sources.city) LIKE ? or LOWER(dispensary_sources.street) LIKE ? or LOWER(dispensary_sources.zip_code) LIKE ?", 
+                                query, query, query, query, query, query, query, query, query).
+                        references(:vendor, :vendors, :dispensary_sources, :categories)
                         
             @product_results = @product_results | @product_results_two
             
