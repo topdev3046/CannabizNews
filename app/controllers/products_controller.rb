@@ -163,7 +163,7 @@ class ProductsController < ApplicationController
                 puts 'steve past 6'
                 
             else
-                ErrorFound.email("Product Show Page not featured product: #{@product.slug}", product.featured_product.to_s, '', '').deliver_now
+                ErrorFound.email("Product Show Page not featured product: #{@product.slug}", @product.featured_product.to_s, '', '').deliver_now
                 redirect_to root_path
             end
         rescue => ex
