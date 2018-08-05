@@ -7,6 +7,7 @@ ActiveAdmin.register Vendor do
 	
 	index do
 		selectable_column
+		id_column
 		column :name
 		column "Description" do |vendor|
 			truncate(vendor.description, omision: "...", length: 50) if vendor.description

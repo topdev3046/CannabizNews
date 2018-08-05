@@ -39,21 +39,59 @@ class Product < ActiveRecord::Base
        self.save
     end
     
-    #import CSV file
-    def self.import(file)
-        CSV.foreach(file.path, headers: true, skip_blanks: true) do |row|
-            
-            #change to update record if id matches
-            product_hash = row.to_hash
-            product = self.where(id: product_hash["id"])
-            
-            if product.present? 
-                product.first.update_attributes(product_hash)
+    def self.import_from_csv(products)
+        csv = CSV.parse(products, :headers => true, :quote_char => "|", :row_sep => :auto, :col_sep => ";")
+        csv.each do |row|
+
+            product  = Product.where("lower(name) =?", row['name'].to_s.downcase).first
+            if product.present?
+                store.update_attributes(
+                name: row['name'], 
+                remote_image_url: row['image'],
+                description: row['description'],
+                featured_product: row['featured_product'],
+                alternate_names: row['alternate_names'],
+                category_id: row['category_id'],
+                vendor_id: row['vendor_id'],
+                sub_category: row['sub_category'],
+                is_dom: row['is_dom'],
+                cbd: row['cbd'],
+                cbn: row['cbn'],
+                min_thc: row['min_thc'],
+                med_thc: row['med_thc'],
+                max_thc: row['max_thc'],
+                headset_alltime_count: row['headset_alltime_count'],
+                headset_monthly_count: row['headset_monthly_count'],
+                headset_weekly_count: row['headset_weekly_count'],
+                headset_daily_count: row['headset_daily_count']
+            )
             else
-                #Product.create! product_hash
+                product = Product.new(
+                    name: row['name'], 
+                    remote_image_url: row['image'],
+                    description: row['description'],
+                    featured_product: row['featured_product'],
+                    alternate_names: row['alternate_names'],
+                    category_id: row['category_id'],
+                    vendor_id: row['vendor_id'],
+                    sub_category: row['sub_category'],
+                    is_dom: row['is_dom'],
+                    cbd: row['cbd'],
+                    cbn: row['cbn'],
+                    min_thc: row['min_thc'],
+                    med_thc: row['med_thc'],
+                    max_thc: row['max_thc'],
+                    headset_alltime_count: row['headset_alltime_count'],
+                    headset_monthly_count: row['headset_monthly_count'],
+                    headset_weekly_count: row['headset_weekly_count'],
+                    headset_daily_count: row['headset_daily_count']
+                )
+                unless product.save
+	        		puts "product Save Error: #{product.errors.messages}"
+	        	end
             end
         end
-    end    
+    end
     
     #export CSV file
     def self.to_csv
