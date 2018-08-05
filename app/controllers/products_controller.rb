@@ -101,7 +101,7 @@ class ProductsController < ApplicationController
         begin
         
             #only show featured product
-            # if @product.featured_product
+            if @product.featured_product
                 
                 puts 'steve in featured'
             
@@ -162,9 +162,10 @@ class ProductsController < ApplicationController
                     
                 puts 'steve past 6'
                 
-            # else
-            #     redirect_to root_path
-            # end
+            else
+                ErrorFound.email("Product Show Page not featured product: #{@product.slug}", product.featured_product.to_s, '', '').deliver_now
+                redirect_to root_path
+            end
         rescue => ex
             ErrorFound.email("Product Show Page for product: #{@product.slug}", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
             redirect_to root_path
