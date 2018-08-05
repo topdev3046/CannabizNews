@@ -12,7 +12,7 @@ if Rails.env.production?
 	Sidekiq::Cron::Job.create(name: 'News MjBizDaily', cron: '50 8,13,18 * * *', class: 'MjBizDailyWorker')
 	Sidekiq::Cron::Job.create(name: 'News TheCannabist', cron: '55 8,13,18 * * *', class: 'TheCannabistWorker')
 	
-	# LEAFLY - runs at 1 am, 2am
+	# LEAFLY - runs at 1 am - 3am daily
 	Sidekiq::Cron::Job.create(name: 'Leafly Disp WA', cron: '0 1 * * *', class: 'LeaflyDispensaryWorker1')
 	Sidekiq::Cron::Job.create(name: 'Leafly Disp CO', cron: '0 2 * * *', class: 'LeaflyDispensaryWorker2')
 	Sidekiq::Cron::Job.create(name: 'Leafly Disp NV', cron: '0 3 * * *', class: 'LeaflyDispensaryWorker3')
