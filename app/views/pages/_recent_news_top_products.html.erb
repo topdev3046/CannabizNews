@@ -1,3 +1,23 @@
+<style>
+
+    #sidebarWrap {
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+    
+    #sidebar {
+        position: absolute;
+        width: 450px;
+    }
+    
+    #sidebar.fixed {
+        position: fixed;
+        top: 50px;
+    }
+
+</style>
+
 <section id="page-content" class="page-wrapper">
     <div class="zm-section bg-white pt-70 pb-40">
         <div class="container">
@@ -57,10 +77,10 @@
                 <!-- End left side (recent articles)-->
 
                 <!-- Start Right sidebar (top products) -->
-                <div class="desktop-homepage col-xs-12 col-sm-12 col-md-4 col-lg-4 sidebar-warp columns">
+                <div class="desktop-homepage col-xs-12 col-sm-12 col-md-4 col-lg-4 columns" id="sidebarWrap">
                     <div class="row">
 						<!-- Start post layout E -->
-                        <aside class="zm-post-lay-e-area col-md-12 col-lg-12" id="product-sidebar">
+                        <aside class="zm-post-lay-e-area col-md-12 col-lg-12" id="sidebar">
                             <div class="row mb-40">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="section-title">
@@ -93,3 +113,28 @@
             </div>
         </div>
     </div>
+    
+<script>
+    $(function() {
+        var top = $('#sidebar').offset().top - parseFloat($('#sidebar').css('marginTop').replace(/auto/, 0));
+        var footTop = $('#footer').offset().top - parseFloat($('#footer').css('marginTop').replace(/auto/, 0));
+    
+        var maxY = footTop - $('#sidebar').outerHeight();
+    
+        $(window).scroll(function(evt) {
+            var y = $(this).scrollTop();
+            if (y > top) {
+                if (y < maxY) {
+                    $('#sidebar').addClass('fixed').removeAttr('style');
+                } else {
+                    $('#sidebar').removeClass('fixed').css({
+                        position: 'absolute',
+                        top: (maxY - top - 40) + 'px'
+                    });
+                }
+            } else {
+                $('#sidebar').removeClass('fixed');
+            }
+        });
+    });
+</script>
