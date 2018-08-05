@@ -69,7 +69,7 @@ class WeedmapsScraperHelper
 				compareAndUpdateDispensarySourceValues(returned_dispensary_source, existing_dispensary_sources[0])
 				
 				#loop through products and see if we need to create any or update any
-				if returned_dispensary_source['menu'] != nil && returned_dispensary_source['menu']['items'] != nil
+				if returned_dispensary_source['menu'].present? && returned_dispensary_source['menu']['items'].present?
 					analyzeReturnedDispensarySourceMenu(returned_dispensary_source['menu'], existing_dispensary_sources[0], false)
 				end
 
