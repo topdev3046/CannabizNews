@@ -147,8 +147,8 @@ class ProductsController < ApplicationController
                 @similar_products = result[0]
             
                 result = ProductHelper.new(@product, state_used, avg_price).buildProductDisplay
-                @dispensary_to_product, @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp = 
-                    result[0], result[1], result[2], result[3]  
+                @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp = 
+                    result[0], result[1], result[2]  
 
             else
                 redirect_to root_path
@@ -195,8 +195,8 @@ class ProductsController < ApplicationController
                 @similar_products = result[0]
             
                 result = ProductHelper.new(@product, @searched_state, @average_price).buildProductDisplay
-                @dispensary_to_product, @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp = 
-                    result[0], result[1], result[2], result[3]
+                @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp = 
+                    result[0], result[1], result[2]
                 
                 render 'show'
             rescue => ex

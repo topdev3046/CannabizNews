@@ -46,6 +46,8 @@ class WeedmapsScraperHelper
 		
 		#MAKE CALL AND CREATE JSON
 		output = nil
+	
+		#washingon, --city=A-G --> all dispensaries in washington cities that start with A-G - dispensary info, products
 		if @city_range.present?
             output = IO.popen(["python", "#{Rails.root}/app/scrapers/weedmaps_disp_scraper.py", @state_name, '--city=' + @city_range])
 		else

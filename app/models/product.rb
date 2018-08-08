@@ -105,6 +105,8 @@ class Product < ActiveRecord::Base
 	def set_redis_key
 	    begin
     	    if self.slug.present?
+    	        #in redis featured_product was false, but in DB featured product = true
+    	        #goal was to update key-value pair after updating record. 
                 $redis.set("product_#{self.slug}", Marshal.dump(self))   
             end
         rescue => ex
