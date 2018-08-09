@@ -75,16 +75,16 @@ class Product < ActiveRecord::Base
                 return_image = 'substitutes/default_flower.jpg'
             
             elsif self.category.name == 'Concentrates'
-                return_image = 'substitutes/default_concentrate.jpeg'
+                return_image = 'https://s3.amazonaws.com/cannabiz-network/substitutes/default_concentrate.jpeg'
             
             elsif self.category.name == 'Edibles'
-                return_image = 'substitutes/default_edible.jpg'
+                return_image = 'https://s3.amazonaws.com/cannabiz-network/substitutes/default_edible.jpg'
                 
             elsif self.category.name == 'Pre-Rolls'
-                return_image = 'substitutes/default_preroll.jpg'
+                return_image = 'https://s3.amazonaws.com/cannabiz-network/substitutes/default_preroll.jpg'
             
             else
-                return_image = 'substitutes/default_flower.jpg'    
+                return_image = 'https://s3.amazonaws.com/cannabiz-network/substitutes/default_flower.jpg'    
             end
         else
             return_image = 'home_top_product.jpg'
