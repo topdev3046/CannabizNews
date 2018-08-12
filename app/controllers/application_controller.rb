@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
     end
   
     def site_visitor_location
-        
+        #comment
         begin
             if request.remote_ip.present? && GeoIP.new('GeoLiteCity.dat').city(request.remote_ip).real_region_name.present?
                 
