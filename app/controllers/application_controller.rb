@@ -36,9 +36,10 @@ class ApplicationController < ActionController::Base
   def site_visitor_location
     # comment
     begin
-      if request.remote_ip.present? && GeoIP.new("GeoLiteCity.dat").city(request.remote_ip).real_region_name.present?
 
-        name = GeoIP.new("GeoLiteCity.dat").city(request.remote_ip).real_region_name
+      if request.remote_ip.present? && GeoIP.new("GeoLiteCity.dat").city(request.remote_ip).try(:real_region_name).present?
+
+        name = GeoIP.new('GeoLiteCity.dat').city(request.remote_ip).try(:real_region_name)
         if name.present? && @site_visitor_state = State.find_by(name: name.strip)
           puts "i got a state from first one"
         else
