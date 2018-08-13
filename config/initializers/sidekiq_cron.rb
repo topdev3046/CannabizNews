@@ -48,4 +48,14 @@ if Rails.env.production?
 
   # HEADSET - runs at 12:30am daily
   Sidekiq::Cron::Job.create(name: "Headset Scraper", cron: "30 0 * * *", class: "HeadsetWorker")
+
+  # HEAD RESET - runs at 12:20am daily
+	Sidekiq::Cron::Job.create(name: 'Headset Reset Daily', cron: '20 0 * * *', class: 'HeadsetResetCountDailyWorker')
+
+	# HEAD RESET - runs at 12:23am weekly
+	Sidekiq::Cron::Job.create(name: 'Headset Reset Weekly', cron: '23 0 * * 0', class: 'HeadsetResetCountWeeklyWorker')
+
+	# HEAD RESET - runs at 12:26am monthly
+	Sidekiq::Cron::Job.create(name: 'Headset Reset Monthly', cron: '26 0 1 * *', class: 'HeadsetResetCountMonthlyWorker')
+
 end
