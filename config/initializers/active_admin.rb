@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.setup do |config|
   # == Site Title
   #
@@ -9,10 +11,10 @@ ActiveAdmin.setup do |config|
   config.footer = "Cannabiz Network"
   config.localize_format = :short
   config.site_title_link = "https://cannabiznetwork.com"
-  config.favicon = 'favicon.ico'
+  config.favicon = "favicon.ico"
   config.site_title_image = "header_footer/cbz-logo-color.png"
-  
-  #friendly ids
+
+  # friendly ids
   ActiveAdmin::ResourceController.class_eval do
     def find_resource
       finder = resource_class.is_a?(FriendlyId) ? :slug : :id
@@ -20,14 +22,14 @@ ActiveAdmin.setup do |config|
     end
   end
 
-  #settings button
+  # settings button
   config.namespace :admin do |admin|
     admin.build_menu :utility_navigation do |menu|
-      menu.add  :label  => 'Settings', # text of your link
-        :url            => proc{ edit_admin_admin_user_path(current_admin_user) }, # route of your link
-        :html_options   => {:style => 'float:left;'}, # attributes added in the DOM of your link
-        :if             => proc{ 1 < 2 } # condition to display the link
-      admin.add_logout_button_to_menu menu, 100, :style => 'float:left;' # logout link
+      menu.add label: "Settings", # text of your link
+        url: proc { edit_admin_admin_user_path(current_admin_user) }, # route of your link
+        html_options: { style: "float:left;" }, # attributes added in the DOM of your link
+        if: proc { 1 < 2 } # condition to display the link
+      admin.add_logout_button_to_menu menu, 100, style: "float:left;" # logout link
     end
   end
 

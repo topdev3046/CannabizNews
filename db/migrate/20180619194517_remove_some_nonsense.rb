@@ -22,12 +22,12 @@ class RemoveSomeNonsense < ActiveRecord::Migration
     remove_column :dispensary_source_products, :price_1mg
     remove_column :dispensary_source_products, :price_2_5mg
     remove_column :dispensary_source_products, :one
-    
+
     remove_column :products, :ancillary
     remove_column :products, :short_description
-    
+
     remove_column :dispensary_sources, :location
-    
+
     drop_table :source_hashtags
     drop_table :digest_emails
     drop_table :hashtags
