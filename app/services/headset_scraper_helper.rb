@@ -27,6 +27,7 @@ class HeadsetScraperHelper
 
 				if contents[state_name] != nil
 					puts "HEADSET DID RETURN PRODUCTS FOR STATE: " + state_name
+					puts contents
 					parseProducts(contents[state_name])
 				else
 					puts "HEADSET DID NOT RETURN ANY PRODUCTS FOR STATE " + state_name
