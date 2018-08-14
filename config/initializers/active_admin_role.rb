@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 ActiveAdminRole.configure do |config|
   # [Required:Hash]
   # == Role | default: { guest: 0, support: 1, staff: 2, manager: 3, admin: 99 }
-  config.roles = {dispensary_admin: 1, admin: 99 }
+  config.roles = { dispensary_admin: 1, admin: 99 }
 
   # [Optional:Array]
   # == Special roles which don't need to manage on database

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register ::ActiveAdmin::Permission, as: "Permission" do
   actions :index
 
