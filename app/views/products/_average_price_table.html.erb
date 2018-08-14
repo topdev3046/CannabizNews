@@ -9,13 +9,13 @@
     	<!--average price units are the headers-->
     	<thead>
     		<tr>
-    			<% @product.average_prices.each do |average_price| %>
+    			<% @product.average_prices.order("display_order DESC").each do |average_price| %>
     				<th style="text-align: center;"><%=average_price.average_price_unit%></th>
     			<% end %>
     		</tr>	
 		</thead>
 			<tr>
-				<% @product.average_prices.each_with_index do |average_price, index| %>
+				<% @product.average_prices.order("display_order DESC").each_with_index do |average_price, index| %>
 					
                     <% if index == 0 %>
     					<td><span itemprop="price">

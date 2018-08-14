@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ProductsController < ApplicationController
   before_action :set_product, only: [:edit, :update, :destroy, :show, :change_state]
 
@@ -141,13 +139,13 @@ class ProductsController < ApplicationController
           @title_state = state_used
         end
 
-        result = ProductHelper.new(@product, state_used, avg_price).buildSimilarProducts
-        @similar_products = result[0]
-
+        result2 = ProductHelper.new(@product, state_used, avg_price).buildSimilarProducts
+        @similar_products = result2[0]
+    
         result = ProductHelper.new(@product, state_used, avg_price).buildProductDisplay
-        @table_header_options, @dispensary_to_dispensary_source, @dispensary_to_dsp =
-            result[0], result[1], result[2]
-
+        @table_header_options = result[0]
+        @dispensary_to_dispensary_source = result[1]
+        @dispensary_to_dsp = result[2]
       else
         redirect_to root_path
       end

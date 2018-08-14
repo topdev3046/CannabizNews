@@ -7,7 +7,7 @@ class ProductHelper
     @average_price = average_price
   end
 
-  def buildSimilarProducts
+  def buildSimilarProducts()
     # similar products - include is_dom and sub_category as well
     if @product.category.present?
 
@@ -45,7 +45,7 @@ class ProductHelper
     [@similar_products]
   end
 
-  def buildProductDisplay
+  def buildProductDisplay()
     @dispensary_source_products = @product.dispensary_source_products.includes(:product, :dsp_prices, dispensary_source: [:dispensary, :state]).
               where("dispensary_sources.state_id =?", @state.id).
               order("dispensary_sources.last_menu_update DESC").order("dispensary_sources.name ASC").
@@ -79,21 +79,17 @@ class ProductHelper
         if @average_price.present?
 
           dsp.dsp_prices.each do |dsp_price|
-             if dsp_price.unit == @average_price.average_price_unit && dsp_price.price <= @average_price.average_price
-               @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
-               @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)
-             end
-           end
+            if dsp_price.unit.to_s.downcase == @average_price.average_price_unit.to_s.downcase && dsp_price.price <= @average_price.average_price
+              @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
+              @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)
+            end
+          end
         else
           @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
           @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)
         end
 
-        @dispensary_to_dispensary_source.store(dsp.dispensary_source.dispensary, dsp.dispensary_source)
-        @dispensary_to_dsp.store(dsp.dispensary_source.dispensary, dsp)
       end
-
-
     end
 
     # return
