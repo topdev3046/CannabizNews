@@ -26,18 +26,19 @@ class HeadsetScraperHelper
 				
 				@state_record = State.where(name: state_name.titlecase).first
 
-				if contents[state_name] != nil
+				if contents[state_name].present? && contents[state_name].any?
 					puts "HEADSET DID RETURN PRODUCTS FOR STATE: " + state_name
-					puts contents
+					puts contents[state_name].size
 					parseProducts(contents[state_name])
 				else
 					puts "HEADSET DID NOT RETURN ANY PRODUCTS FOR STATE " + state_name
+					ScraperError.email("Headset", "No Products Returned in #{state_name}").deliver_now
 				end
 				
 			end
 		rescue => ex
-			puts "THERE WAS A HEADSET ERROR: "
-			puts ex.message
+			puts "THERE WAS A HEADSET SCRAPER ERROR: "
+			ScraperError.email("Headset", ex.message).deliver_now
 		end
   end
 
