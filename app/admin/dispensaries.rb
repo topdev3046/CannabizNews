@@ -51,18 +51,20 @@ ActiveAdmin.register Dispensary do
 
   #-----CSV ACTIONS ----------#
 
-  index do
-    column :name
-    column "State", sortable: :"states.name" do |dispensary|
-  if dispensary.state.present?
-    link_to dispensary.state.name, admin_state_path(dispensary.state)
-  end
-end
-    column :has_hypur
-    column :has_payqwick
-    column :updated_at
-    actions
-  end
+index do
+        column :name
+        column "State", :sortable=>:"states.name" do |dispensary|
+    			if dispensary.state.present?
+    				link_to dispensary.state.name, admin_state_path(dispensary.state)
+    			end
+		    end
+        column "Dispensary Sources" do |dispensary|
+            dispensary.dispensary_sources.map{|ds| "#{link_to ds.name, admin_dispensary_source_path(ds)}".html_safe}.join('\n,').html_safe
+        end
+        column :has_hypur
+        column :has_payqwick
+        column :updated_at
+        actions
 
   form do |f|
     f.inputs "Dispensary" do
