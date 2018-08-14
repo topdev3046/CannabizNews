@@ -1,5 +1,7 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe PasswordResetsController, :type => :controller do
+require "rails_helper"
+
+RSpec.describe PasswordResetsController, type: :controller do
 
 end

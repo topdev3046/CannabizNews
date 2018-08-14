@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register AdminUser do
   permit_params :email, :password, :password_confirmation, :role
 
-  menu priority: 2, :if => proc{ current_admin_user.admin? }
-  #menu priority: 2
+  menu priority: 2, if: proc { current_admin_user.admin? }
+  # menu priority: 2
 
   index do
     selectable_column

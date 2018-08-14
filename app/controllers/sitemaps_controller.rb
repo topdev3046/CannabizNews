@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SitemapsController < ApplicationController
   def index
     @static_pages = [root_url]
@@ -6,7 +8,7 @@ class SitemapsController < ApplicationController
     @vendors = Vendor.all
     @dispensaries = Dispensary.all
     # @articles = Article.all
-    
+
 
     respond_to do |format|
       format.xml
