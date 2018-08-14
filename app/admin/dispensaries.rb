@@ -59,7 +59,7 @@ ActiveAdmin.register Dispensary do
 			end
     end
     column "Dispensary Sources" do |dispensary|
-        dispensary.dispensary_sources.map{|ds| "#{link_to ds.name, admin_dispensary_source_path(ds)}".html_safe}.join('\n,').html_safe
+        dispensary.dispensary_sources.map{|ds| "#{link_to ds.name + ' - ' + ds.source.name, admin_dispensary_source_path(ds)}".html_safe}.join('\n,').html_safe
     end
     column :has_hypur
     column :has_payqwick
