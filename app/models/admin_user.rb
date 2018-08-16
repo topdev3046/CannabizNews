@@ -15,4 +15,8 @@ class AdminUser < ActiveRecord::Base
     def admin?
         self.role == 'admin'
     end
+
+    def read_only?
+        self.role == 'read_only_admin'
+    end 
 end

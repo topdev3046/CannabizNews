@@ -1,6 +1,6 @@
 ActiveAdmin.register DspPrice do
     
-    menu :if => proc{ current_admin_user.admin? }
+    menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
 	
 	permit_params :dispensary_source_product_id, :price, :unit, :display_order
 	

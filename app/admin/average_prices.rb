@@ -2,7 +2,7 @@ ActiveAdmin.register AveragePrice do
 	
 	#maybe i can make a trigger to set the display order based on the unit
 
-	menu :if => proc{ current_admin_user.admin? }
+	menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
 	
 	permit_params :product_id, :average_price, :average_price_unit, :units_sold, :display_order
 	

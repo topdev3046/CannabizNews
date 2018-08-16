@@ -1,6 +1,6 @@
 ActiveAdmin.register State do
 
-	menu :if => proc{ current_admin_user.admin? }
+	menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
 	
 	permit_params :name, :abbreviation, :keywords, :logo, :product_state
 

@@ -1,5 +1,5 @@
 ActiveAdmin.register Blog do
-    menu :if => proc{ current_admin_user.admin? }, :label => 'Blog'
+    menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }, :label => 'Blog'
 	
 	permit_params :title, :body, :published, :published_date, :num_views, :image, :author_id, 
 					:description, :sub_header, :keywords

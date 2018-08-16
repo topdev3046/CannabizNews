@@ -1,10 +1,11 @@
 ActiveAdmin.register Product do
+
 	permit_params :name, :image, :ancillary, :product_type, :slug, :description, :featured_product, 
 	  :short_description, :category_id, :year, :month, :alternate_names, :sub_category, :is_dom, :cbd, 
 	  :cbn, :min_thc, :med_thc, :max_thc, :dsp_count, :headset_alltime_count, :headset_monthly_count,
 	  :headset_weekly_count, :headset_daily_count
   
-	menu priority: 6, :if => proc{ current_admin_user.admin? }
+	menu priority: 6, :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
   
 	#use with friendly id
 	before_filter :only => [:show, :edit, :update, :delete] do

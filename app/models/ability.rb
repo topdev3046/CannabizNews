@@ -6,7 +6,8 @@ class Ability
     user ||= AdminUser.new
     if user.super_user?
       can :manage, :all
-      
+    elsif user.read_only?
+      can :read, :all
     elsif user.dispensary_admin_user?
       can :read, Product
       can :manage, AdminUser, :id => user.id
