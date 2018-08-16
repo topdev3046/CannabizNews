@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Product do
 
 	permit_params :name, :image, :ancillary, :product_type, :slug, :description, :featured_product, 
@@ -88,70 +90,70 @@ ActiveAdmin.register Product do
 		column :name
 		column :alternate_names
 		column "Description", :sortable=>:"products.description" do |product|
-          truncate(product.description, omision: "...", length: 50)
+        truncate(product.description, omision: "...", length: 50)
         end
-		column "Image", :sortable=>:"products.image" do |product|
-			if product.image.present?
-				image_tag product.image_url, class: 'admin_image_size'
-			end
-		end
-		column :featured_product
-		column "Category", :sortable=>:"categories.name" do |product|
-			if product.category.present?
-				link_to product.category.name, admin_category_path(product.category)
-			end
-		end
-		column :sub_category
-		column "Vendor (1 to many)", :sortable=>:"vendors.name" do |product|
-			if product.vendor.present?
-				link_to product.vendor.name, admin_vendor_path(product.vendor)
-			end
-		end
-		column "Vendors (many to many)" do |product|
-			vendors = product.vendors
-			unless vendors.blank?
-				vendors.each.map do |vendor|
-					link_to(vendor.name, admin_vendor_path(vendor)) 
-				end.join(', ').html_safe
-			end
-		end
-        column "DispensaryProducts" do |product|
-            dsps = product.dispensary_source_products
-            unless dsps.blank?
-                dsps.each.map do |dsp|
-                    link_to(dsp.dispensary_source.name, admin_dispensary_product_path(dsp)) 
-                end.join(', ').html_safe
-            end
-        end
-		column :updated_at
-		column :headset_alltime_count
-		column :headset_monthly_count
-		column :headset_weekly_count 
-		column :headset_daily_count
-		actions
-	end
-  
-  	#edit and new form - multipart allows for carrierwave connection
-	form(:html => { :multipart => true }) do |f|
-		f.semantic_errors *f.object.errors.keys
-		f.inputs "Product" do
-			f.input :name
-			f.input :alternate_names
-			f.input :description
-			f.input :image, :as => :file
-			f.input :featured_product
-			
-			f.input :category_id, :label => 'Category', :as => :select, 
-        		:collection => Category.products.map{|u| ["#{u.name}", u.id]}
-        		
-			f.input :sub_category
-			f.input :is_dom
-			f.input :cbd
-			f.input :cbn
-			f.input :min_thc
-			f.input :med_thc
-			f.input :max_thc
-		end
-		f.actions
-	end
+    column "Image", sortable: :"products.image" do |product|
+      if product.image.present?
+        image_tag product.image_url, class: "admin_image_size"
+      end
+    end
+    column :featured_product
+    column "Category", sortable: :"categories.name" do |product|
+      if product.category.present?
+        link_to product.category.name, admin_category_path(product.category)
+      end
+    end
+    column :sub_category
+    column "Vendor (1 to many)", sortable: :"vendors.name" do |product|
+      if product.vendor.present?
+        link_to product.vendor.name, admin_vendor_path(product.vendor)
+      end
+    end
+    column "Vendors (many to many)" do |product|
+      vendors = product.vendors
+      unless vendors.blank?
+        vendors.each.map do |vendor|
+          link_to(vendor.name, admin_vendor_path(vendor))
+        end.join(", ").html_safe
+      end
+    end
+    column "DispensaryProducts" do |product|
+      dsps = product.dispensary_source_products
+      unless dsps.blank?
+        dsps.each.map do |dsp|
+            link_to(dsp.dispensary_source.name, admin_dispensary_product_path(dsp))
+          end.join(", ").html_safe
+      end
+    end
+    column :updated_at
+    column :headset_alltime_count
+    column :headset_monthly_count
+    column :headset_weekly_count
+    column :headset_daily_count
+    actions
+  end
+
+  # edit and new form - multipart allows for carrierwave connection
+  form(html: { multipart: true }) do |f|
+    f.semantic_errors *f.object.errors.keys
+    f.inputs "Product" do
+      f.input :name
+      f.input :alternate_names
+      f.input :description
+      f.input :image, as: :file
+      f.input :featured_product
+
+      f.input :category_id, label: "Category", as: :select,
+            collection: Category.products.map { |u| ["#{u.name}", u.id] }
+
+      f.input :sub_category
+      f.input :is_dom
+      f.input :cbd
+      f.input :cbn
+      f.input :min_thc
+      f.input :med_thc
+      f.input :max_thc
+    end
+    f.actions
+  end
 end

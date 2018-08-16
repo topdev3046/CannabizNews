@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Author do
     menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
 	
@@ -7,5 +9,4 @@ ActiveAdmin.register Author do
     before_filter :only => [:show, :edit, :update, :delete] do
     	@author = Author.friendly.find(params[:id])
     end
-
 end

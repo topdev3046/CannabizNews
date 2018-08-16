@@ -4,7 +4,7 @@ class CreateBlogTables < ActiveRecord::Migration
       t.string :name
       t.timestamps
     end
-    
+
     create_table :blog do |t|
       t.string :title
       t.text :body
@@ -16,8 +16,7 @@ class CreateBlogTables < ActiveRecord::Migration
       t.integer :author_id
       t.timestamps
     end
-    
+
     add_index :blog, :slug, unique: true
-    
   end
 end

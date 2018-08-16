@@ -1,9 +1,11 @@
-class WeedMapsWorker7
-	include Sidekiq::Worker
+# frozen_string_literal: true
 
-	def perform()
-		require "json"
-		logger.info "Weedmaps Job 7 is running"
-		WeedmapsScraperHelper.new('Colorado', 'M-R').scrapeWeedmaps
-	end
+class WeedMapsWorker7
+  include Sidekiq::Worker
+
+  def perform
+    require "json"
+    logger.info "Weedmaps Job 7 is running"
+    WeedmapsScraperHelper.new("Colorado", "M-R").scrapeWeedmaps
+  end
 end

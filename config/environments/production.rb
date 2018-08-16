@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -22,7 +24,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.serve_static_files = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -76,18 +78,18 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
-  #be able to include image in email
-  config.action_mailer.asset_host = 'http://cannabiznetwork.com'
-  
+
+  # be able to include image in email
+  config.action_mailer.asset_host = "http://cannabiznetwork.com"
+
   config.action_mailer.delivery_method = :smtp
   # SMTP settings for gmail
   config.action_mailer.smtp_settings = {
-   :address              => "smtp.gmail.com",
-   :port                 => 587,
-   :user_name            => ENV['GMAIL_USERNAME'],
-   :password             => ENV['GMAIL_PASSWORD'],
-   :authentication       => "plain",
-   :enable_starttls_auto => true
+   address: "smtp.gmail.com",
+   port: 587,
+   user_name: ENV["GMAIL_USERNAME"],
+   password: ENV["GMAIL_PASSWORD"],
+   authentication: "plain",
+   enable_starttls_auto: true
   }
 end

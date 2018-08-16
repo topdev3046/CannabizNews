@@ -1,9 +1,11 @@
-class PotguideWorker5
-	include Sidekiq::Worker
+# frozen_string_literal: true
 
-	def perform()
-		require "json"
-		logger.info "Potguide Job 5 is running"
-		PotguideScraperHelper.new('Colorado', 'A-F').scrapePotguide
-	end
+class PotguideWorker5
+  include Sidekiq::Worker
+
+  def perform
+    require "json"
+    logger.info "Potguide Job 5 is running"
+    PotguideScraperHelper.new("Colorado", "A-F").scrapePotguide
+  end
 end

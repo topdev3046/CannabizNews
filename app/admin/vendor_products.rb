@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register VendorProduct do
 
 	menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
@@ -35,6 +37,7 @@ ActiveAdmin.register VendorProduct do
 				:collection => Vendor.order('name ASC').map{|u| ["#{u.name}", u.id]}
 		f.input :units_sold
     	f.actions
+
     end
 
 end

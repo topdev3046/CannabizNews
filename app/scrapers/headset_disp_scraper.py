@@ -17,7 +17,7 @@ class HeadsetDispensaryScraper(object):
         response = self._http_client.get(self._url.format(state_name.lower()))
         if response.success:
             html_doc = html.fromstring(response.content)
-            category_urls = HtmlUtils.get_elements(html_doc, './/div[@class="w-dyn-items"]//div[@class="w-embed"]/a/@href')
+            category_urls = HtmlUtils.get_elements(html_doc, './/div[@class="w-dyn-items"]//div[contains(@class,"w-embed")]/a/@href')
             return category_urls
         return []
 

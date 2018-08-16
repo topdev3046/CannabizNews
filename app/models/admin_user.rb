@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdminUser < ActiveRecord::Base
     role_based_authorizable
     # Include default devise modules. Others available are:
