@@ -3,8 +3,8 @@
 ActiveAdmin.register AdminUser do
   permit_params :email, :password, :password_confirmation, :role
 
-  menu priority: 2, if: proc { current_admin_user.admin? }
-  # menu priority: 2
+  menu priority: 2, :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin?  }
+  #menu priority: 2
 
   index do
     selectable_column
@@ -35,6 +35,7 @@ ActiveAdmin.register AdminUser do
         f.input :password_confirmation
       end
     end
+
     f.actions
   end
 

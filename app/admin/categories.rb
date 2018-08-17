@@ -2,13 +2,14 @@
 
 ActiveAdmin.register Category do
 
-  menu if: proc { current_admin_user.admin? }
+	menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
+	
+	permit_params :name, :keywords, :active, :category_type
+	
+	#use with friendly id
+    before_filter :only => [:show, :edit, :update, :delete] do
+    	@category = Category.friendly.find(params[:id])
 
-  permit_params :name, :keywords, :active, :category_type
-
-  # use with friendly id
-  before_filter only: [:show, :edit, :update, :delete] do
-    @category = Category.friendly.find(params[:id])
   end
 
   #-----CSV ACTIONS ----------#
@@ -43,6 +44,7 @@ ActiveAdmin.register Category do
         end
       end
       redirect_to admin_categories_path
+
     end
   end
 
