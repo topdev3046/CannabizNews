@@ -2,9 +2,11 @@
 
 ActiveAdmin.register State do
 
-  menu if: proc { current_admin_user.admin? }
 
-  permit_params :name, :abbreviation, :keywords, :logo, :product_state
+	menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
+	
+	permit_params :name, :abbreviation, :keywords, :logo, :product_state
+
 
   # use with friendly id
   before_filter only: [:show, :edit, :update, :delete] do
@@ -27,6 +29,7 @@ ActiveAdmin.register State do
     column :updated_at
     actions
   end
+
 
   form(html: { multipart: true }) do |f|
     f.inputs do

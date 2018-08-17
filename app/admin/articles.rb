@@ -2,11 +2,12 @@
 
 ActiveAdmin.register Article do
 
-  menu if: proc { current_admin_user.admin? }
+	menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
+	
+	permit_params :title, :image, :body, :date, :web_url, :source_id
+	
+	#use with friendly id
 
-  permit_params :title, :image, :body, :date, :web_url, :source_id
-
-  # use with friendly id
   before_filter only: [:show, :edit, :update, :delete] do
     @article = Article.friendly.find(params[:id])
   end
