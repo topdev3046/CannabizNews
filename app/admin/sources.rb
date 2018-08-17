@@ -1,14 +1,12 @@
 # frozen_string_literal: true
-
 ActiveAdmin.register Source, as: "Source" do
-
-  menu if: proc { current_admin_user.admin? }
-
-  permit_params :name, :url, :active, :source_type
-
-  # use with friendly id
-  before_filter only: [:show, :edit, :update, :delete] do
-    @source = Source.friendly.find(params[:id])
+	menu :if => proc{ current_admin_user.admin? || current_admin_user.read_only_admin? }
+	
+	permit_params :name, :url, :active, :source_type
+	
+	#use with friendly id
+    before_filter :only => [:show, :edit, :update, :delete] do
+    	@source = Source.friendly.find(params[:id])
   end
 
   index do
