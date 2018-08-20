@@ -25,11 +25,10 @@ class HeadsetScraperHelper
         contents = JSON.parse(output.read)
 				
 				@state_record = State.where(name: state_name.titlecase).first
-
-				if contents[state_name].present? && contents[state_name].any?
+				if contents[state_name.to_s.downcase].present? && contents[state_name.to_s.downcase].any?
 					puts "HEADSET DID RETURN PRODUCTS FOR STATE: " + state_name
 					puts contents[state_name].size
-					parseProducts(contents[state_name])
+					parseProducts(contents[state_name.to_s.downcase])
 				else
 					puts "HEADSET DID NOT RETURN ANY PRODUCTS FOR STATE " + state_name
 					ScraperError.email("Headset", "No Products Returned in #{state_name}").deliver_now
