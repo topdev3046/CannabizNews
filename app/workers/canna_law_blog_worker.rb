@@ -20,10 +20,10 @@ class CannaLawBlogWorker
     if contents["articles"] != nil
       NewsScraperHelper.new(contents["articles"], "Canna Law Blog").addArticles
     else
-      ScraperError.email("CannaLawBlog News", "No Articles were returned").deliver_now
+      ScraperError.email("CannaLawBlog News", "No Articles were returned", "", "").deliver_now
     end
   rescue => ex
-    ScraperError.email("CannaLawBlog News", ex.message).deliver_now
+    ScraperError.email("CannaLawBlog News", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
   end
   end
 end
