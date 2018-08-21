@@ -20,10 +20,10 @@ class DopeMagazineWorker
     if contents["articles"].present?
       NewsScraperHelper.new(contents["articles"], "Dope Magazine").addArticles
     else
-      ScraperError.email("Dope Magazine News", "No Articles were returned").deliver_now
+      ScraperError.email("Dope Magazine News", "No Articles were returned", "", "").deliver_now
     end
      rescue => ex
-       ScraperError.email("Dope Magazine News", ex.message).deliver_now
+       ScraperError.email("Dope Magazine News", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
   end
   end
 end
