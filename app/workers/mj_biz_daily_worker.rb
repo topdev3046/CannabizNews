@@ -21,10 +21,10 @@ class MjBizDailyWorker
   if contents["articles"].present?
     NewsScraperHelper.new(contents["articles"], "MJ Biz Daily").addArticles
   else
-    ScraperError.email("MjBizDaily News", "No Articles were returned").deliver_now
+    ScraperError.email("MjBizDaily News", "No Articles were returned", "", "").deliver_now
   end
    rescue => ex
-     ScraperError.email("MjBizDaily News", ex.message).deliver_now
+     ScraperError.email("MjBizDaily News", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
 end
   end
 end

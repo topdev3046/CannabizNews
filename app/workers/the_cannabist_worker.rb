@@ -20,10 +20,10 @@ class TheCannabistWorker
     if contents["articles"].present?
       NewsScraperHelper.new(contents["articles"], "The Cannabist").addArticles
     else
-      ScraperError.email("TheCannabist News", "No Articles were returned").deliver
+      ScraperError.email("TheCannabist News", "No Articles were returned", "", "").deliver
     end
    rescue => ex
-     ScraperError.email("TheCannabist News", ex.message).deliver_now
+     ScraperError.email("TheCannabist News", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
   end
   end
 end

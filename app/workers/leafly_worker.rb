@@ -20,10 +20,10 @@ class LeaflyWorker
     if contents["articles"].present?
       NewsScraperHelper.new(contents["articles"], "Leafly").addArticles
     else
-      ScraperError.email("Leafly News", "No Articles were returned").deliver_now
+      ScraperError.email("Leafly News", "No Articles were returned", "", "").deliver_now
     end
      rescue => ex
-       ScraperError.email("Leafly News", ex.message).deliver_now
+       ScraperError.email("Leafly News", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
   end
   end
 end

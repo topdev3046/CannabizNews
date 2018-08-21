@@ -31,13 +31,13 @@ class HeadsetScraperHelper
 					parseProducts(contents[state_name.to_s.downcase])
 				else
 					puts "HEADSET DID NOT RETURN ANY PRODUCTS FOR STATE " + state_name
-					ScraperError.email("Headset", "No Products Returned in #{state_name}").deliver_now
+					ScraperError.email("Headset", "No Products Returned in #{state_name}", "", "").deliver_now
 				end
 				
 			end
 		rescue => ex
 			puts "THERE WAS A HEADSET SCRAPER ERROR: "
-			ScraperError.email("Headset", ex.message).deliver_now
+			ScraperError.email("Headset", ex.inspect, ex.message, ex.backtrace.join("\n")).deliver_now
 		end
   end
 
