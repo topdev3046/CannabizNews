@@ -4,6 +4,6 @@ class HeadsetResetCountDailyWorker
   def perform(*args)
     logger.info "HeadReset Daily Worker is Running"
     state_string = 'washington colorado nevada'
-    HeadResetCountHelper.new(state_string).daily
+    HeadsetResetCountHelper.new(state_string).daily
   end
 end
