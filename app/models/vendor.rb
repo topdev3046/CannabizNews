@@ -33,8 +33,13 @@ class Vendor < ActiveRecord::Base
   # set redis key after save
   after_save :set_redis_key
   def set_redis_key
-    if self.slug.present?
-      $redis.set("vendor_#{self.slug}", Marshal.dump(self))
+    begin
+      if self.slug.present?
+        $redis.set("vendor_#{self.slug}", Marshal.dump(self))
+      end
+    rescue => ex
+      puts ex
+      #eventually put error email here
     end
   end
 end
